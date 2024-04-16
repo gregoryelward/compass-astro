@@ -194,8 +194,10 @@ const applyPage = Astro.props.applyPage
                   {
                     benefit?.fields?.steps
                       ? //@ts-ignore
-                        benefit.fields.steps.map(
-                          (s: TypeStepsSkeleton, index: number) => {
+                        benefit.fields.steps
+                          //@ts-ignore
+                          ?.filter(Boolean)
+                          .map((s: TypeStepsSkeleton, index: number) => {
                             return (
                               <li
                                 class={`page-item ${stepIndex - 1 === index ? 'active' : ''}`}
@@ -205,8 +207,7 @@ const applyPage = Astro.props.applyPage
                                 </a>
                               </li>
                             )
-                          }
-                        )
+                          })
                       : null
                   }
                 </ul>
