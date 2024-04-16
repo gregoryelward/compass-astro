@@ -1,0 +1,15 @@
+.dashboard-menu {
+    &[data-new="no"] {
+        .dashboard-menu__new-btn {
+            display: none;
+        }
+    }
+}
+
+.dash-sort-by-container {
+    @media (max-width: 767px) {
+        select {
+            font-size: 0.875rem;
+        }
+    }
+}

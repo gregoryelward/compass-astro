@@ -1,0 +1,398 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Asset, Entry } from 'contentful'
+import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
+import getJurisdiction from '../lib/jurisdictions'
+import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
+import makeUrl from '../lib/helpers'
+import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
+import type { TypeAgencySkeleton } from '../types/contentful/TypeAgency'
+import Feedback from '../components/Feedback.astro'
+import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
+      content_type: 'benefit',
+      locale
+    })
+
+    const benefits = benefitRes.items
+    for (const i of benefits) {
+      const jurisdiction = getJurisdiction(i.fields.authority, locale)
+      const jurisdictionSlug = jurisdiction?.slug
+      let path = locale === 'en-CA' ? '' : `/fr`
+      if (jurisdictionSlug) {
+        path = path + '/' + jurisdictionSlug
+      }
+      path = path + '/' + i.fields.slug
+
+      const benefitPages = i.fields.benefitPages as Array<
+        Entry<TypeBenefitPageSkeleton>
+      >
+      let navigationIndex = 0
+      for (const b of benefitPages) {
+        paths.push({
+          params: {
+            benefitpage: path + '/' + b.fields.slug
+          },
+          props: {
+            page: { ...b },
+            benefit: { ...i },
+            navigationIndex,
+            prevPage: benefitPages[navigationIndex - 1],
+            nextPage: benefitPages[navigationIndex + 1]
+          }
+        })
+        navigationIndex = navigationIndex + 1
+      }
+    }
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+
+const page = Astro.props.page as Entry<TypeBenefitPageSkeleton>
+const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
+const resources = benefit.fields.resources
+const navigationIndex = Astro.props.navigationIndex
+const prevPage = Astro.props.prevPage
+const nextPage = Astro.props.nextPage
+
+let agency
+
+if (benefit?.fields?.agency) {
+  //@ts-ignore
+  agency = benefit?.fields?.agency?.filter(Boolean) as Array<
+    Entry<TypeAgencySkeleton>
+  >
+}
+---
+
+<Layout
+  title={page?.fields?.title as string}
+  description={''}
+  className='resource'
+>
+  <main
+    class={`page_${page?.fields?.slug}`}
+    id='maincontent'
+    data-page-title={page?.fields?.title as string}
+    data-page-category={page?.fields?.slug}
+  >
+    <div class='container'>
+      <div class='row justify-content-md-center'>
+        <div class='col-12 col-md-10'>
+          <nav aria-label='breadcrumb'>
+            <ol class='breadcrumb'>
+              <li class='breadcrumb-item'>
+                <a class='breadcrumb-item' href='/'>{t('home')}</a>
+              </li>
+              <li class='breadcrumb-item'>
+                <a
+                  class='breadcrumb-item'
+                  href={`${makeUrl(
+                    locale,
+                    benefit?.fields?.slug as string,
+                    getJurisdiction(benefit.fields.authority, locale)?.slug
+                  )}`}>{benefit?.fields?.title}</a
+                >
+              </li>
+              <li class='active breadcrumb-item' aria-current='page'>
+                {page?.fields?.title}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <div class='category h6 d-print-none'>
+              {benefit.fields.acronym}
+            </div>
+            <div class='mb-3 pb-3'></div>
+            <h1><strong>{page.fields.title}</strong></h1>
+            {
+              page?.fields?.lead ? (
+                <p>{page.fields.lead}</p>
+              ) : page?.fields?.content1 ? (
+                <div class='js-accordion'>
+                  <div set:html={marked(page.fields.content1 as string)} />
+                </div>
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {
+      page?.fields?.lead ? (
+        <div class='bg-white lt-border-t-light'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div class='js-accordion'>
+                    <div set:html={marked(page.fields.content1 as string)} />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+
+    <div class='bg-white lt-border-t-light'>
+      <div class='container' data-benefit-id='1dPLuwsYC0vnelqpxncb47'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              {
+                page?.fields.slug === 'apply' ? (
+                  <>
+                    <h2>Steps</h2>
+                    <div class='mb-3 pb-3' />
+                    <ol class='tertiary-blue'>
+                      {benefit?.fields?.steps
+                        ? //@ts-ignore
+                          benefit.fields.steps.map(
+                            (s: TypeStepsSkeleton, index: number) => {
+                              return (
+                                <li>
+                                  <a href={`apply/step-${index + 1}`}>
+                                    {s.fields.title}
+                                  </a>
+                                </li>
+                              )
+                            }
+                          )
+                        : null}
+                    </ol>
+                  </>
+                ) : null
+              }
+              <hr />
+              <div class='flex center'>
+                {
+                  navigationIndex === 0 ? (
+                    <a
+                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                      href={`${makeUrl(
+                        locale,
+                        benefit?.fields?.slug as string,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug
+                      )}`}
+                    >
+                      {t('startBack')}
+                    </a>
+                  ) : (
+                    <a
+                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                      href={`${makeUrl(
+                        locale,
+                        prevPage?.fields?.slug as string,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string
+                      )}`}
+                    >
+                      {prevPage?.fields?.title}
+                    </a>
+                  )
+                }
+
+                {
+                  nextPage?.fields?.slug ? (
+                    <a
+                      class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
+                      href={`${makeUrl(
+                        locale,
+                        nextPage?.fields?.slug as string,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string
+                      )}`}
+                    >
+                      {nextPage.fields.title}
+                    </a>
+                  ) : null
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    {
+      page?.fields.slug === 'resources' ? (
+        <div class='bg-white lt-border-t-light'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div class='js-accordion resources'>
+                    {agency
+                      ? agency.map((a, index) => {
+                          return (
+                            <>
+                              <h2 id={`agency-${index}`}>{a.fields.title}</h2>
+                              {a.fields?.resource
+                                ? //@ts-ignore
+                                  a.fields.resource.map(
+                                    (
+                                      a: TypeAgencyResourceSkeleton,
+                                      index: number
+                                    ) => {
+                                      return (
+                                        <div>
+                                          {a?.fields?.title ? (
+                                            <h3 id={`agency-resource-${index}`}>
+                                              {a.fields.title}
+                                            </h3>
+                                          ) : null}
+                                          {a?.fields?.content ? (
+                                            <div
+                                              set:html={marked(
+                                                a.fields
+                                                  .content as unknown as string
+                                              )}
+                                            />
+                                          ) : null}
+                                        </div>
+                                      )
+                                    }
+                                  )
+                                : null}
+                            </>
+                          )
+                        })
+                      : null}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <h2>{page?.fields?.bodyTitle}</h2>
+              <div class='mb-3 pb-2'></div>
+              {
+                page?.fields?.content5Title ? (
+                  <div class='bg-light--alt p-3 my-3'>
+                    <h3 class='h5'>{page?.fields?.content5Title}</h3>
+                    {page?.fields?.content5 ? (
+                      <div
+                        set:html={marked(page?.fields?.content5 as string)}
+                      />
+                    ) : null}
+                  </div>
+                ) : null
+              }
+
+              {
+                page?.fields?.content2 ? (
+                  <section>
+                    <div class='js-accordion'>
+                      <div
+                        class=''
+                        set:html={marked(page.fields.content2 as string)}
+                      />
+                    </div>
+                  </section>
+                ) : null
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-secondary lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <h2>{t('resources')}</h2>
+              <div class='mb-4 pb-2'></div>
+              <div class='row'>
+                {
+                  resources
+                    ? //@ts-ignore
+                      resources?.map((o) => {
+                        return (
+                          <div
+                            class='col-12 col-md-4'
+                            data-province-filter=''
+                            style='display: block;'
+                          >
+                            <div class='pro-card--full-img equal-height'>
+                              <picture>
+                                <img
+                                  src={
+                                    (o.fields.cardImage as Asset)?.fields?.file
+                                      ?.url as string
+                                  }
+                                />
+                              </picture>
+                              <div class='content'>
+                                <a
+                                  href={`/resource/${o.fields.slug as string}`}
+                                >
+                                  <>
+                                    <p>{o.fields.title as string}</p>
+                                    <p class='xsmall'>
+                                      {o.fields.lead as string}
+                                    </p>
+                                    <span class='btn-link btn-icon-right bi bi-arrow-right'>
+                                      <span />
+                                    </span>
+                                  </>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })
+                    : null
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <Feedback />
+  </main>
+</Layout>
+
+<script>
+  import accordion from '../lib/accordion'
+
+  accordion('.js-accordion h2', 'H2', 2)
+  accordion('.js-accordion h3', 'H3', 3)
+</script>

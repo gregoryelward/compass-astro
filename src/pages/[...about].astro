@@ -1,0 +1,159 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Asset, Entry } from 'contentful'
+import type { TypeAboutSkeleton } from '../types/contentful/TypeAbout'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const res = await contentfulClient.getEntries<TypeAboutSkeleton>({
+      content_type: 'about',
+      locale
+    })
+
+    const page = res.items[0]
+
+    paths.push({
+      params: {
+        about: `${locale === 'en-CA' ? page.fields.slug : `fr/${page.fields.slug}`}`
+      },
+      props: { page: { ...page } }
+    })
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const page = Astro.props.page as Entry<TypeAboutSkeleton>
+---
+
+<Layout
+  title={page?.fields.title as string}
+  description={page?.fields.metaDescription as string}
+  className=''
+>
+  <main
+    class={`page ${page?.fields?.slug}`}
+    id='maincontent'
+    data-page-title={page?.fields.title as string}
+    data-page-category=''
+  >
+    <div class='container block1'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <h1><strong>{page?.fields.title as string}</strong></h1>
+            <p class='large'>
+              {page?.fields.lead as string}
+            </p>
+            {
+              page?.fields?.block1 ? (
+                <div set:html={marked(page.fields.block1 as string)} />
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class='bg-white lt-border-t-light'>
+      <div class='container partner'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              {
+                page?.fields?.block2 ? (
+                  <div set:html={marked(page.fields.block2 as string)} />
+                ) : null
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-white lt-border-t-light'>
+      <div class='container partner'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <p>{page.fields.partnerLead}</p>
+              <div
+                class='row align-items-center justify-content-start partners'
+              >
+                {
+                  //@ts-ignore
+                  page?.fields?.partners?.map((p: Asset) => {
+                    return (
+                      <div class='col-6 col-md-4 col-lg-3 text-md-center'>
+                        <a href={p.fields.description as string}>
+                          <img
+                            src={p.fields?.file?.url as string}
+                            alt={p.fields?.title as string}
+                          />
+                        </a>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-white lt-border-t-light'>
+      <div class='container reviewer'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <p>{page.fields.reviewerLead}</p>
+              <div
+                class='row align-items-center justify-content-start reviewers'
+              >
+                {
+                  //@ts-ignore
+                  page?.fields?.reviewersLogos?.map((p: Asset) => {
+                    return (
+                      <div class='col-6 col-md-4 col-lg-3 text-md-center'>
+                        <a href={p.fields.description as string}>
+                          <img
+                            src={p.fields?.file?.url as string}
+                            alt={p.fields?.title as string}
+                          />
+                        </a>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              {
+                page?.fields?.block3 ? (
+                  <div set:html={marked(page.fields.block3 as string)} />
+                ) : null
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main></Layout
+>

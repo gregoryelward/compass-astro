@@ -1,0 +1,222 @@
+:root {
+    --card-padding: 1.25rem;
+    @media (min-width: 768px) {
+        --card-padding: 1.875rem;
+    }
+}
+
+.benefit-card {
+    background: #fff;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 0.375rem;
+    margin-top: 1.5rem;
+    border: 1px solid transparent;
+    border-top: 7px solid var(--orange);
+    padding: var(--card-padding) 0 calc(var(--card-padding) - 1rem) 0;
+    position: relative;
+    transition: all linear 0.25s;
+    &>* {
+        margin-bottom: 1rem;
+    }
+    &:hover {
+        box-shadow: none;
+        border: 1px solid var(--tertiary);
+        border-top: 7px solid var(--tertiary);
+
+        .bg-light &, .bg-light--alt &, .bg-white &, .light-theme & {
+            border: 1px solid var(--light-brown);
+            border-top: 7px solid var(--primary);
+        }
+
+        a span, a::before {
+            color: var(--tertiary);
+        }
+    }
+    .category {
+        font-size: 1rem;
+        margin-bottom: 0;
+        padding: 0 var(--card-padding);
+        span {
+            position: relative;
+            z-index: 1;
+        }
+    }
+    a {
+        margin: 0 var(--card-padding);
+        display: inline-block;
+
+        &::before {
+            color: var(--primary);
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: -7px;
+            left: 0;
+            width: 100%;
+            height: calc(100% + 7px);
+            border-radius: 0.375rem;
+            transition: all linear 0.25s;
+            border: 1px solid transparent;
+        }
+        &:focus {
+            outline: none;
+            
+            &::after {
+                outline: auto;
+                outline-color: var(--secondary);
+            }
+        }
+    }
+
+    &--description {
+        margin-top: 0.5rem;
+        
+        p {
+            font-size: 1rem;
+            line-height: 1.4;
+            @media (min-width: 768px) {
+                font-size: 1.125rem;
+                line-height: 1.33;
+            }
+            position: relative;
+            z-index: 1;
+        }
+        padding: 0 var(--card-padding);
+    }
+
+    &--benefit {
+        margin-left: var(--card-padding);
+        margin-right: var(--card-padding);
+        padding: 1rem;
+        background-color: var(--light-brown-tint);
+        border-radius: 6px;
+
+        * {
+            position: relative;
+            z-index: 1;
+        }
+        *:last-of-type {
+            margin-bottom: 0;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+
+        .light-theme & {
+            background-color: var(--lt-secondary);
+        }
+    }
+
+    &--receiving {
+        margin: 0 var(--card-padding) 1rem var(--card-padding);
+        padding: 1rem;
+        background-color: var(--primary);
+        border-radius: 6px;
+        color: #fff;
+        a {
+            margin-left: 0;
+            margin-right: 1rem;
+        }
+    }
+
+    .h4 {
+        margin-bottom: 0;
+    }
+
+    .additional-info {
+        padding: 0 var(--card-padding);
+        * {
+            position: relative;
+            z-index: 1;
+        }
+        white-space: nowrap;
+        overflow-x: scroll;
+        flex-wrap: unset;
+        //Hide horizontal scrollbar. Affordance of cut-off buttons should be sufficient.
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        @media(min-width: 630px) {
+            white-space: unset;
+            overflow-x: unset;
+            flex-wrap: wrap;
+        }
+    }
+
+    &--actions {
+        border-top: solid 1px var(--c-i-border);
+        @media(min-width: 530px) {
+            padding: 1.5rem var(--card-padding) 0rem var(--card-padding);
+        }
+        * {
+            position: relative;
+            z-index: 1;
+        }
+        button, select, a {
+            margin-bottom: 1rem;
+        }
+        margin-bottom: 0;
+        .btn {
+            text-align: left;
+        }
+        
+        .benefit-card--mobile-overflow {
+            white-space: nowrap;
+            overflow-x: scroll;
+            padding: 1.5rem var(--card-padding) 0rem var(--card-padding);
+            min-width: 100%;
+            //Hide horizontal scrollbar. Affordance of cut-off buttons should be sufficient.
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            @media(min-width: 530px) {
+                white-space: unset;
+                overflow-x: unset;
+                padding: 0;
+                min-width: none;
+            }
+        }
+        .benefit-card--mobile-no-overflow {
+            padding: 0rem var(--card-padding) 0 var(--card-padding);
+            @media(min-width: 530px) {
+                padding: 0;
+            }
+        }
+    }
+
+    &.compressed {
+        .benefit-card--benefit, .category, .additional-info {
+            display: none !important;
+        }
+    }
+
+    &__top {
+        padding: 0 var(--card-padding);
+        border-bottom: solid 1px var(--c-i-border);
+
+        @media (min-width: 768px) {
+            margin-top: -0.875rem;
+        }
+        
+        &.justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+    }
+
+    @media print {
+        border-left: solid 1px var(--card-border);
+        border-right: solid 1px var(--card-border);
+        border-bottom: solid 1px var(--card-border);
+        page-break-inside: avoid;
+        display: block;
+    }
+}

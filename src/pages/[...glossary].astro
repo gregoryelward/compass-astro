@@ -1,0 +1,161 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Entry } from 'contentful'
+import type { TypeGlossarySkeleton } from '../types/contentful/TypeGlossary'
+import Feedback from '../components/Feedback.astro'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const res = await contentfulClient.getEntries<TypeGlossarySkeleton>({
+      content_type: 'glossary',
+      locale,
+      skip: 0,
+      limit: 200,
+      //@ts-ignore
+      order: 'fields.term'
+    })
+
+    const glossaryItems = res.items
+
+    paths.push({
+      params: {
+        glossary: `${locale === 'en-CA' ? 'glossary' : `fr/glossary`}`
+      },
+      props: { page: [...glossaryItems] }
+    })
+    return paths
+  }
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+const glossaryItems = Astro.props.page as Array<Entry<TypeGlossarySkeleton>>
+const alphabet = [
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z'
+]
+
+let glossaryGroups = alphabet.reduce(function (target, key) {
+  //@ts-ignore
+  target[key] = {}
+  return target
+}, {}) as Record<string, Array<Entry<TypeGlossarySkeleton>>>
+
+for (const [key] of Object.entries(glossaryGroups)) {
+  const letterTerms = glossaryItems.filter(
+    //@ts-ignore
+    (t) => t?.fields?.term?.charAt(0).toUpperCase() === key
+  )
+  //@ts-ignore
+  glossaryGroups[key] = [...letterTerms]
+}
+---
+
+<Layout
+  title={'page?.fields.title as string'}
+  description={'page?.fields.metaDescription as string'}
+  className=''
+>
+  <main class={`page glossary`} id='maincontent' data-page-category=''>
+    <div class='container'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'><h1><strong>Glossary</strong></h1></div>
+        </div>
+      </section>
+    </div>
+    <div class='bg-light--alt lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <div class='glossary links d-flex justify-content-md-center'>
+                <strong>
+                  {
+                    Object.keys(glossaryGroups)?.map((key) => {
+                      return glossaryGroups[key].length > 0 ? (
+                        <a href={`#${key}`}>{key}</a>
+                      ) : (
+                        <span>{key}</span>
+                      )
+                    })
+                  }
+                </strong>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              {
+                Object.keys(glossaryGroups)
+                  ?.filter((key) => glossaryGroups[key].length > 0)
+                  .map((key) => {
+                    return (
+                      <section>
+                        <h2 id={`${key}`} class='h3'>
+                          {key}
+                        </h2>
+                        <dl class='glossary'>
+                          {glossaryGroups[key].map((g) => {
+                            return (
+                              <>
+                                <dt>{g.fields.term}</dt>
+                                <dd
+                                  set:html={marked(
+                                    g.fields.definition as string
+                                  )}
+                                />
+                              </>
+                            )
+                          })}
+                        </dl>
+                      </section>
+                    )
+                  })
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <Feedback />
+  </main>
+</Layout>

@@ -1,0 +1,82 @@
+---
+import { getLangFromUrl } from '../i18n/utils'
+import { contentfulClient } from '../lib/contentful'
+import type { TypeStartHelpSkeleton } from '../types/contentful/TypeStartHelp'
+
+const lang = getLangFromUrl(Astro.url)
+
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+const helpRes = await contentfulClient.getEntries<TypeStartHelpSkeleton>({
+  skip: 0,
+  limit: 1,
+  content_type: 'startHelp',
+  locale
+})
+let helpSection = helpRes.items[0]?.fields
+---
+
+<div class='bg-secondary'>
+  <div class='container'>
+    <section class='section'>
+      <div class='row justify-content-md-center'>
+        <div class='col-12'>
+          <h2>{helpSection.title}</h2>
+          <p class='large'>
+            {helpSection.lead}
+          </p>
+          <div class='mb-5'></div>
+          <div class='row'>
+            <div class='col-12 col-md-6'>
+              <div
+                class='pro-card--top-border pro-card--starting-points equal-height'
+              >
+                <div class='content'>
+                  <div class='icon blue-gradient'>
+                    <img
+                      alt=''
+                      src='../../public/img/starting-points/play.svg'
+                    />
+                  </div>
+                  <a
+                    href={helpSection.cta1Url as unknown as string}
+                    target='_blank'
+                  >
+                    <span class='small-text h6'>{helpSection.cta1Action}</span
+                    ><span class='large-text btn-link h4'
+                      ><span>{helpSection.cta1UrlText}</span></span
+                    >
+                  </a>
+                  <a href={helpSection?.cta3Url as unknown as string}
+                    ><span class='btn-link'
+                      ><span>{helpSection.cta3UrlText}</span></span
+                    ></a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class='col-12 col-md-6'>
+              <div
+                class='pro-card--top-border pro-card--starting-points equal-height'
+              >
+                <div class='content'>
+                  <div class='icon blue-gradient'>
+                    <img
+                      alt=''
+                      src='../../public/img/starting-points/doc.svg'
+                    />
+                  </div>
+                  <a href={helpSection.cta2Url as unknown as string}
+                    ><span class='small-text h6'>{helpSection.cta2Action}</span
+                    ><span class='large-text btn-link h4'
+                      ><span>{helpSection.cta2UrlText}</span></span
+                    ></a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

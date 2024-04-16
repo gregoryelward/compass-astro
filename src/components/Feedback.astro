@@ -1,0 +1,54 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import { contentfulClient } from '../lib/contentful'
+import type { TypeHelpfulSkeleton } from '../types/contentful/TypeHelpful'
+
+const lang = getLangFromUrl(Astro.url)
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+const t = useTranslations(lang)
+
+const res = await contentfulClient.getEntries<TypeHelpfulSkeleton>({
+  skip: 0,
+  limit: 1,
+  content_type: 'helpful',
+  locale
+})
+let content = res.items[0]?.fields
+---
+
+<aside class='callout--helpful d-print-none feedback'>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-12 col-sm-12'>
+        <h2 class='h4'>{content?.title}</h2><div>
+          <button
+            class='btn btn-primary bi bi-hand-thumbs-up-fill js-feedback--answer js-feedback--answer-yes'
+            aria-label={content?.yes || 'Yes'}></button>
+          <button
+            class='btn btn-primary bi bi-hand-thumbs-down-fill js-feedback--answer js-feedback--answer-no'
+            aria-label={content?.no || 'No'}></button>
+        </div>
+        <div role='status' aria-live='polite'>
+          <div class='feedback--response js-feedback--response-yes'>
+            <p>{content?.yesResponse}</p>
+          </div>
+          <div class='feedback--response js-feedback--response-no'>
+            <p>{content?.noResponse}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  import feedback from '../lib/feedback'
+
+  feedback()
+</script>
+
+<style>
+  h2.h4 {
+    color: #000;
+  }
+</style>

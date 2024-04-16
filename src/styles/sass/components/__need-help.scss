@@ -1,0 +1,44 @@
+.need-help {
+    background-color: var(--tertiary);
+    position: fixed;
+    padding: 0.75rem;
+    bottom: 1rem;
+    right: 1rem;
+    border-radius: 0.375rem;
+    display: block;
+    width: 8.125rem;
+    color: var(--white);
+    z-index: 2;
+    a {
+        color: var(--white);
+
+        .light-theme & {
+            color: var(--white);
+        }
+    }
+    .close {
+        color: white;
+        opacity: 1;
+        text-shadow: none;
+        position: absolute;
+        top: 0.25rem;
+        right: 0.25rem;
+    }
+    *:last-of-type {
+        margin-bottom: 0;
+    }
+    p.xsmall {
+        line-height: 1.15;
+    }
+    &::before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        border-top: 0.5rem solid var(--tertiary);
+        border-left: 0.5rem solid transparent;
+        border-right: 0.5rem solid transparent;
+    }
+}

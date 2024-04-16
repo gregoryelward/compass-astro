@@ -1,0 +1,258 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { getLangFromUrl } from '../i18n/utils'
+import getJurisdiction from '../lib/jurisdictions'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Entry } from 'contentful'
+import type { TypeHomePageSkeleton } from '../types/contentful/TypeHomePage'
+import type {
+  TypeBenefitApplyWarningFields,
+  TypeBenefitApplyWarningSkeleton
+} from '../types/contentful/TypeBenefitApplyWarning'
+import type { TypeIndigenousCalloutSkeleton } from '../types/contentful/TypeIndigenousCallout'
+import type { TypeStartHelpSkeleton } from '../types/contentful/TypeStartHelp'
+import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
+import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
+import type {
+  TypeExploreMoreBenefitsCalloutFields,
+  TypeExploreMoreBenefitsCalloutSkeleton
+} from '../types/contentful/TypeExploreMoreBenefitsCallout'
+import makeUrl from '../lib/helpers'
+import HelpStarter from '../components/HelpStarter.astro'
+import Resources from '../components/Resources.astro'
+import CalloutIndigenous from '../components/CalloutIndigenous.astro'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const resourcesRes =
+      await contentfulClient.getEntries<TypeResourcesSkeleton>({
+        content_type: 'resources',
+        locale
+      })
+
+    const resources = resourcesRes.items
+
+    const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
+      content_type: 'benefit',
+      //@ts-ignore
+      order: 'fields.order',
+      locale
+    })
+
+    const benefits = benefitRes.items
+
+    const helpRes = await contentfulClient.getEntries<TypeStartHelpSkeleton>({
+      skip: 0,
+      limit: 1,
+      content_type: 'startHelp',
+      locale
+    })
+    let helpSection = helpRes.items[0]?.fields
+    const exploreRes =
+      await contentfulClient.getEntries<TypeExploreMoreBenefitsCalloutSkeleton>(
+        {
+          skip: 0,
+          limit: 1,
+          content_type: 'exploreMoreBenefitsCallout',
+          locale
+        }
+      )
+    let exploreSection = exploreRes.items[0]?.fields
+
+    const indigRes =
+      await contentfulClient.getEntries<TypeIndigenousCalloutSkeleton>({
+        skip: 0,
+        limit: 1,
+        content_type: 'indigenousCallout',
+        locale
+      })
+
+    let indigenousCallout = indigRes.items[0]?.fields
+
+    const entryies = await contentfulClient.getEntries<TypeHomePageSkeleton>({
+      include: 3,
+      content_type: 'homePage',
+      locale
+    })
+
+    const item = { ...entryies.items[0] }
+    paths.push({
+      params: { home: locale === 'en-CA' ? undefined : 'fr' },
+      props: {
+        page: { ...item.fields },
+        indigenousCallout,
+        helpSection,
+        resources,
+        benefits,
+        exploreSection
+      }
+    })
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const lang = getLangFromUrl(Astro.url)
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+
+const fields = Astro.props.page
+
+const pageTitle = fields.title || ''
+const metaDescription = fields.metaDescription || ''
+const introduction = marked(fields.introduction as string)
+const actionOption = marked(fields.actionOptions as string)
+const instruction = marked(fields.instruction as string)
+
+const mainCallout = (
+  fields?.applyWarning as Entry<TypeBenefitApplyWarningSkeleton>
+).fields as TypeBenefitApplyWarningFields
+
+const exploreSection = Astro.props
+  .exploreSection as TypeExploreMoreBenefitsCalloutFields
+const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
+---
+
+<Layout title={pageTitle} description={metaDescription} className='home'>
+  <main
+    class='page_home'
+    id='maincontent'
+    data-page-title='Home'
+    data-page-category='page'
+  >
+    <div class='container'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10 intro'>
+            <div set:html={introduction} />
+            <div class='mt-5'></div>
+            <div class='action'>
+              <div set:html={actionOption} />
+            </div>
+            <div class='mt-5'></div>
+            <CalloutIndigenous />
+          </div>
+        </div>
+      </section>
+    </div>
+    <HelpStarter />
+    <div class='bg-light'>
+      <div class='container'>
+        <section class='section'>
+          <div
+            class='row justify-content-md-center'
+            id='four-key-disability-benefits'
+          >
+            <div class='col-12'>
+              <div class='js-accordion'>
+                <div set:html={instruction} />
+              </div>
+              {
+                mainCallout ? (
+                  <div class='callout callout--no-border p-3'>
+                    <>
+                      <h2 class='h4'>{mainCallout.title}</h2>
+                      <div
+                        set:html={marked(
+                          mainCallout?.content as unknown as string
+                        )}
+                      />
+                      {mainCallout?.ctaurl ? (
+                        <a
+                          class='btn btn-outline-primary btn-small'
+                          href={mainCallout?.ctaurl as unknown as string}
+                        >
+                          {mainCallout?.cta}
+                        </a>
+                      ) : null}
+                    </>
+                  </div>
+                ) : null
+              }
+
+              <div class='mb-4'></div>
+              {
+                benefits
+                  ? benefits.map((b) => {
+                      return (
+                        <section
+                          class='benefit-card'
+                          data-province-filter={
+                            getJurisdiction(b.fields.authority)?.code || ''
+                          }
+                          data-province-hide-filter={
+                            b.fields.hideForProvinces || ''
+                          }
+                        >
+                          <a
+                            class='btn btn-link btn-icon-right bi bi-arrow-right no-padding'
+                            href={`${makeUrl(locale, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                          >
+                            <h3 class='h4'>
+                              <span>{b.fields.title}</span>
+                            </h3>
+                          </a>
+
+                          <div class='benefit-card--description'>
+                            <p class='mt-2'>{b.fields.lead}</p>
+                          </div>
+
+                          {b.fields?.dollarAmount ? (
+                            <div class='benefit-card--benefit'>
+                              <p>{b.fields.dollarAmount}</p>
+                            </div>
+                          ) : null}
+                        </section>
+                      )
+                    })
+                  : null
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <Resources />
+    <div class='bg-white'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12 cta explore'>
+              <h2>{exploreSection.title}</h2>
+              <div
+                set:html={marked(exploreSection.content as unknown as string)}
+              />
+              <a
+                class='btn btn-primary btn-icon-right bi bi-arrow-up-right'
+                href={exploreSection.url as unknown as string}
+                >{exploreSection.cta}
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import accordion from '../lib/accordion'
+  import showProvincialDataOnly from '../lib/filterContent'
+  showProvincialDataOnly()
+  accordion('.js-accordion h3', 'H3', 3)
+</script>
+
+<style>
+  .callout a.btn,
+  .cta a.btn {
+    margin-top: 1rem;
+  }
+</style>

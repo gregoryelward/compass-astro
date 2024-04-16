@@ -1,0 +1,493 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import { marked } from 'marked'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { TypePageSkeleton } from '../types/contentful/TypePage'
+import type { TypeTermsAndConditionsSkeleton } from '../types/contentful/TypeTermsAndConditions'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const res = await contentfulClient.getEntries<TypePageSkeleton>({
+      content_type: 'page',
+      locale
+    })
+
+    const termsRes =
+      await contentfulClient.getEntries<TypeTermsAndConditionsSkeleton>({
+        content_type: 'termsAndConditions',
+        locale
+      })
+
+    const terms = termsRes.items[0]
+
+    const page = res.items
+    for (const i of page) {
+      // maybe have an attribute basic page
+      if (i.fields.slug === 'share-this-tool') {
+        paths.push({
+          params: {
+            share: `${locale === 'en-CA' ? i.fields.slug : `fr/${i.fields.slug}`}`
+          },
+          props: { page: { ...i }, terms }
+        })
+      }
+    }
+  }
+  return paths
+}
+
+const page = Astro.props.page
+const pageTitle = page.fields.title || ''
+const metaDescription = page.fields.metaDescription || ''
+const block1 = page.fields.block1 ? marked(page.fields.block1) : null
+const block2 = page.fields.block2 ? marked(page.fields.block2) : null
+const block3 = page.fields.block3 ? marked(page.fields.block3) : null
+
+const terms = Astro.props.terms
+const introduction = marked(terms?.fields?.introduction as string)
+const agreeQuestion = terms?.fields?.agreeQuestion as string
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+let image1URL =
+  'https://disability.benefitswayfinder.org/img/share/compass-image-en-1.png'
+if (lang === 'fr') {
+  image1URL =
+    'https://disability.benefitswayfinder.org/img/share/compass-image-fr-1.png'
+}
+let image2URL =
+  'https://disability.benefitswayfinder.org/img/share/compass-image-en-2.png'
+if (lang === 'fr') {
+  image2URL =
+    'https://disability.benefitswayfinder.org/img/share/compass-image-fr-2.png'
+}
+---
+
+<Layout title={pageTitle} description={metaDescription} className='home'>
+  <main>
+    <div class='container block1'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <h1><strong>{page?.fields.title as string}</strong></h1>
+            {
+              page?.fields?.block1 ? (
+                <div set:html={marked(block1 as string)} />
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class='bg-light--alt'>
+      <div class='container'>
+        <div class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12 col-lg-4 col-md-6'>
+              <div class='xp-4'>
+                <div class='xpro-card--full-img xequal-height'>
+                  <picture>
+                    <img alt='' src={image1URL} width='300' height='300' />
+                  </picture>
+                  <div class='content'>
+                    <a href='#'><p>{t('embedOption1')}</p></a>
+                  </div>
+                </div>
+              </div>
+            </div><div class='col-12 col-lg-4 col-md-6'>
+              <div class='xp-4'>
+                <div class='xpro-card--full-img xequal-height'>
+                  <picture>
+                    <img alt='' src={image2URL} width='300' height='300' />
+                  </picture>
+                  <div class='content'>
+                    <a href='#'><p>{t('embedOption2')}</p></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='album py-2 bg-white'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-6 offset-md-3 card p-4 shadow-lg mb-5'>
+            <p class='text-muted font-italic'>{t(`emdedMandatory`)}</p><form
+              id='share'
+            >
+              <div class='form-group'>
+                <label for='inputOrg'>{t(`embedOrg`)}</label>
+                <input
+                  class='form-control'
+                  id='inputOrg'
+                  name='inputOrg'
+                  required=''
+                  value=''
+                />
+              </div>
+              <div class='form-group'>
+                <label for='inputWebsite'>{t(`embedURL`)}</label>
+                <input
+                  class='form-control'
+                  id='inputWebsite'
+                  name='inputWebsite'
+                  required=''
+                  value=''
+                />
+                <small class='form-text text-muted' id='webSiteHelp'>
+                  https://yourwebsite.com
+                </small>
+              </div>
+              <div class='form-group mt-4'>
+                <fieldset>
+                  <legend>{t(`embedLangSelect`)}</legend>
+                  <div class='form-check'>
+                    <input
+                      class='form-check-input'
+                      id='langRadio1'
+                      type='radio'
+                      name='langRadio'
+                      required=''
+                      value='en'
+                    />
+                    <label class='form-check-label' for='langRadio1'
+                      >{t(`emdedLangOptionEn`)}
+                    </label>
+                  </div>
+                  <div class='form-check'>
+                    <input
+                      class='form-check-input'
+                      id='langRadio2'
+                      type='radio'
+                      name='langRadio'
+                      required=''
+                      value='fr'
+                    />
+                    <label class='form-check-label' for='langRadio2'>
+                      {t(`emdedLangOptionFr`)}
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+              <div class='form-group mt-4'>
+                <fieldset>
+                  <legend>{t(`embedButtonSelect`)}</legend>
+                  <div class='form-check'>
+                    <input
+                      class='form-check-input'
+                      id='targetRadio1'
+                      type='radio'
+                      name='imgoption'
+                      required=''
+                      value='1'
+                    />
+                    <label class='form-check-label' for='targetRadio1'>
+                      {t('embedOption1')}</label
+                    >
+                  </div>
+                  <div class='form-check'>
+                    <input
+                      class='form-check-input'
+                      id='targetRadio2'
+                      type='radio'
+                      name='imgoption'
+                      required=''
+                      value='2'
+                    />
+                    <label class='form-check-label' for='targetRadio2'>
+                      {t('embedOption2')}
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+              <div set:html={block2} />
+              <div class='form-check'>
+                <input
+                  class='form-check-input'
+                  id='iagree'
+                  type='checkbox'
+                  name='iagree'
+                  required=''
+                />
+                <label class='form-check-label' for='iagree'>
+                  <a id='tandclink' href='#'>{agreeQuestion}</a>
+                </label>
+                <div set:html={introduction} />
+              </div>
+              <button
+                class='btn btn-secondary d-block w-100 my-4'
+                id='getcode'
+                type='submit'
+              >
+                {t(`getButton`)}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='py-5 bg-white' id='shareregion' style='display:none'>
+      <div class='container'>
+        <div class='col-md-6 offset-md-3'>
+          <div class='mb-3'>
+            <h4>{t(`embedPreview`)}</h4>
+            <img
+              id='shareimage'
+              alt=''
+              width='300'
+              height='300'
+              style='border:1px; border-style:solid;'
+            />
+          </div>
+          <div class='mb-3'>
+            <label for='sharecode'>{t(`embedCodeTitle`)}</label>
+            <textarea
+              id='sharecode'
+              name='sharecode'
+              rows='6'
+              cols='80'
+              readonly=''
+            >
+            </textarea>
+          </div>
+          <div class='mb-3'>
+            <div set:html={block3} />
+            <button class='btn btn-secondary' id='copy' type='button'>
+              {t(`emdedCopy`)}
+            </button>
+            <span class='ml-2' id='copied' style='display:none'>
+              {t(`emdedCopied`)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class='modal fade'
+      id='modalDemo'
+      tabindex='-1'
+      aria-labelledby='exampleModalLabel'
+      aria-hidden='true'
+    >
+      <div class='modal-dialog'>
+        <div class='modal-content'>
+          <div class='modal-header'>
+            <h5 class='modal-title' id='exampleModalLabel'>
+              {terms.fields.title}
+            </h5>
+            <button
+              type='button'
+              class='close'
+              data-dismiss='modal'
+              aria-label='Close'
+            >
+              <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>
+          <div class='modal-body'>
+            <div set:html={marked(terms?.fields?.content as string)} />
+            <div class='form-check'>
+              <input
+                class='form-check-input'
+                id='iagreemodal'
+                type='checkbox'
+              />
+              <label class='form-check-label' for='iagreemodal'>
+                {terms.fields.agreeQuestion}
+              </label>
+            </div>
+          </div>
+          <div class='modal-footer'>
+            <button
+              type='button'
+              class='btn btn-secondary'
+              data-dismiss='modal'
+            >
+              {t('close')}</button
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  interface ShareData {
+    event: string
+    formType: string
+    organization: string
+    website: string
+    language: string
+  }
+
+  const sendAnalyticsEvent = (eventPayload: ShareData) => {
+    console.log('eventPayload ', eventPayload)
+    // @ts-expect-error
+    window.dataLayer = window.dataLayer || []
+    // @ts-expect-error
+    window.dataLayer.push(eventPayload)
+  }
+
+  const shareregion = document.getElementById('shareregion')
+  const shareimage = document.getElementById('shareimage') as HTMLImageElement
+  const sharecode = document.getElementById('sharecode') as HTMLTextAreaElement
+  const copy = document.getElementById('copy')
+  const copied = document.getElementById('copied')
+
+  const tandclink = document.getElementById('tandclink')
+  const myModal = document.getElementById('modalDemo')
+  const agreed = document.getElementById('iagreemodal')
+  const iagree = document.getElementById('iagree') as HTMLInputElement
+
+  if (copy) {
+    copy.onclick = function (e: any) {
+      sharecode.select()
+
+      document && document.execCommand('copy')
+      e?.target?.focus()
+
+      if (copied) {
+        copied.style.display = 'block'
+      }
+    }
+  }
+
+  if (tandclink) {
+    tandclink.onclick = function (e) {
+      e.preventDefault()
+      if (myModal) {
+        myModal.style.display = 'block'
+        myModal.setAttribute('role', 'dialog')
+        myModal.removeAttribute('aria-hidden')
+        myModal.classList.add('show')
+      }
+    }
+  }
+
+  function closeHandler() {
+    if (myModal) {
+      myModal.style.display = 'none'
+      myModal.removeAttribute('role')
+      myModal.setAttribute('aria-hidden', 'true')
+      myModal.classList.remove('show')
+    }
+  }
+
+  document.querySelectorAll('.modalclose').forEach((item) => {
+    item.addEventListener('click', closeHandler)
+  })
+  document.querySelectorAll('.btn-close').forEach((item) => {
+    item.addEventListener('click', closeHandler)
+  })
+
+  if (tandclink) {
+    if (agreed) {
+      agreed.onclick = function () {
+        if (myModal) {
+          myModal.style.display = 'none'
+          myModal.removeAttribute('role')
+          myModal.setAttribute('aria-hidden', 'true')
+          myModal.classList.remove('show')
+        }
+        if (iagree) {
+          iagree.checked = true
+        }
+      }
+    }
+  }
+
+  const share = document.getElementById('share')
+  if (share) {
+    share.onsubmit = function (e) {
+      e.preventDefault()
+      const inputOrg = document.getElementById('inputOrg') as HTMLInputElement
+      const inputWebsite = document.getElementById(
+        'inputWebsite'
+      ) as HTMLInputElement
+      const langRadio = document.getElementsByName('langRadio')
+      const imageOption = document.getElementsByName('imgoption')
+
+      if (inputOrg?.value && inputWebsite?.value) {
+        // if (inputOrg.value && inputWebsite.value && inputEmail.value) {
+        const source = encodeURI(inputOrg.value + ' ' + inputWebsite.value)
+        const medium = `compass-button`
+
+        let inputLang = 'en'
+
+        for (let i = 0; i < langRadio.length; i++) {
+          if ((langRadio[i] as HTMLInputElement).checked) {
+            inputLang = (langRadio[i] as HTMLInputElement).value
+          }
+        }
+        let imageOpt = '1'
+        for (let i = 0; i < imageOption.length; i++) {
+          if ((imageOption[i] as HTMLInputElement).checked) {
+            imageOpt = (imageOption[i] as HTMLInputElement).value
+          }
+        }
+
+        let embedDomain = 'https://disability.benefitswayfinder.org/'
+        let imageUrl = `${embedDomain}img/share/compass-image-${inputLang}-${imageOpt}.png`
+
+        let embedTargetSlug = `` //home page
+        let embedTitle = 'Disability Benefits Compass'
+
+        const embedCode = `<a href="${embedDomain}${
+          inputLang.includes('en') ? '' : 'fr/'
+        }${embedTargetSlug}?utm_source=${source}&utm_medium=${medium}" title="${embedTitle}" target="_blank" rel="noopener"><img src="${imageUrl}" width="300" height="300" style="border:1px; border-style:solid;" /></a>`
+
+        if (shareregion) {
+          shareregion.style.display = 'block'
+        }
+        if (shareimage) {
+          shareimage.src = imageUrl
+        }
+        if (sharecode) {
+          sharecode.value = embedCode
+        }
+
+        sendAnalyticsEvent({
+          event: 'formSubmission',
+          formType: 'Share',
+          organization: inputOrg.value,
+          website: inputWebsite.value,
+          language: inputLang
+        })
+      }
+    }
+  }
+</script>
+
+<style>
+  legend {
+    font-size: 1.1rem;
+  }
+  :global(.form-group p) {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.modal-content) {
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  :global(.modal-body) {
+    height: 350px;
+    overflow-y: scroll;
+  }
+
+  :global(.modalclose) {
+    color: #fff;
+  }
+</style>

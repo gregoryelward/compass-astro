@@ -1,0 +1,218 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Asset, Entry } from 'contentful'
+import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
+import getJurisdiction from '../lib/jurisdictions'
+import type { TypeBenefitApplyWarningSkeleton } from '../types/contentful/TypeBenefitApplyWarning'
+import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
+import Feedback from '../components/Feedback.astro'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
+      content_type: 'benefit',
+      locale
+    })
+
+    const benefits = benefitRes.items
+    for (const i of benefits) {
+      const jurisdiction = getJurisdiction(i.fields.authority, locale)
+      const jurisdictionSlug = jurisdiction?.slug
+      let path = locale === 'en-CA' ? '' : `/fr`
+      if (jurisdictionSlug) {
+        path = path + '/' + jurisdictionSlug
+      }
+      path = path + '/' + i.fields.slug
+      paths.push({
+        params: {
+          benefit: path
+        },
+        props: { page: { ...i } }
+      })
+    }
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const page = Astro.props.page as Entry<TypeBenefitSkeleton>
+const resources = page.fields.resources
+// console.log('resources ', resources)
+const callout = page.fields
+  .applyWarning as Entry<TypeBenefitApplyWarningSkeleton>
+//
+const benefitPages = page.fields.benefitPages as Array<
+  Entry<TypeBenefitPageSkeleton>
+>
+---
+
+<Layout
+  title={page?.fields.title as string}
+  description={''}
+  className='resource'
+>
+  <main
+    class='resource page'
+    id='maincontent'
+    data-page-title={page?.fields.title as string}
+    data-page-category='resource'
+  >
+  <div class='container'>
+      <div class='row justify-content-md-center'>
+        <div class='col-12 col-md-10'>
+          <nav aria-label='breadcrumb'>
+            <ol class='breadcrumb'>
+              <li class='breadcrumb-item'>
+                <a class='breadcrumb-item' href='/'>{t('home')}</a>
+              </li>
+              <li class='active breadcrumb-item' aria-current='page'>
+                {page?.fields?.title}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <h1><strong>{page?.fields?.title as string}</strong>
+            {page?.fields?.acronym ? `(${page?.fields?.acronym})` : null } 
+            </h1>
+            <p class='large'>
+              {page?.fields.lead as string}
+            </p>
+            {
+              page?.fields?.subLead ? (
+                <div set:html={marked(page.fields.subLead as string)} />
+              ) : null
+            }
+            <hr class='hr-light hr-small' />
+            {callout?.fields?.title ? <div class='callout callout--no-border p-3 mb-4'>
+              {
+                callout?.fields?.title ? (
+                  <h2 class='h4'>{callout.fields.title}</h2>
+                ) : null
+              }
+              <!-- <div set:html={marked(callout.fields.content as string)} /> -->
+              {
+                callout?.fields?.content ? (
+                  <div set:html={marked(callout.fields.content as string)} />
+                ) : null
+              }
+              {
+                callout?.fields?.ctaurl ? (
+                  <a
+                    class='btn btn-outline-primary btn-small'
+                    href={callout.fields.ctaurl as string}
+                  >
+                    {callout.fields.cta}
+                  </a>
+                ) : null
+              }
+            </div>:null}
+            <h2 class='h4'>{t('inthissection')}</h2>
+
+            <ol class='large light-blue'>
+              {
+                benefitPages.map((b) => {
+                  return (
+                    <li>
+                      <a href={`${page?.fields.slug}/${b.fields.slug}`}>
+                        {b.fields.title}
+                      </a>
+                    </li>
+                  )
+                })
+              }
+            </ol>
+
+            <hr class='hr-light' />
+            <a
+              class='js-start-button btn btn-tertiary btn-lg btn-icon-right bi bi-arrow-right'
+              href={`${page?.fields.slug}/${benefitPages[0].fields.slug}`}
+              >{t('start')}</a
+            >
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class='bg-secondary lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <h2>{t('resources')}</h2>
+              <div class='mb-4 pb-2'></div>
+              <div class='row'>
+                {
+                  resources
+                    ? //@ts-ignore
+                      resources?.map((o) => {
+                        return (
+                          <div
+                            class='col-12 col-md-4'
+                            data-province-filter=''
+                            style='display: block;'
+                          >
+                            <div class='pro-card--full-img equal-height'>
+                              <picture>
+                                <img
+                                  src={
+                                    (o.fields.cardImage as Asset)?.fields?.file
+                                      ?.url as string
+                                  }
+                                />
+                              </picture>
+                              <div class='content'>
+                                <a
+                                  href={`/resource/${o.fields.slug as string}`}
+                                >
+                                  <>
+                                    <p>{o.fields.title as string}</p>
+                                    <p class='xsmall'>
+                                      {o.fields.lead as string}
+                                    </p>
+                                    <span class='btn-link btn-icon-right bi bi-arrow-right'>
+                                      <span />
+                                    </span>
+                                  </>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })
+                    : null
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <Feedback />
+    </main>
+</Layout>
+
+ <script>
+    import accordion from '../lib/accordion'
+
+    accordion('.js-accordion h2', 'H2', 2)
+    accordion('.js-accordion h3', 'H3', 3)
+  </script>

@@ -1,0 +1,38 @@
+{
+  "en-CA": [
+    {
+      "title": "Home",
+      "slug": ""
+    },
+    {
+      "title": "Glossary",
+      "slug": "glossary"
+    },
+    {
+      "title": "Resources",
+      "slug": "resources"
+    },
+    {
+      "title": "Help",
+      "slug": "help"
+    }
+  ],
+  "fr-CA": [
+    {
+      "title": "Page d’accueil",
+      "slug": ""
+    },
+    {
+      "title": "Glossaire",
+      "slug": "glossary"
+    },
+    {
+      "title": "Ressources",
+      "slug": "resources"
+    },
+    {
+      "title": "Aide",
+      "slug": "help"
+    }
+  ]
+}

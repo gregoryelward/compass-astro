@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string
+  body: string
+  href: string
+  img: string
+  alt: string
+  linkTitle: string
+}
+
+const { href, title, body, img, alt, linkTitle } = Astro.props
+---
+
+<div class='card'>
+  <div class='px-lg-5 mx-lg-4'>
+    <img class='card-img-top' alt={alt} src={img} />
+  </div>
+  <div class='card-body'>
+    <div class='card-title' style='min-height:50px;'>
+      <h3>{title}</h3>
+    </div>
+    <p class='card-text' style='min-height:120px;'>
+      {body}
+    </p>
+    <a
+      class='icon-link stretched-link'
+      href={href}
+      target='_blank'
+      rel='noopener'
+      aria-describedby='new_window'
+    >
+      {linkTitle}
+    </a>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+---
+import { marked } from 'marked'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import { contentfulClient } from '../lib/contentful'
+import type { TypeIndigenousCalloutSkeleton } from '../types/contentful/TypeIndigenousCallout'
+const lang = getLangFromUrl(Astro.url)
+
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+const indigRes =
+  await contentfulClient.getEntries<TypeIndigenousCalloutSkeleton>({
+    skip: 0,
+    limit: 1,
+    content_type: 'indigenousCallout',
+    locale
+  })
+
+let indigenousCallout = indigRes.items[0]?.fields
+
+const t = useTranslations(lang)
+---
+
+{
+  indigenousCallout ? (
+    <>
+      <div class='callout callout--no-border p-3 my-5'>
+        <h2 class='h5'>{indigenousCallout.title}</h2>
+        <p class='xsmall'>{indigenousCallout.lead}</p>
+        <button
+          type='button'
+          class='btn btn-outline-primary btn-small'
+          data-toggle='modal'
+          data-target='#indigenousCallout'
+        >
+          {indigenousCallout.cta}
+        </button>
+      </div>
+      <div
+        class='modal fade'
+        id='indigenousCallout'
+        tabindex='-1'
+        aria-labelledby='exampleModalLabel'
+        aria-hidden='true'
+      >
+        <div class='modal-dialog'>
+          <div class='modal-content'>
+            <div class='modal-header'>
+              <h5 class='modal-title' id='exampleModalLabel'>
+                {indigenousCallout.title}
+              </h5>
+              <button
+                type='button'
+                class='close'
+                data-dismiss='modal'
+                aria-label={t('close')}
+              >
+                <span aria-hidden='true'>&times;</span>
+              </button>
+            </div>
+            <div
+              class='modal-body'
+              set:html={marked(indigenousCallout.content as unknown as string)}
+            />
+            <div class='modal-footer'>
+              <button
+                type='button'
+                class='btn btn-secondary'
+                data-dismiss='modal'
+              >
+                {t('close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  ) : null
+}

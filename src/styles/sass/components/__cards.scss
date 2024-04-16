@@ -1,0 +1,306 @@
+.pro-card {
+    background: var(--secondary);
+    padding: 1.875rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.5s;
+    
+
+    .btn-link, .btn-link span {
+        color: var(--white);
+
+        @media print {
+            color: var(--tertiary);
+        }
+    }
+
+    .bg-secondary & {
+        background: var(--primary);
+    }
+
+    .bg-light &, .bg-light--alt &, .light-theme & {
+        background-color: var(--white);
+
+        .btn-link, .btn-link span {
+            color: var(--body);
+        }
+    }
+    .bg-white & {
+        background-color: var(--white);
+        border-left: 1px solid var(--c-i-border);
+        border-right: 1px solid var(--c-i-border);
+        border-bottom: 1px solid var(--c-i-border);
+
+        .btn-link, .btn-link span {
+            color: var(--body);
+        }
+    }
+
+    //applies to cards to give them an equal height when they appear in columns.
+    &.equal-height {
+        height: calc(100% - 1.5rem);
+    }
+
+    &--top-border {
+        @extend .pro-card;
+        border-top: 7px solid var(--orange);
+
+        &.pro-card--orange-outline {
+            .light-theme & {
+                border: solid 1px var(--orange);
+                border-top: 7px solid var(--orange);
+            }
+        }
+    }
+
+    &--resource {
+        padding: 0;
+        position: relative;
+        border: 0 solid var(--light-brown);
+        // height: calc(100% - 1.5rem);
+
+        &:hover {
+            background-color: var(--light-brown-tint);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0);
+            // border: 1px solid var(--light-brown);
+
+            a::after {
+                box-shadow: inset 0px 0px 0px 1px var(--light-brown);
+            }
+        }
+
+        img {
+            width: 100%;
+        }
+
+        >div {
+            padding: 1rem;
+        }
+
+        h3, .heading-six {
+            margin-bottom: 0;
+        }
+
+        a {
+            &::after {
+                content: "";
+                position: absolute;
+                top: -7px;
+                left: 0;
+                width: 100%;
+                height: calc(100% + 7px);
+                border-radius: 0.375rem;
+                transition: all linear 0.25s;
+                border: 1px solid transparent;
+            }
+
+            &:focus {
+                outline: none;
+                
+                &::after {
+                    outline: auto;
+                    outline-color: var(--secondary);
+                }
+            }
+        }
+    }
+
+    &--starting-points {
+        @extend .pro-card;
+        position: relative;
+        border: 1px solid transparent;
+
+        &.pro-card--top-border {
+            border-top: 7px solid var(--orange);
+            
+            &:hover { 
+                border-top: 7px solid var(--tertiary);
+
+                .bg-light &, .bg-light--alt &, .bg-white &, .light-theme & {
+                    border-top: 7px solid var(--primary);
+                }
+            }
+        }
+
+        a {
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 0.375rem;
+            }
+            &:hover, &:focus {
+                text-decoration: none;
+                outline: none;
+            }
+            &:focus {
+                text-decoration: none;
+                outline: none;
+                &::after {
+                    outline-style: solid;
+                }
+
+            }
+        }
+        &:hover {
+            background-color: var(--secondary-transparent);
+            box-shadow: none;
+            border: 1px solid var(--tertiary);
+            
+
+            .bg-secondary & {
+                background-color: var(--primary-transparent);
+                border-left: 1px solid var(--primary);
+                border-right: 1px solid var(--primary);
+                border-bottom: 1px solid var(--primary);
+            }
+            
+
+            .bg-light &, .bg-light--alt &, .light-theme & {
+                background-color: var(--white);
+                border-left: 1px solid var(--card-border);
+                border-right: 1px solid var(--card-border);
+                border-bottom: 1px solid var(--card-border);
+            }
+
+            .bg-white & {
+                background-color: var(--light);
+                border-left: 1px solid var(--light-brown);
+                border-right: 1px solid var(--light-brown);
+                border-bottom: 1px solid var(--light-brown);
+            }
+        }
+        .small-text {
+            display: block;
+            color: var(--white);
+            margin-bottom: 0;
+
+            .bg-light &, .bg-light--alt &, .bg-white &, .light-theme & {
+                color: var(--body);
+            }
+
+            @media print {
+                color: var(--secondary);
+            }
+        }
+        .large-text {
+            display: block;
+        }
+    }
+
+    &--full-img {
+        @extend .pro-card;
+        position: relative;
+        border: 1px solid transparent;
+        padding: 0;
+
+        img {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .content {
+            padding: 1rem;
+        }
+
+        &.pro-card--top-border {
+            border-top: 7px solid var(--orange);
+            &:hover { 
+                border-top: 7px solid var(--orange);
+            }
+        }
+
+        a {
+            color: var(--white);
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 0.375rem;
+            }
+            &:hover, &:focus {
+                text-decoration: none;
+                outline: none;
+            }
+            &:focus {
+                text-decoration: none;
+                outline: none;
+                &::after {
+                    outline-style: solid;
+                }
+
+            }
+
+            @media print {
+                color: var(--tertiary);
+            }
+        }
+
+        &:hover {
+            background-color: var(--secondary-transparent);
+            box-shadow: none;
+            border: 1px solid var(--secondary);
+
+            .bg-secondary & {
+                background-color: var(--primary-transparent);
+                border: 1px solid var(--primary);
+            }
+
+            .bg-light &, .bg-light--alt &, .bg-white &, .light-theme & {
+                background-color: var(--light-brown-tint);
+                border: 1px solid var(--light-brown);
+            }
+        }
+
+        .small-text {
+            display: block;
+            margin-bottom: 0;
+        }
+
+        .large-text {
+            display: block;
+        }
+
+        .light-theme & {
+            border: 1px solid var(--tertiary);
+
+            &:hover {
+                background-color: var(--light);
+                box-shadow: none;
+                border: 1px solid var(--primary);
+            }
+        }
+    }
+
+    .content {
+        >* {
+            margin-bottom: 1rem;
+        }
+
+        @media print {
+            page-break-inside: avoid;
+        }
+    }
+
+    @media print {
+        border: solid 1px var(--card-border);
+        display: block;
+
+        a {
+            text-decoration: none;
+        }
+    }
+}
+
+.resources-container {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}

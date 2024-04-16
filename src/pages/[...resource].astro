@@ -1,0 +1,142 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
+import type { Asset, Entry } from 'contentful'
+import Feedback from '../components/Feedback.astro'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const resourcesRes =
+      await contentfulClient.getEntries<TypeResourcesSkeleton>({
+        content_type: 'resources',
+        locale
+      })
+
+    const resources = resourcesRes.items
+    const allitems = [...resources]
+    for (const i of resources) {
+      const others = allitems.filter((f) => f.fields.slug !== i.fields.slug)
+      paths.push({
+        params: {
+          resource: `${locale === 'en-CA' ? 'resource/' : 'fr/resource/'}${i.fields.slug}`
+        },
+        props: { page: { ...i }, others }
+      })
+    }
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const page = Astro.props.page as Entry<TypeResourcesSkeleton>
+
+const others = Astro.props.others as Array<Entry<TypeResourcesSkeleton>>
+---
+
+<Layout
+  title={page?.fields.title as string}
+  description={''}
+  className='resource'
+>
+  <main
+    class='resource page'
+    id='maincontent'
+    data-page-title={page?.fields.title as string}
+    data-page-category='resource'
+  >
+    <div class='container'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <h1><strong>{page?.fields.title as string}</strong></h1>
+            <p class='large'>
+              {page?.fields.lead as string}
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <div class='js-accordion'>
+                <div set:html={marked(page?.fields.content1 as string)} />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-light--alt'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <h2>{t('resources')}</h2>
+              <div class='mb-4 pb-2'></div>
+              <div class='row'>
+                {
+                  others.map((o) => {
+                    return (
+                      <div
+                        class='col-12 col-md-4'
+                        data-province-filter=''
+                        style='display: block;'
+                      >
+                        <div class='pro-card--full-img equal-height'>
+                          <picture>
+                            <img
+                              src={
+                                (o.fields.cardImage as Asset)?.fields?.file
+                                  ?.url as string
+                              }
+                            />
+                          </picture>
+                          <div class='content'>
+                            <a href={`/resource/${o.fields.slug as string}`}>
+                              <>
+                                <p>{o.fields.title as string}</p>
+                                <p class='xsmall'>{o.fields.lead as string}</p>
+                                <span class='btn-link btn-icon-right bi bi-arrow-right'>
+                                  <span />
+                                </span>
+                              </>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <Feedback />
+  </main>
+</Layout>
+
+<script>
+  import accordion from '../lib/accordion'
+
+  accordion('.js-accordion h2', 'H2', 2)
+  accordion('.js-accordion h3', 'H3', 3)
+</script>

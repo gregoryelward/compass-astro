@@ -1,0 +1,242 @@
+{
+  "jurisdictions": {
+    "en-CA": [
+      {
+        "id": "jurisdictionAlberta",
+        "title": "Alberta",
+        "slug": "alberta",
+        "enabled": true,
+        "code": "AB",
+        "name": "Alberta",
+        "escode": "AB"
+      },
+      {
+        "id": "jurisdictionBc",
+        "title": "British Columbia",
+        "slug": "british-columbia",
+        "enabled": true,
+        "code": "BC",
+        "name": "British Columbia",
+        "escode": "BC"
+      },
+      {
+        "id": "jurisdictionManitoba",
+        "title": "Manitoba",
+        "slug": "manitoba",
+        "enabled": true,
+        "code": "MB",
+        "name": "Manitoba",
+        "escode": "MB"
+      },
+      {
+        "id": "jurisdictionNewBrunswick",
+        "title": "New Brunswick",
+        "slug": "new-brunswick",
+        "enabled": true,
+        "code": "NB",
+        "name": "New Brunswick",
+        "escode": "NB"
+      },
+      {
+        "id": "jurisdictionNewfoundlandAndLabrador",
+        "title": "Newfoundland and Labrador",
+        "slug": "newfoundland-and-labrador",
+        "enabled": true,
+        "code": "NL",
+        "name": "Newfoundland and Labrador",
+        "escode": "NL"
+      },
+      {
+        "id": "jurisdictionNorthwestTerritories",
+        "title": "Northwest Territories",
+        "slug": "northwest-territories",
+        "enabled": true,
+        "code": "NT",
+        "name": "Northwest Territories",
+        "escode": "NT"
+      },
+      {
+        "id": "jurisdictionNovaScotia",
+        "title": "Nova Scotia",
+        "slug": "nova-scotia",
+        "enabled": true,
+        "code": "NS",
+        "name": "Nova Scotia",
+        "escode": "NS"
+      },
+      {
+        "id": "jurisdictionNunavut",
+        "title": "Nunavut",
+        "slug": "nunavut",
+        "enabled": true,
+        "code": "NU",
+        "name": "Nunavut",
+        "escode": "NU"
+      },
+      {
+        "id": "jursdictionOn",
+        "title": "Ontario",
+        "slug": "ontario",
+        "enabled": true,
+        "code": "ON",
+        "name": "Ontario",
+        "escode": "ON"
+      },
+      {
+        "id": "jurisdictionPrinceEdwardIsland",
+        "title": "Prince Edward Island",
+        "slug": "prince-edward-island",
+        "enabled": true,
+        "code": "PE",
+        "name": "Prince Edward Island",
+        "escode": "PE"
+      },
+      {
+        "id": "jurisdictionQuebec",
+        "title": "Quebec",
+        "slug": "quebec",
+        "enabled": true,
+        "code": "QC",
+        "name": "Quebec",
+        "escode": "QC"
+      },
+      {
+        "id": "jurisdictionSaskatchewan",
+        "title": "Saskatchewan",
+        "slug": "saskatchewan",
+        "enabled": true,
+        "code": "SK",
+        "name": "Saskatchewan",
+        "escode": "SK"
+      },
+      {
+        "id": "jurisdictionYt",
+        "title": "Yukon",
+        "slug": "yukon",
+        "enabled": true,
+        "code": "YT",
+        "name": "Yukon",
+        "escode": "YT"
+      }
+    ],
+    "fr-CA": [
+      {
+        "id": "jurisdictionAlberta",
+        "title": "Alberta",
+        "slug": "alberta",
+        "enabled": true,
+        "code": "AB",
+        "name": "Alberta",
+        "escode": "Alb."
+      },
+      {
+        "id": "jurisdictionBc",
+        "title": "Colombie-Britannique",
+        "slug": "colombie-britannique",
+        "enabled": true,
+        "code": "BC",
+        "name": "British Columbia",
+        "escode": "C.-B."
+      },
+      {
+        "id": "jurisdictionManitoba",
+        "title": "Manitoba",
+        "slug": "manitoba",
+        "enabled": true,
+        "code": "MB",
+        "name": "Manitoba",
+        "escode": "Man."
+      },
+      {
+        "id": "jurisdictionNewBrunswick",
+        "title": "Nouveau-Brunswick",
+        "slug": "nouveau-brunswick",
+        "enabled": true,
+        "code": "NB",
+        "name": "New Brunswick",
+        "escode": "N.-B."
+      },
+      {
+        "id": "jurisdictionNewfoundlandAndLabrador",
+        "title": "Terre-Neuve-et-Labrador",
+        "slug": "terre-neuve-et-labrador",
+        "enabled": true,
+        "code": "NL",
+        "name": "Newfoundland and Labrador",
+        "escode": "T.-N.-L."
+      },
+      {
+        "id": "jurisdictionNorthwestTerritories",
+        "title": "Territoires du Nord-Ouest",
+        "slug": "territoires-du-nord-ouest",
+        "enabled": true,
+        "code": "NT",
+        "name": "Northwest Territories",
+        "escode": "T.N.-O."
+      },
+      {
+        "id": "jurisdictionNovaScotia",
+        "title": "Nouvelle-Écosse",
+        "slug": "nouvelle-ecosse",
+        "enabled": true,
+        "code": "NS",
+        "name": "Nova Scotia",
+        "escode": "N.-É."
+      },
+      {
+        "id": "jurisdictionNunavut",
+        "title": "Nunavut",
+        "slug": "nunavut",
+        "enabled": true,
+        "code": "NU",
+        "name": "Nunavut",
+        "escode": "Nt"
+      },
+      {
+        "id": "jursdictionOn",
+        "title": "Ontario",
+        "slug": "ontario",
+        "enabled": true,
+        "code": "ON",
+        "name": "Ontario",
+        "escode": "Ont."
+      },
+      {
+        "id": "jurisdictionPrinceEdwardIsland",
+        "title": "Île-du-Prince-Édouard",
+        "slug": "ile-du-prince-edouard",
+        "enabled": true,
+        "code": "PE",
+        "name": "Prince Edward Island",
+        "escode": "Î.-P.-É."
+      },
+      {
+        "id": "jurisdictionQuebec",
+        "title": "Québec",
+        "slug": "quebec",
+        "enabled": true,
+        "code": "QC",
+        "name": "Quebec",
+        "escode": "Qc"
+      },
+      {
+        "id": "jurisdictionSaskatchewan",
+        "title": "Saskatchewan",
+        "slug": "saskatchewan",
+        "enabled": true,
+        "code": "SK",
+        "name": "Saskatchewan",
+        "escode": "Sask."
+      },
+      {
+        "id": "jurisdictionYt",
+        "title": "Yukon",
+        "slug": "yukon",
+        "enabled": true,
+        "code": "YT",
+        "name": "Yukon",
+        "escode": "Yn"
+      }
+    ]
+  }
+}

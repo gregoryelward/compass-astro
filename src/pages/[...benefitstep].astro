@@ -1,0 +1,177 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Entry } from 'contentful'
+import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
+import getJurisdiction from '../lib/jurisdictions'
+import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
+import makeUrl from '../lib/helpers'
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
+      content_type: 'benefit',
+      locale
+    })
+
+    const benefits = benefitRes.items
+    for (const i of benefits) {
+      const benefitPages = i.fields.benefitPages as Array<
+        Entry<TypeBenefitPageSkeleton>
+      >
+      const applyPage = benefitPages.filter(
+        (p) => p.fields.slug === 'apply' || p.fields.slug === 'how-to-apply'
+      )[0] as Entry<TypeBenefitPageSkeleton>
+      const jurisdiction = getJurisdiction(i.fields.authority, locale)
+      const jurisdictionSlug = jurisdiction?.slug
+      let path = locale === 'en-CA' ? '' : `/fr`
+      if (jurisdictionSlug) {
+        path = path + '/' + jurisdictionSlug
+      }
+      path = path + '/' + i.fields.slug
+
+      path = path + '/' + applyPage.fields.slug
+
+      const benefitApplySteps = i.fields.steps?.filter(Boolean) as Array<
+        Entry<TypeStepsSkeleton>
+      >
+      let index = 1
+      for (const b of benefitApplySteps) {
+        paths.push({
+          params: {
+            benefitstep: `${path}/step-${index}`
+          },
+          props: { page: { ...b }, benefit: { ...i }, index, applyPage }
+        })
+        index = index + 1
+      }
+    }
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const lang = getLangFromUrl(Astro.url)
+const langSlug = lang === 'en' ? '' : `${lang}/`
+const t = useTranslations(lang)
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+
+const page = Astro.props.page as Entry<TypeStepsSkeleton>
+const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
+const stepIndex = Astro.props.index
+const applyPage = Astro.props.applyPage
+---
+
+<Layout title={page?.fields?.title as string} description={''} className='step'>
+  <main
+    class='step page'
+    id='maincontent'
+    data-page-title={page?.fields?.title as string}
+    data-page-category='step'
+  >
+    <div class='container'>
+      <div class='row justify-content-md-center'>
+        <div class='col-12 col-md-10'>
+          <nav aria-label='breadcrumb'>
+            <ol class='breadcrumb'>
+              <li class='breadcrumb-item'>
+                <a class='breadcrumb-item' href='/'>{t('home')}</a>
+              </li>
+              <li class='breadcrumb-item'>
+                <a
+                  class='breadcrumb-item'
+                  href={`${makeUrl(
+                    locale,
+                    benefit?.fields?.slug as string,
+                    getJurisdiction(benefit.fields.authority, locale)?.slug
+                  )}`}>{benefit?.fields?.title}</a
+                >
+              </li>
+              <li class='breadcrumb-item'>
+                <a
+                  class='breadcrumb-item'
+                  href={`${makeUrl(
+                    locale,
+                    'apply',
+                    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string
+                  )}`}>{applyPage.fields.title}</a
+                >
+              </li>
+              <li class='active breadcrumb-item' aria-current='page'>
+                {`Step ${stepIndex}`}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <div class='category h6 d-print-none'>
+              {benefit.fields.acronym}
+            </div>
+            <div class='mb-3 pb-3'></div>
+            <h1><strong>{`${t('step')} ${stepIndex}`}</strong></h1>
+
+            <hr class='hr-light' />
+
+            <div class='pro-card--top-border pro-card--orange-outline'>
+              <p class='large'>{page.fields.title}</p>
+              <a
+                class='btn btn-primary btn-lg'
+                href={`step-${stepIndex + 1}?a=y`}
+                >{t('yes')}
+              </a>
+              <a
+                class='btn btn-primary btn-lg'
+                href={`step-${stepIndex}-no?a=n`}>{t('no')}</a
+              >
+              <a
+                class='btn btn-primary btn-lg'
+                href={`step-${stepIndex}-no?a=d`}
+                >{t('notsure')}
+              </a><div class='mb-3'></div>
+            </div>
+            <h2 class='h5' id='steps-title'>{t('steps')}</h2>
+            <nav aria-labelledby='steps-title'>
+              <ul class='pagination'>
+                {
+                  benefit?.fields?.steps
+                    ? //@ts-ignore
+                      benefit.fields.steps.map(
+                        (s: TypeStepsSkeleton, index: number) => {
+                          return (
+                            <li
+                              class={`page-item ${stepIndex - 1 === index ? 'active' : ''}`}
+                            >
+                              <a class='page-link' href={`step-${index + 1}`}>
+                                {index + 1}
+                              </a>
+                            </li>
+                          )
+                        }
+                      )
+                    : null
+                }
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>

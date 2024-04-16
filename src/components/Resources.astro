@@ -1,0 +1,84 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import { contentfulClient } from '../lib/contentful'
+import getJurisdiction from '../lib/jurisdictions'
+import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
+import type { Asset } from 'contentful'
+
+const lang = getLangFromUrl(Astro.url)
+const langSlug = lang === 'en' ? '/' : `${lang}/`
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+const resourcesRes = await contentfulClient.getEntries<TypeResourcesSkeleton>({
+  content_type: 'resources',
+  locale
+})
+
+const resources = resourcesRes.items
+
+const t = useTranslations(lang)
+---
+
+<div class='bg-secondary'>
+  <div class='container'>
+    <section class='section'>
+      <div class='row justify-content-md-center'>
+        <div class='col-12'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <h2>{t('resources')}</h2>
+                  <div class='mb-4 pb-2'></div>
+                  <div class='row'>
+                    {
+                      resources.map((r) => {
+                        return (
+                          <div
+                            class='col-12 col-md-4'
+                            data-province-filter={
+                              r.fields.showLocalyOnly
+                                ? getJurisdiction(r.fields.authority)?.code
+                                : ''
+                            }
+                            style='display: block;'
+                          >
+                            <div class='pro-card--full-img equal-height'>
+                              <>
+                                <picture>
+                                  <img
+                                    alt=''
+                                    src={
+                                      (r.fields.cardImage as Asset)?.fields
+                                        ?.file?.url as string
+                                    }
+                                  />
+                                </picture>
+                                <div class='content'>
+                                  <a
+                                    href={`${langSlug}resource/${r.fields.slug}`}
+                                  >
+                                    <>
+                                      <p>{r.fields.title}</p>
+                                      <p class='xsmall'>{r.fields.lead}</p>
+                                      <span class='btn-link btn-icon-right bi bi-arrow-right'>
+                                        <span />
+                                      </span>
+                                    </>
+                                  </a>
+                                </div>
+                              </>
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

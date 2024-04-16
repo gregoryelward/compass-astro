@@ -1,0 +1,232 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Entry } from 'contentful'
+import type { TypePageSkeleton } from '../types/contentful/TypePage'
+import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
+import type { TypeHelpAgencyListHeadingSkeleton } from '../types/contentful/TypeHelpAgencyListHeading'
+import getJurisdiction from '../lib/jurisdictions'
+import type { TypeAgencySkeleton } from '../types/contentful/TypeAgency'
+import Feedback from '../components/Feedback.astro'
+import HelpStarter from '../components/HelpStarter.astro'
+import Resources from '../components/Resources.astro'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const res = await contentfulClient.getEntries<TypePageSkeleton>({
+      content_type: 'page',
+      locale
+    })
+
+    const page = res.items
+
+    const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
+      content_type: 'benefit',
+      locale
+    })
+    const benefits = benefitRes.items
+
+    const agencyHeadingRes =
+      await contentfulClient.getEntries<TypeHelpAgencyListHeadingSkeleton>({
+        content_type: 'helpAgencyListHeading',
+        limit: 1,
+        locale
+      })
+    const agencyHeading = agencyHeadingRes?.items[0]
+
+    for (const i of page) {
+      if (i.fields.slug == 'help') {
+        // move this to howTo content type, removed as a page
+        paths.push({
+          params: {
+            help: `${locale === 'en-CA' ? i.fields.slug : `fr/${i.fields.slug}`}`
+          },
+          props: { page: { ...i }, benefits, agencyHeading }
+        })
+      }
+    }
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const page = Astro.props.page as Entry<TypePageSkeleton>
+const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
+
+const agencyHeading = Astro.props
+  .agencyHeading as Entry<TypeHelpAgencyListHeadingSkeleton>
+---
+
+<Layout
+  title={page?.fields.title as string}
+  description={page?.fields.metaDescription as string}
+  className=''
+>
+  <main
+    class={`page ${page?.fields?.slug}`}
+    id='maincontent'
+    data-page-title={page?.fields.title as string}
+    data-page-category=''
+  >
+    <div class='container block1'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <h1><strong>{page?.fields.title as string}</strong></h1>
+            <h2>{page?.fields.subTitle as string}</h2>
+            <p class='large'>
+              {page?.fields.lead as string}
+            </p>
+            {
+              page?.fields?.block1 ? (
+                <div set:html={marked(page.fields.block1 as string)} />
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <h2>{agencyHeading?.fields.title}</h2>
+              <div class='mb-3 pb-2'></div>
+
+              {
+                benefits
+                  ? benefits.map((b) => {
+                      return (
+                        <div
+                          class='js-accordion benefit-agency'
+                          data-province-filter={
+                            getJurisdiction(b.fields.authority)?.code || ''
+                          }
+                          data-province-hide-filter={
+                            b.fields.hideForProvinces || ''
+                          }
+                        >
+                          <h2 id={`help${b?.sys.id}`}>{b.fields.title}</h2>
+                          <div class='card-body'>
+                            {b?.fields?.helpAgency ? (
+                              <div
+                                set:html={marked(b.fields.helpAgency as string)}
+                              />
+                            ) : null}
+                            {b?.fields?.agency ? (
+                              <div>
+                                <p class='bg-light--alt p-3'>
+                                  {agencyHeading?.fields.subTitle}
+                                </p>
+
+                                {
+                                  //@ts-ignore
+                                  b.fields.agency.map(
+                                    (a: TypeAgencySkeleton) => {
+                                      return (
+                                        <div
+                                          class='mt-3'
+                                          data-province-filter={
+                                            a.fields.showLocalyOnly &&
+                                            getJurisdiction(a.fields.authority)
+                                              ?.code
+                                          }
+                                        >
+                                          <h3 class='h4'>{a.fields.title}</h3>
+                                          {a?.fields?.content ? (
+                                            <div
+                                              set:html={marked(
+                                                a.fields
+                                                  .content as unknown as string
+                                              )}
+                                            />
+                                          ) : null}
+                                        </div>
+                                      )
+                                    }
+                                  )
+                                }
+                                <hr />
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      )
+                    })
+                  : null
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <HelpStarter />
+
+    {
+      page?.fields?.block2 ? (
+        <div class='bg-white lt-border-t-light block2'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block2 as string)} />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    {
+      page?.fields?.block3 ? (
+        <div class='bg-secondary block3'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block3 as string)} />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    {
+      page?.fields?.block4 ? (
+        <div class='bg-white lt-border-t-light block4'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block4 as string)} />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+
+    <Resources />
+    <Feedback />
+  </main>
+</Layout>
+
+<script>
+  import accordion from '../lib/accordion'
+  import showProvincialDataOnly from '../lib/filterContent'
+  showProvincialDataOnly()
+  accordion('.js-accordion h2', 'H2', 2)
+</script>
