@@ -43,6 +43,7 @@ export async function getStaticPaths() {
       const benefitApplySteps = i.fields.steps?.filter(Boolean) as Array<
         Entry<TypeStepsSkeleton>
       >
+      console.log('steps length ', benefitApplySteps.length)
       let index = 1
       for (const b of benefitApplySteps) {
         paths.push({
@@ -108,7 +109,7 @@ const applyPage = Astro.props.applyPage
                     'apply',
                     getJurisdiction(benefit.fields.authority, locale)?.slug,
                     benefit?.fields?.slug as string
-                  )}`}>{applyPage.fields.title}</a
+                  )}`}>{applyPage?.fields?.title}</a
                 >
               </li>
               <li class='active breadcrumb-item' aria-current='page'>
@@ -124,21 +125,21 @@ const applyPage = Astro.props.applyPage
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
             <div class='category h6 d-print-none'>
-              {benefit.fields.acronym}
+              {benefit.fields?.acronym}
             </div>
             <div class='mb-3 pb-3'></div>
             <h1>
               <strong>
-                {`${t('step')} ${stepIndex} - ${benefit.fields.title}`}</strong
+                {`${t('step')} ${stepIndex} - ${benefit.fields?.title}`}</strong
               >
             </h1>
-            <h2>{page.fields.title}</h2>
+            <h2>{page.fields?.title}</h2>
 
             <div class='bg-secondary p-3 step answer no d-none'>
-              {page.fields.noAnswer}
+              {page.fields?.noAnswer}
             </div>
             <div class='bg-secondary p-3 step answer dontknow d-none'>
-              {page.fields.notSure}
+              {page.fields?.notSure}
             </div>
           </div>
         </div>
@@ -152,13 +153,13 @@ const applyPage = Astro.props.applyPage
             <div class='col-12'>
               <div
                 class='js-accordion'
-                set:html={marked(page.fields.content as string)}
+                set:html={marked(page.fields?.content as string)}
               />
               {
                 page?.fields?.qAndA ? (
                   <div
                     class='js-accordion'
-                    set:html={marked(page.fields.qAndA as string)}
+                    set:html={marked(page.fields?.qAndA as string)}
                   />
                 ) : null
               }
@@ -166,7 +167,7 @@ const applyPage = Astro.props.applyPage
                 page?.fields?.aside ? (
                   <div
                     class='js-accordion'
-                    set:html={marked(page.fields.aside as string)}
+                    set:html={marked(page.fields?.aside as string)}
                   />
                 ) : null
               }
