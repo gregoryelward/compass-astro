@@ -19,6 +19,7 @@ const resourcesRes = await contentfulClient.getEntries<TypeResourcesSkeleton>({
 const resources = resourcesRes.items
 
 // const base = 'compass-astro' //import.meta.env.BASE_URL
+// const base = '/' //import.meta.env.BASE_URL
 const base = import.meta.env.BASE_URL
 ---
 

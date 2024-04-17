@@ -20,9 +20,9 @@ export default function makeUrl(
   if (locale !== 'en-CA') {
     slugs.unshift('fr')
   }
-  if (base && base !== '/') {
-    slugs.unshift(base)
-  }
+  // if (base && base !== '/') {
+  //   slugs.unshift(base)
+  // }
   // console.log('slugs 2 ', slugs)
 
   if (slugs.length === 0) {
@@ -30,6 +30,6 @@ export default function makeUrl(
   }
 
   // console.log('slugs 3 ', `/${slugs.join('/')}/${name}`)
-  return `/${slugs.join('/')}/${name}`
+  return `${base}${slugs.join('/')}/${name}`
   // return `${slugs.join('/')}/${name}`
 }
