@@ -18,6 +18,7 @@ const resourcesRes = await contentfulClient.getEntries<TypeResourcesSkeleton>({
 
 const resources = resourcesRes.items
 
+// const base = 'compass-astro' //import.meta.env.BASE_URL
 const base = import.meta.env.BASE_URL
 ---
 
@@ -58,7 +59,7 @@ const base = import.meta.env.BASE_URL
                                 </picture>
                                 <div class='content'>
                                   <a
-                                    href={`${makeUrl(locale, r.fields?.slug as string, base, 'resource')}`}
+                                    href={`${makeUrl(locale, base, r.fields?.slug as string, 'resource')}`}
                                   >
                                     <>
                                       <p>{r.fields?.title}</p>

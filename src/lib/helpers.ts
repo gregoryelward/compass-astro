@@ -1,6 +1,12 @@
-export default function makeUrl(locale: string, name: string, ...args: any[]) {
-  // console.log('INPUT ', locale, name, [...args])
+export default function makeUrl(
+  locale: string,
+  base: string = '',
+  name: string,
+  ...args: any[]
+) {
+  // console.log('INPUT ', locale, base, name, [...args])
 
+  // INPUT  en-CA how-do-i-set-up-a-my-self-serve-myss-account [ '/', 'resource' ]
   //href={`${ makeUrl(locale,
   //   b.fields?.slug as string,
   //   base,
@@ -13,6 +19,9 @@ export default function makeUrl(locale: string, name: string, ...args: any[]) {
 
   if (locale !== 'en-CA') {
     slugs.unshift('fr')
+  }
+  if (base && base !== '/') {
+    slugs.unshift(base)
   }
   // console.log('slugs 2 ', slugs)
 
