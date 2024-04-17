@@ -151,15 +151,19 @@ const applyPage = Astro.props.applyPage
         <section class='section'>
           <div class='row'>
             <div class='col-12'>
-              <div
-                class='js-accordion'
-                set:html={marked(page.fields?.content as string)}
-              />
+              {
+                page.fields?.content ? (
+                  <div
+                    class='js-accordion'
+                    set:html={marked(page.fields.content as string)}
+                  />
+                ) : null
+              }
               {
                 page?.fields?.qAndA ? (
                   <div
                     class='js-accordion'
-                    set:html={marked(page.fields?.qAndA as string)}
+                    set:html={marked(page.fields.qAndA as string)}
                   />
                 ) : null
               }
@@ -167,7 +171,7 @@ const applyPage = Astro.props.applyPage
                 page?.fields?.aside ? (
                   <div
                     class='js-accordion'
-                    set:html={marked(page.fields?.aside as string)}
+                    set:html={marked(page.fields.aside as string)}
                   />
                 ) : null
               }
