@@ -102,6 +102,7 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const lang = getLangFromUrl(Astro.url)
+const langSlug = lang === 'en' ? '' : `${lang}/`
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
 const fields = Astro.props.page
@@ -119,6 +120,8 @@ const mainCallout = (
 const exploreSection = Astro.props
   .exploreSection as TypeExploreMoreBenefitsCalloutFields
 const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
+
+const base = 'foobar-base' //import.meta.env.BASE_URL
 ---
 
 <Layout title={pageTitle} description={metaDescription} className='home'>
@@ -194,10 +197,10 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                         >
                           <a
                             class='btn btn-link btn-icon-right bi bi-arrow-right no-padding'
-                            href={`${makeUrl(locale, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                            href={`${makeUrl(locale, b.fields?.slug as string, base, getJurisdiction(b.fields.authority, locale)?.slug)}`}
                           >
                             <h3 class='h4'>
-                              <span>{b.fields.title}</span>
+                              <span>{b.fields.title} ????</span>
                             </h3>
                           </a>
 
