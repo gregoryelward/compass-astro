@@ -121,7 +121,7 @@ const exploreSection = Astro.props
   .exploreSection as TypeExploreMoreBenefitsCalloutFields
 const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
-const base = 'foobar-base' //import.meta.env.BASE_URL
+const base = import.meta.env.BASE_URL
 ---
 
 <Layout title={pageTitle} description={metaDescription} className='home'>
@@ -200,7 +200,7 @@ const base = 'foobar-base' //import.meta.env.BASE_URL
                             href={`${makeUrl(locale, b.fields?.slug as string, base, getJurisdiction(b.fields.authority, locale)?.slug)}`}
                           >
                             <h3 class='h4'>
-                              <span>{b.fields.title} ????</span>
+                              <span>{b.fields.title}</span>
                             </h3>
                           </a>
 
@@ -224,25 +224,34 @@ const base = 'foobar-base' //import.meta.env.BASE_URL
       </div>
     </div>
     <Resources />
-    <div class='bg-white'>
-      <div class='container'>
-        <section class='section'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12 cta explore'>
-              <h2>{exploreSection.title}</h2>
-              <div
-                set:html={marked(exploreSection.content as unknown as string)}
-              />
-              <a
-                class='btn btn-primary btn-icon-right bi bi-arrow-up-right'
-                href={exploreSection.url as unknown as string}
-                >{exploreSection.cta}
-              </a>
-            </div>
+    {
+      exploreSection?.title ? (
+        <div class='bg-white'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12 cta explore'>
+                  <h2>{exploreSection.title}</h2>
+                  {exploreSection?.content ? (
+                    <div
+                      set:html={marked(
+                        exploreSection.content as unknown as string
+                      )}
+                    />
+                  ) : null}
+                  <a
+                    class='btn btn-primary btn-icon-right bi bi-arrow-up-right'
+                    href={exploreSection?.url as unknown as string}
+                  >
+                    {exploreSection?.cta}
+                  </a>
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
+      ) : null
+    }
   </main>
 </Layout>
 

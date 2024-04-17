@@ -1,13 +1,16 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import { contentfulClient } from '../lib/contentful'
+import makeUrl from '../lib/helpers'
 import getJurisdiction from '../lib/jurisdictions'
 import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
 import type { Asset } from 'contentful'
 
 const lang = getLangFromUrl(Astro.url)
-const langSlug = lang === 'en' ? '/' : `${lang}/`
+const t = useTranslations(lang)
+// const langSlug = lang === 'en' ? '/' : `${lang}/`
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+
 const resourcesRes = await contentfulClient.getEntries<TypeResourcesSkeleton>({
   content_type: 'resources',
   locale
@@ -15,7 +18,7 @@ const resourcesRes = await contentfulClient.getEntries<TypeResourcesSkeleton>({
 
 const resources = resourcesRes.items
 
-const t = useTranslations(lang)
+const base = import.meta.env.BASE_URL
 ---
 
 <div class='bg-secondary'>
@@ -37,7 +40,7 @@ const t = useTranslations(lang)
                             class='col-12 col-md-4'
                             data-province-filter={
                               r.fields.showLocalyOnly
-                                ? getJurisdiction(r.fields.authority)?.code
+                                ? getJurisdiction(r.fields?.authority)?.code
                                 : ''
                             }
                             style='display: block;'
@@ -48,18 +51,18 @@ const t = useTranslations(lang)
                                   <img
                                     alt=''
                                     src={
-                                      (r.fields.cardImage as Asset)?.fields
+                                      (r.fields?.cardImage as Asset)?.fields
                                         ?.file?.url as string
                                     }
                                   />
                                 </picture>
                                 <div class='content'>
                                   <a
-                                    href={`${langSlug}resource/${r.fields.slug}`}
+                                    href={`${makeUrl(locale, r.fields?.slug as string, base, 'resource')}`}
                                   >
                                     <>
-                                      <p>{r.fields.title}</p>
-                                      <p class='xsmall'>{r.fields.lead}</p>
+                                      <p>{r.fields?.title}</p>
+                                      <p class='xsmall'>{r.fields?.lead}</p>
                                       <span class='btn-link btn-icon-right bi bi-arrow-right'>
                                         <span />
                                       </span>
