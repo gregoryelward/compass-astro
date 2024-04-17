@@ -7,6 +7,7 @@ import { contentfulClient } from '../lib/contentful'
 import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
 import type { Asset, Entry } from 'contentful'
 import Feedback from '../components/Feedback.astro'
+import Resources from '../components/Resources.astro'
 
 export async function getStaticPaths() {
   let paths = []
@@ -84,6 +85,9 @@ const others = Astro.props.others as Array<Entry<TypeResourcesSkeleton>>
       </div>
     </div>
     <div class='bg-light--alt'>
+      <Resources />
+    </div>
+    <!-- <div class='bg-light--alt'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
@@ -129,7 +133,7 @@ const others = Astro.props.others as Array<Entry<TypeResourcesSkeleton>>
           </div>
         </section>
       </div>
-    </div>
+    </div> -->
     <Feedback />
   </main>
 </Layout>

@@ -7,6 +7,7 @@ import ProvincePickerMobile from './header/ProvincePickerMobile.astro'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
 import makeUrl from '../lib/helpers'
+
 const lang = getLangFromUrl(Astro.url)
 const langSlug = lang === 'en' ? '' : `${lang}`
 const t = useTranslations(lang)
@@ -21,6 +22,10 @@ const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
 })
 
 const benefits = benefitRes.items
+// const base = import.meta.env.BASE_URL
+
+const base = '/compass-astro' //import.meta.env.BASE_URL
+// const base = import.meta.env.BASE_URL
 ---
 
 <header id='header'>
@@ -29,7 +34,7 @@ const benefits = benefitRes.items
       <div class='row'>
         <div class='col-12 col-sm-12'>
           <div class='d-flex justify-content-between'>
-            <a class='nav-top__logo-a' href={`/${langSlug}`}>
+            <a class='nav-top__logo-a' href={`${makeUrl(locale, base, '/')}`}>
               <svg
                 class='nav-top__logo'
                 viewBox='0 0 155 30'
@@ -190,8 +195,8 @@ const benefits = benefitRes.items
                   </button>
                 </li>
                 <li>
-                  <a class='js--menu-link' href={`/${t(`langSlug`)}`}
-                    >{t(`langTitle`)}
+                  <a class='js--menu-link' href={`${t(`langSlug`)}`}>
+                    {t(`langTitle`)}
                   </a>
                 </li>
                 <li class='has-submenu desktop-only'>
@@ -247,7 +252,7 @@ const benefits = benefitRes.items
                                   >
                                     <a
                                       class='js--sub-link'
-                                      href={`${makeUrl(locale, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                                      href={`${makeUrl(locale, base, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
                                     >
                                       {b.fields.title}
                                     </a>
@@ -255,7 +260,10 @@ const benefits = benefitRes.items
                                 )
                               })}
                               <li>
-                                <a class='js--sub-link' href='/all-benefits'>
+                                <a
+                                  class='js--sub-link'
+                                  href={`${makeUrl(locale, base, 'all-benefits')}`}
+                                >
                                   {t('menuOtherBen')}
                                 </a>
                               </li>
@@ -264,7 +272,7 @@ const benefits = benefitRes.items
                         ) : null}
                         <li>
                           <a
-                            href={`${langSlug ? '/' + langSlug : ''}/${i.slug}`}
+                            href={`${makeUrl(locale, base, i.slug as string)}`}
                           >
                             {i.title}
                           </a>
@@ -322,7 +330,7 @@ const benefits = benefitRes.items
                                     >
                                       <a
                                         class='dropdown-item'
-                                        href={`${makeUrl(locale, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                                        href={`${makeUrl(locale, base, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
                                       >
                                         {b.fields.title}
                                       </a>
@@ -330,7 +338,10 @@ const benefits = benefitRes.items
                                   )
                                 })}
                                 <li>
-                                  <a class='js--sub-link' href='/all-benefits'>
+                                  <a
+                                    class='js--sub-link'
+                                    href={`${makeUrl(locale, base, 'all-benefits')}`}
+                                  >
                                     {t('menuOtherBen')}
                                   </a>
                                 </li>
@@ -339,7 +350,7 @@ const benefits = benefitRes.items
                           ) : null}
                           <li class='nav-link'>
                             <a
-                              href={`${langSlug ? '/' + langSlug : ''}/${i.slug}`}
+                              href={`${makeUrl(locale, base, i.slug as string)}`}
                             >
                               {i.title}
                             </a>
@@ -355,7 +366,9 @@ const benefits = benefitRes.items
                   </li>
                   <div class='dropdown-divider'></div>
                   <li>
-                    <a class='nav-link' href='/fr'>{t('langTitle')}</a>
+                    <a class='nav-link' href={`${t(`langSlug`)}`}
+                      >{t('langTitle')}</a
+                    >
                   </li>
                 </ul>
               </div>
