@@ -13,7 +13,7 @@ const langSlug = lang === 'en' ? '' : `${lang}`
 const t = useTranslations(lang)
 const menu = menuItems[lang === 'fr' ? 'fr-CA' : 'en-CA']
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
-const otherLocale = lang !== 'fr' ? 'en-CA' : 'fr-CA'
+const otherLocale = lang !== 'fr' ? 'fr-CA' : 'en-CA'
 
 const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
   content_type: 'benefit',
@@ -25,8 +25,8 @@ const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
 const benefits = benefitRes.items
 // const base = import.meta.env.BASE_URL
 
-const base = '/compass-astro' //import.meta.env.BASE_URL
-// const base = import.meta.env.BASE_URL
+// const base = '/compass-astro' //import.meta.env.BASE_URL
+const base = import.meta.env.BASE_URL
 ---
 
 <header id='header'>
@@ -198,9 +198,10 @@ const base = '/compass-astro' //import.meta.env.BASE_URL
                 <li>
                   <a
                     class='js--menu-link'
-                    href={`${makeUrl(otherLocale, base, '/')}`}
+                    href={`${makeUrl(otherLocale, 'TESTbase')}`}
                   >
-                    {t(`langTitle`)}
+                    {t(`langTitle`)}!{otherLocale}
+                    {base}
                   </a>
                 </li>
                 <li class='has-submenu desktop-only'>

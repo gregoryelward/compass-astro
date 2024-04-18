@@ -1,7 +1,7 @@
 export default function makeUrl(
   locale: string,
   base: string = '',
-  name: string,
+  name?: string,
   ...args: any[]
 ) {
   // console.log('INPUT ', locale, base, name, [...args])
@@ -15,7 +15,7 @@ export default function makeUrl(
   //INPUT  en-CA canada-pension-plan-disability-benefit [ 'foobar-base', undefined ]
   const slugs = args.filter((f) => f)
 
-  // console.log('slugs 1 ', slugs)
+  console.log('slugs 1 ', slugs)
 
   if (locale !== 'en-CA') {
     slugs.unshift('fr')
@@ -23,13 +23,20 @@ export default function makeUrl(
   // if (base && base !== '/') {
   //   slugs.unshift(base)
   // }
-  // console.log('slugs 2 ', slugs)
+  console.log('slugs 2 ', slugs, slugs.length)
 
-  if (slugs.length === 0) {
-    return `${name}`
+  // if (slugs.length === 0) {
+  //   return `${name}`
+  // }
+  let url = `${base}${slugs.join('/')}`
+
+  if (name) {
+    url = url + name
   }
+  console.log('name ', url)
+  return url
 
-  // console.log('slugs 3 ', `/${slugs.join('/')}/${name}`)
-  return `${base}${slugs.join('/')}/${name}`
+  // console.log('slugs 3 ', `${base}${slugs.join('/')}/${name}`)
+  // return `${base}${slugs.join('/')}/${name}`
   // return `${slugs.join('/')}/${name}`
 }
