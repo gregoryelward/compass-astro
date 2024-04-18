@@ -8,7 +8,7 @@ let base = ''
 // console.log("@@@@@@@@@@@@@@@@@@@@@process.env --> ", process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'production') {
   // console.log("building for production");
-  base = 'compass-astro/'
+  base = 'compass-astro'
 } // else "development"
 export default defineConfig({
   site: 'https://gregoryelward.github.io', //

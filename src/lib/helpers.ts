@@ -4,6 +4,13 @@ export default function makeUrl(
   name?: string,
   ...args: any[]
 ) {
+  // locale : 'fr-CA' | 'en-CA'
+  // base:  "/" | "/compass-astro/"
+  // name:  remove this?
+  // args: [] | ["sluga" | "slugb" | ...]
+  // /fr
+  //
+
   // console.log('INPUT ', locale, base, name, [...args])
 
   // INPUT  en-CA how-do-i-set-up-a-my-self-serve-myss-account [ '/', 'resource' ]
