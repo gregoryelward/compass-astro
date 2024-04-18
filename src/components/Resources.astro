@@ -61,7 +61,7 @@ const base = import.meta.env.BASE_URL
                                 </picture>
                                 <div class='content'>
                                   <a
-                                    href={`${makeUrl(locale, base, r.fields?.slug as string, 'resource')}`}
+                                    href={`${makeUrl(base, locale, 'resource', r.fields?.slug as string)}`}
                                   >
                                     <>
                                       <p>{r.fields?.title}</p>

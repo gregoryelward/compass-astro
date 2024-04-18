@@ -35,7 +35,7 @@ const base = import.meta.env.BASE_URL
       <div class='row'>
         <div class='col-12 col-sm-12'>
           <div class='d-flex justify-content-between'>
-            <a class='nav-top__logo-a' href={`${makeUrl(locale, base, '/')}`}>
+            <a class='nav-top__logo-a' href={`${makeUrl(base, locale)}`}>
               <svg
                 class='nav-top__logo'
                 viewBox='0 0 155 30'
@@ -198,7 +198,7 @@ const base = import.meta.env.BASE_URL
                 <li>
                   <a
                     class='js--menu-link'
-                    href={`${makeUrl(otherLocale, 'TESTbase')}`}
+                    href={`${makeUrl(base, otherLocale)}`}
                   >
                     {t(`langTitle`)}!{otherLocale}
                     {base}
@@ -257,9 +257,9 @@ const base = import.meta.env.BASE_URL
                                   >
                                     <a
                                       class='js--sub-link'
-                                      href={`${makeUrl(locale, base, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                                      href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
                                     >
-                                      {b.fields.title}
+                                      {b.fields.title}??
                                     </a>
                                   </li>
                                 )
@@ -267,7 +267,7 @@ const base = import.meta.env.BASE_URL
                               <li>
                                 <a
                                   class='js--sub-link'
-                                  href={`${makeUrl(locale, base, 'all-benefits')}`}
+                                  href={`${makeUrl(base, locale, 'all-benefits')}`}
                                 >
                                   {t('menuOtherBen')}
                                 </a>
@@ -277,7 +277,7 @@ const base = import.meta.env.BASE_URL
                         ) : null}
                         <li>
                           <a
-                            href={`${makeUrl(locale, base, i.slug as string)}`}
+                            href={`${makeUrl(base, locale, i.slug as string)}`}
                           >
                             {i.title}
                           </a>
@@ -335,7 +335,7 @@ const base = import.meta.env.BASE_URL
                                     >
                                       <a
                                         class='dropdown-item'
-                                        href={`${makeUrl(locale, base, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                                        href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
                                       >
                                         {b.fields.title}
                                       </a>
@@ -345,7 +345,7 @@ const base = import.meta.env.BASE_URL
                                 <li>
                                   <a
                                     class='js--sub-link'
-                                    href={`${makeUrl(locale, base, 'all-benefits')}`}
+                                    href={`${makeUrl(base, locale, 'all-benefits')}`}
                                   >
                                     {t('menuOtherBen')}
                                   </a>
@@ -355,7 +355,7 @@ const base = import.meta.env.BASE_URL
                           ) : null}
                           <li class='nav-link'>
                             <a
-                              href={`${makeUrl(locale, base, i.slug as string)}`}
+                              href={`${makeUrl(base, locale, i.slug as string)}`}
                             >
                               {i.title}
                             </a>
@@ -371,9 +371,7 @@ const base = import.meta.env.BASE_URL
                   </li>
                   <div class='dropdown-divider'></div>
                   <li>
-                    <a
-                      class='nav-link'
-                      href={`${makeUrl(otherLocale, base, '/')}`}
+                    <a class='nav-link' href={`${makeUrl(base, otherLocale)}`}
                       >{t('langTitle')}</a
                     >
                   </li>
