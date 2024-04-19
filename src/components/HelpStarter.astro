@@ -41,16 +41,16 @@ let helpSection = helpRes.items[0]?.fields
                     href={helpSection.cta1Url as unknown as string}
                     target='_blank'
                   >
-                    <span class='small-text h6'>{helpSection.cta1Action}</span
-                    ><span class='large-text btn-link h4'
-                      ><span>{helpSection.cta1UrlText}</span></span
+                    <span class='small-text h6'>{helpSection.cta1Action}</span>
+                    <span class='large-text btn-link h4'>
+                      <span>{helpSection.cta1UrlText} </span>
+                    </span>
+                  </a>
+                  <a href={helpSection?.cta3Url as unknown as string}>
+                    <span class='btn-link'>
+                      <span>{helpSection.cta3UrlText}</span></span
                     >
                   </a>
-                  <a href={helpSection?.cta3Url as unknown as string}
-                    ><span class='btn-link'
-                      ><span>{helpSection.cta3UrlText}</span></span
-                    ></a
-                  >
                 </div>
               </div>
             </div>
@@ -65,12 +65,12 @@ let helpSection = helpRes.items[0]?.fields
                       src='../../public/img/starting-points/doc.svg'
                     />
                   </div>
-                  <a href={helpSection.cta2Url as unknown as string}
-                    ><span class='small-text h6'>{helpSection.cta2Action}</span
-                    ><span class='large-text btn-link h4'
-                      ><span>{helpSection.cta2UrlText}</span></span
-                    ></a
-                  >
+                  <a href={helpSection.cta2Url as unknown as string}>
+                    <span class='small-text h6'>{helpSection.cta2Action}</span>
+                    <span class='large-text btn-link h4'>
+                      <span>{helpSection.cta2UrlText}</span>
+                    </span>
+                  </a>
                 </div>
               </div>
             </div>

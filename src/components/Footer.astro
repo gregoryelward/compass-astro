@@ -3,6 +3,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import { contentfulClient } from '../lib/contentful'
 import { marked } from 'marked'
 import type { TypeFooterProsperAboutSkeleton } from '../types/contentful/TypeFooterProsperAbout'
+import makeUrl from '../lib/helpers'
 
 const lang = getLangFromUrl(Astro.url)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
@@ -14,7 +15,10 @@ const res = await contentfulClient.getEntries<TypeFooterProsperAboutSkeleton>({
   content_type: 'footerProsperAbout',
   locale
 })
+
 let about = res.items[0]?.fields
+
+const base = import.meta.env.BASE_URL
 ---
 
 <footer class='d-print-none'>
@@ -199,10 +203,13 @@ let about = res.items[0]?.fields
       <div class='col-12 col-sm-6 col-md-4'>
         <ul>
           <li>
-            <a class='small' href='/'>{t('home')}</a>
+            <a class='small' href={`${makeUrl(base, locale)}`}>{t('home')}</a>
           </li>
           <li>
-            <a class='small' href='/#four-key-disability-benefits'>
+            <a
+              class='small'
+              href={`${makeUrl(base, locale, '#four-key-disability-benefits')}`}
+            >
               {t('menuDisabilityBen')}
             </a>
           </li>
@@ -210,27 +217,43 @@ let about = res.items[0]?.fields
             <a
               class='small'
               href='https://benefitswayfinder.org/search?size=n_6_n&filters%5B0%5D%5Bfield%5D=tags&filters%5B0%5D%5Bvalues%5D%5B0%5D=Disability&filters%5B0%5D%5Btype%5D=any'
-              >{t('menuSearch')}</a
             >
+              {t('menuSearch')}
+            </a>
           </li>
           <li>
-            <a class='small' href='/disclaimer'>{t('disclaimer')}</a>
+            <a class='small' href={`${makeUrl(base, locale, 'disclaimer')}`}>
+              {t('disclaimer')}
+            </a>
           </li>
         </ul>
       </div>
       <div class='col-12 col-sm-6 col-md-4'>
         <ul>
           <li>
-            <a class='small' href='/help'>{t('menuHelp')}</a>
+            <a class='small' href={`${makeUrl(base, locale, 'help')}`}>
+              {t('menuHelp')}
+            </a>
           </li>
           <li>
-            <a class='small' href='/how-to-use-this-website'>{t('useSite')}</a>
+            <a
+              class='small'
+              href={`${makeUrl(base, locale, 'how-to-use-this-website')}`}
+            >
+              {t('useSite')}
+            </a>
           </li>
           <li>
-            <a class='small' href='/about'>{t('aboutLong')}</a>
+            <a class='small' href={`${makeUrl(base, locale, 'about')}`}
+              >{t('aboutLong')}</a
+            >
           </li>
           <li>
-            <a class='small' href='/share-this-tool'>{t('embedTitle')}</a>
+            <a
+              class='small'
+              href={`${makeUrl(base, locale, 'share-this-tool')}`}
+              >{t('embedTitle')}</a
+            >
           </li>
         </ul>
       </div>
