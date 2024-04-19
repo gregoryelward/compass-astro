@@ -74,6 +74,8 @@ const page = Astro.props.page as Entry<TypeStepsSkeleton>
 const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
 const stepIndex = Astro.props.index
 const applyPage = Astro.props.applyPage
+
+const base = import.meta.env.BASE_URL
 ---
 
 <Layout title={page?.fields?.title as string} description={''} className='step'>
@@ -89,28 +91,36 @@ const applyPage = Astro.props.applyPage
           <nav aria-label='breadcrumb'>
             <ol class='breadcrumb'>
               <li class='breadcrumb-item'>
-                <a class='breadcrumb-item' href='/'>{t('home')}</a>
-              </li>
-              <li class='breadcrumb-item'>
-                <a
-                  class='breadcrumb-item'
-                  href={`${makeUrl(
-                    locale,
-                    benefit?.fields?.slug as string,
-                    getJurisdiction(benefit.fields.authority, locale)?.slug
-                  )}`}>{benefit?.fields?.title}</a
+                <a class='breadcrumb-item' href={`${makeUrl(base, locale)}`}
+                  >{t('home')}</a
                 >
               </li>
               <li class='breadcrumb-item'>
                 <a
                   class='breadcrumb-item'
                   href={`${makeUrl(
+                    base,
                     locale,
-                    'apply',
                     getJurisdiction(benefit.fields.authority, locale)?.slug,
                     benefit?.fields?.slug as string
-                  )}`}>{applyPage?.fields?.title}</a
+                  )}`}
                 >
+                  {benefit?.fields?.title}
+                </a>
+              </li>
+              <li class='breadcrumb-item'>
+                <a
+                  class='breadcrumb-item'
+                  href={`${makeUrl(
+                    base,
+                    locale,
+                    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string,
+                    'apply'
+                  )}`}
+                >
+                  {applyPage?.fields?.title}
+                </a>
               </li>
               <li class='active breadcrumb-item' aria-current='page'>
                 {`Step ${stepIndex}`}
@@ -130,17 +140,25 @@ const applyPage = Astro.props.applyPage
             <div class='mb-3 pb-3'></div>
             <h1>
               <strong>
-                {`${t('step')} ${stepIndex} - ${benefit.fields?.title}`}</strong
-              >
+                {`${t('step')} ${stepIndex} - ${benefit.fields?.title}`}
+              </strong>
             </h1>
             <h2>{page.fields?.title}</h2>
 
-            <div class='bg-secondary p-3 step answer no d-none'>
-              {page.fields?.noAnswer}
-            </div>
-            <div class='bg-secondary p-3 step answer dontknow d-none'>
-              {page.fields?.notSure}
-            </div>
+            {
+              page.fields?.noAnswer ? (
+                <div class='bg-secondary p-3 step answer no d-none'>
+                  {page.fields.noAnswer}
+                </div>
+              ) : null
+            }
+            {
+              page.fields?.notSure ? (
+                <div class='bg-secondary p-3 step answer dontknow d-none'>
+                  {page.fields.notSure}
+                </div>
+              ) : null
+            }
           </div>
         </div>
       </section>
@@ -179,7 +197,7 @@ const applyPage = Astro.props.applyPage
           </div>
           <a
             class='btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill'
-            href=`step-${stepIndex + 1}`
+            href={`${makeUrl(base, locale, 'apply', `step-${stepIndex + 1}`)}`}
           >
             {t('continuesteppart1')}&nbsp;
             <strong>{t('continuesteppart2')}&nbsp;{stepIndex + 1}</strong>
@@ -207,7 +225,10 @@ const applyPage = Astro.props.applyPage
                               <li
                                 class={`page-item ${stepIndex - 1 === index ? 'active' : ''}`}
                               >
-                                <a class='page-link' href={`step-${index + 1}`}>
+                                <a
+                                  class='page-link'
+                                  href={`${makeUrl(base, locale, 'apply', `step-${index + 1}`)}`}
+                                >
                                   {index + 1}
                                 </a>
                               </li>

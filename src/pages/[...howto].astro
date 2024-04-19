@@ -56,6 +56,8 @@ const lang = getLangFromUrl(Astro.url)
 const page = Astro.props.page as Entry<TypeHowToSkeleton>
 const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+
+const base = import.meta.env.BASE_URL
 ---
 
 <Layout
@@ -130,16 +132,18 @@ const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
                           >
                             <a
                               class='btn btn-link btn-icon-right bi bi-arrow-right no-padding'
-                              href={`${makeUrl(locale, b.fields?.slug as string, getJurisdiction(b.fields.authority, locale)?.slug)}`}
+                              href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
                             >
                               <h3 class='h4'>
                                 <span>{b.fields.title}</span>
                               </h3>
                             </a>
 
-                            <div class='benefit-card--description'>
-                              <p class='mt-2'>{b.fields.lead}</p>
-                            </div>
+                            {b.fields?.lead ? (
+                              <div class='benefit-card--description'>
+                                <p class='mt-2'>{b.fields.lead}</p>
+                              </div>
+                            ) : null}
 
                             {b.fields?.dollarAmount ? (
                               <div class='benefit-card--benefit'>

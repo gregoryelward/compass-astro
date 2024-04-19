@@ -82,6 +82,8 @@ if (benefit?.fields?.agency) {
     Entry<TypeAgencySkeleton>
   >
 }
+
+const base = import.meta.env.BASE_URL
 ---
 
 <Layout
@@ -101,17 +103,21 @@ if (benefit?.fields?.agency) {
           <nav aria-label='breadcrumb'>
             <ol class='breadcrumb'>
               <li class='breadcrumb-item'>
-                <a class='breadcrumb-item' href='/'>{t('home')}</a>
+                <a class='breadcrumb-item' href={`${makeUrl(base, locale)}`}>
+                  {t('home')}
+                </a>
               </li>
               <li class='breadcrumb-item'>
                 <a
                   class='breadcrumb-item'
                   href={`${makeUrl(
+                    base,
                     locale,
-                    benefit?.fields?.slug as string,
-                    getJurisdiction(benefit.fields.authority, locale)?.slug
-                  )}`}>{benefit?.fields?.title}</a
-                >
+                    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string
+                  )}`}
+                  >{benefit?.fields?.title}
+                </a>
               </li>
               <li class='active breadcrumb-item' aria-current='page'>
                 {page?.fields?.title}
@@ -179,7 +185,9 @@ if (benefit?.fields?.agency) {
                             (s: TypeStepsSkeleton, index: number) => {
                               return (
                                 <li>
-                                  <a href={`apply/step-${index + 1}`}>
+                                  <a
+                                    href={`${makeUrl(base, locale, 'apply', `step-${index + 1}`)}`}
+                                  >
                                     {s.fields?.title}
                                   </a>
                                 </li>
@@ -198,9 +206,10 @@ if (benefit?.fields?.agency) {
                     <a
                       class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
                       href={`${makeUrl(
+                        base,
                         locale,
-                        benefit?.fields?.slug as string,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string
                       )}`}
                     >
                       {t('startBack')}
@@ -209,10 +218,11 @@ if (benefit?.fields?.agency) {
                     <a
                       class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
                       href={`${makeUrl(
+                        base,
                         locale,
-                        prevPage?.fields?.slug as string,
                         getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string
+                        benefit?.fields?.slug as string,
+                        prevPage?.fields?.slug as string
                       )}`}
                     >
                       {prevPage?.fields?.title}
@@ -225,10 +235,11 @@ if (benefit?.fields?.agency) {
                     <a
                       class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
                       href={`${makeUrl(
+                        base,
                         locale,
-                        nextPage?.fields?.slug as string,
                         getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string
+                        benefit?.fields?.slug as string,
+                        nextPage?.fields?.slug as string
                       )}`}
                     >
                       {nextPage.fields.title}

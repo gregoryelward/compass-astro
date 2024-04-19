@@ -9,7 +9,6 @@ import getJurisdiction from '../lib/jurisdictions'
 import makeUrl from '../lib/helpers'
 
 const lang = getLangFromUrl(Astro.url)
-const langSlug = lang === 'en' ? '' : `${lang}`
 const t = useTranslations(lang)
 const menu = menuItems[lang === 'fr' ? 'fr-CA' : 'en-CA']
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
@@ -23,9 +22,6 @@ const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
 })
 
 const benefits = benefitRes.items
-// const base = import.meta.env.BASE_URL
-
-// const base = '/compass-astro' //import.meta.env.BASE_URL
 const base = import.meta.env.BASE_URL
 ---
 

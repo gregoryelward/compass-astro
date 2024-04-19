@@ -5,7 +5,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
 import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
-import type { Asset, Entry } from 'contentful'
+import type { Entry } from 'contentful'
 import Feedback from '../components/Feedback.astro'
 import Resources from '../components/Resources.astro'
 
@@ -44,8 +44,6 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 
 const page = Astro.props.page as Entry<TypeResourcesSkeleton>
-
-const others = Astro.props.others as Array<Entry<TypeResourcesSkeleton>>
 ---
 
 <Layout
@@ -87,53 +85,6 @@ const others = Astro.props.others as Array<Entry<TypeResourcesSkeleton>>
     <div class='bg-light--alt'>
       <Resources />
     </div>
-    <!-- <div class='bg-light--alt'>
-      <div class='container'>
-        <section class='section'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12'>
-              <h2>{t('resources')}</h2>
-              <div class='mb-4 pb-2'></div>
-              <div class='row'>
-                {
-                  others.map((o) => {
-                    return (
-                      <div
-                        class='col-12 col-md-4'
-                        data-province-filter=''
-                        style='display: block;'
-                      >
-                        <div class='pro-card--full-img equal-height'>
-                          <picture>
-                            <img
-                              src={
-                                (o.fields.cardImage as Asset)?.fields?.file
-                                  ?.url as string
-                              }
-                            />
-                          </picture>
-                          <div class='content'>
-                            <a href={`/resource/${o.fields.slug as string}`}>
-                              <>
-                                <p>{o.fields.title as string}</p>
-                                <p class='xsmall'>{o.fields.lead as string}</p>
-                                <span class='btn-link btn-icon-right bi bi-arrow-right'>
-                                  <span />
-                                </span>
-                              </>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div> -->
     <Feedback />
   </main>
 </Layout>
