@@ -25,6 +25,8 @@ jobs:
         with:
           node-version: 21
       - name: Install, build, and upload your site
+        with:
+          node-version: 21
         uses: withastro/action@v2
         # with:
         # path: . # The root location of your Astro project inside the repository. (optional)
