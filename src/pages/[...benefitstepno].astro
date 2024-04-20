@@ -66,7 +66,7 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const lang = getLangFromUrl(Astro.url)
-const langSlug = lang === 'en' ? '' : `${lang}/`
+// const langSlug = lang === 'en' ? '' : `${lang}/`
 const t = useTranslations(lang)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 

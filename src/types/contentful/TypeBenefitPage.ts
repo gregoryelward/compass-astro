@@ -21,6 +21,7 @@ export interface TypeBenefitPageFields {
     content5?: EntryFieldTypes.Text;
     mainCta?: EntryFieldTypes.EntryLink<TypeCtaSkeleton>;
     resources?: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TypeAgencyResourceSkeleton>>;
+    showWarning?: EntryFieldTypes.Boolean;
 }
 
 export type TypeBenefitPageSkeleton = EntrySkeletonType<TypeBenefitPageFields, "benefitPage">;

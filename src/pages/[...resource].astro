@@ -1,7 +1,7 @@
 ---
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
-import { getLangFromUrl, useTranslations } from '../i18n/utils'
+import { getLangFromUrl } from '../i18n/utils'
 import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
 import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
@@ -41,7 +41,7 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
+// const t = useTranslations(lang)
 
 const page = Astro.props.page as Entry<TypeResourcesSkeleton>
 ---

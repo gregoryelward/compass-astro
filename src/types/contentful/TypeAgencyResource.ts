@@ -1,9 +1,11 @@
 import type { ChainModifiers, Entry, EntryFieldTypes, EntrySkeletonType, LocaleCode } from "contentful";
+import type { TypeAgencySkeleton } from "./TypeAgency";
 
 export interface TypeAgencyResourceFields {
     internalTitle?: EntryFieldTypes.Symbol;
     title?: EntryFieldTypes.Symbol;
     content?: EntryFieldTypes.Text;
+    agency?: EntryFieldTypes.EntryLink<TypeAgencySkeleton>;
 }
 
 export type TypeAgencyResourceSkeleton = EntrySkeletonType<TypeAgencyResourceFields, "agencyResource">;

@@ -11,6 +11,7 @@ import type { TypeBenefitApplyWarningSkeleton } from '../types/contentful/TypeBe
 import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
 import Feedback from '../components/Feedback.astro'
 import makeUrl from '../lib/helpers'
+import Resources from '../components/Resources.astro'
 
 export async function getStaticPaths() {
   let paths = []
@@ -136,7 +137,7 @@ const base = import.meta.env.BASE_URL
                   return (
                     <li>
                       <a 
-                      href={`${makeUrl(base, locale, page?.fields.slug ,b.fields.slug)}`}
+                      href={`${makeUrl(base, locale, getJurisdiction(page?.fields.authority, locale)?.slug, page?.fields.slug,b.fields.slug)}`}
                       >
                         {b.fields.title}
                       </a>
@@ -147,9 +148,10 @@ const base = import.meta.env.BASE_URL
             </ol>
 
             <hr class='hr-light' />
+         
             <a
               class='js-start-button btn btn-tertiary btn-lg btn-icon-right bi bi-arrow-right'
-              href={`${makeUrl(base, locale, page?.fields.slug,benefitPages[0].fields.slug)}`}
+              href={`${makeUrl(base, locale,getJurisdiction(page?.fields.authority, locale)?.slug, page?.fields.slug,benefitPages[0].fields.slug)}`}
               >
               {t('start')}
               </a
@@ -158,6 +160,7 @@ const base = import.meta.env.BASE_URL
         </div>
       </section>
     </div>
+    <!-- <Resources class='lt-border-t-light' /> -->
     <div class='bg-secondary lt-border-t-light'>
       <div class='container'>
         <section class='section'>
@@ -187,8 +190,7 @@ const base = import.meta.env.BASE_URL
                               </picture>
                               <div class='content'>
                                 <a
-                                  href=
-                                  {`${makeUrl(base, locale, "resource",o.fields.slug)}`}
+                                href={`${makeUrl(base, locale, 'resource', o.fields.slug as string)}`}
                                 >
                                   <>
                                     <p>{o.fields.title as string}</p>

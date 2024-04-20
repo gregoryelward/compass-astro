@@ -5,7 +5,7 @@ import jurisdictions from '../../lib/jurisdictions.json'
 const lang = getLangFromUrl(Astro.url)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 const t = useTranslations(lang)
-const base = import.meta.env.BASE_URL
+// const base = import.meta.env.BASE_URL
 ---
 
 <a

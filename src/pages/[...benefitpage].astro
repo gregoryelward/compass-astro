@@ -13,6 +13,11 @@ import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyR
 import type { TypeAgencySkeleton } from '../types/contentful/TypeAgency'
 import Feedback from '../components/Feedback.astro'
 import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
+// import Resources from '../components/Resources.astro'
+import type {
+  // TypeBenefitWarning,
+  TypeBenefitWarningSkeleton
+} from '../types/contentful'
 
 export async function getStaticPaths() {
   let paths = []
@@ -23,9 +28,19 @@ export async function getStaticPaths() {
       locale
     })
 
+    const warningRes =
+      await contentfulClient.getEntries<TypeBenefitWarningSkeleton>({
+        skip: 0,
+        limit: 1,
+        content_type: 'benefitWarning',
+        locale
+      })
+    let warning = warningRes.items[0]?.fields
+
     const benefits = benefitRes.items
     for (const i of benefits) {
       const jurisdiction = getJurisdiction(i.fields.authority, locale)
+      console.log("benefit resource ", i.fields.agencyResource)
       const jurisdictionSlug = jurisdiction?.slug
       let path = locale === 'en-CA' ? '' : `/fr`
       if (jurisdictionSlug) {
@@ -47,7 +62,8 @@ export async function getStaticPaths() {
             benefit: { ...i },
             navigationIndex,
             prevPage: benefitPages[navigationIndex - 1],
-            nextPage: benefitPages[navigationIndex + 1]
+            nextPage: benefitPages[navigationIndex + 1],
+            warning
           }
         })
         navigationIndex = navigationIndex + 1
@@ -69,6 +85,7 @@ const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
 const page = Astro.props.page as Entry<TypeBenefitPageSkeleton>
 const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
+const warning = Astro.props.warning
 const resources = benefit.fields.resources
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
@@ -140,7 +157,7 @@ const base = import.meta.env.BASE_URL
               page?.fields?.lead ? (
                 <p>{page.fields.lead}</p>
               ) : page?.fields?.content1 ? (
-                <div class='js-accordion'>
+                <div class='js-accordion reguirements'>
                   <div set:html={marked(page.fields.content1 as string)} />
                 </div>
               ) : null
@@ -152,7 +169,7 @@ const base = import.meta.env.BASE_URL
 
     {
       page?.fields?.lead ? (
-        <div class='bg-white lt-border-t-light'>
+        <div class='bg-white lt-border-t-light under heere'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -160,6 +177,7 @@ const base = import.meta.env.BASE_URL
                   <div class='js-accordion'>
                     <div set:html={marked(page.fields.content1 as string)} />
                   </div>
+                  <!--  next page here -->
                 </div>
               </div>
             </section>
@@ -168,90 +186,49 @@ const base = import.meta.env.BASE_URL
       ) : null
     }
 
-    <div class='bg-white lt-border-t-light'>
-      <div class='container' data-benefit-id='1dPLuwsYC0vnelqpxncb47'>
-        <section class='section'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12'>
-              {
-                page?.fields.slug === 'apply' ? (
-                  <>
-                    <h2>Steps</h2>
-                    <div class='mb-3 pb-3' />
-                    <ol class='tertiary-blue'>
-                      {benefit?.fields?.steps
-                        ? //@ts-ignore
-                          benefit.fields.steps.map(
-                            (s: TypeStepsSkeleton, index: number) => {
-                              return (
-                                <li>
-                                  <a
-                                    href={`${makeUrl(base, locale, 'apply', `step-${index + 1}`)}`}
-                                  >
-                                    {s.fields?.title}
-                                  </a>
-                                </li>
-                              )
-                            }
-                          )
-                        : null}
-                    </ol>
-                  </>
-                ) : null
-              }
-              <hr />
-              <div class='flex center'>
-                {
-                  navigationIndex === 0 ? (
+    {
+      page?.fields.slug === 'apply' ? (
+        <div class='bg-white lt-border-t-light'>
+          <div class='container' data-benefit-id='1dPLuwsYC0vnelqpxncb47'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <h2>Steps</h2>
+                  <div class='mb-3 pb-3' />
+                  <ol class='tertiary-blue'>
+                    {benefit?.fields?.steps
+                      ? //@ts-ignore
+                        benefit.fields.steps.map(
+                          (s: TypeStepsSkeleton, index: number) => {
+                            return (
+                              <li>
+                                <a
+                                  href={`${makeUrl(base, locale, 'apply', `step-${index + 1}`)}`}
+                                >
+                                  {s.fields?.title}
+                                </a>
+                              </li>
+                            )
+                          }
+                        )
+                      : null}
+                  </ol>
+                  <div class='mb-3 pb-3'>
                     <a
-                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string
-                      )}`}
+                      href={`${makeUrl(base, locale, getJurisdiction(benefit.fields.authority, locale)?.slug, 'apply', `step-1`)}`}
+                      class='a js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none'
                     >
-                      {t('startBack')}
+                      {t('startsteppart1')}&nbsp;
+                      <strong>{t('startsteppart2')}</strong>
                     </a>
-                  ) : (
-                    <a
-                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        prevPage?.fields?.slug as string
-                      )}`}
-                    >
-                      {prevPage?.fields?.title}
-                    </a>
-                  )
-                }
-
-                {
-                  nextPage?.fields?.slug ? (
-                    <a
-                      class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        nextPage?.fields?.slug as string
-                      )}`}
-                    >
-                      {nextPage.fields.title}
-                    </a>
-                  ) : null
-                }
+                  </div>
+                </div>
               </div>
-            </div>
+            </section>
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
+      ) : null
+    }
 
     {
       page?.fields.slug === 'resources' ? (
@@ -306,13 +283,25 @@ const base = import.meta.env.BASE_URL
       ) : null
     }
 
-    <div class='bg-white lt-border-t-light'>
+    <div class=' bg-white  lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
             <div class='col-12'>
               <h2>{page?.fields?.bodyTitle}</h2>
               <div class='mb-3 pb-2'></div>
+              {
+                page?.fields?.showWarning && warning?.content ? (
+                  <div class='bg-light--alt p-3 my-3'>
+                    <>
+                      {warning?.title ? (
+                        <h3 class='h5'>{warning.title}</h3>
+                      ) : null}
+                      <div set:html={marked(warning.content as string)} />
+                    </>
+                  </div>
+                ) : null
+              }
               {
                 page?.fields?.content5Title ? (
                   <div class='bg-light--alt p-3 my-3'>
@@ -334,15 +323,87 @@ const base = import.meta.env.BASE_URL
                         class=''
                         set:html={marked(page.fields.content2 as string)}
                       />
-                    </div>
+                    </div>{' '}
                   </section>
                 ) : null
               }
+              {
+                page.fields.content3 ? (
+                  <section>
+                    {page.fields?.content3Title ? (
+                      <h3>{page.fields?.content3Title}</h3>
+                    ) : null}
+                    <div
+                      class='js-accordion'
+                      set:html={marked(page.fields.content3 as string)}
+                    />
+                  </section>
+                ) : null
+              }
+
+              {
+                page.fields?.content4 ? (
+                  <>
+                    <hr />
+                    <div class='bg-light--alt p-3 info'>
+                      <div set:html={marked(page.fields.content4 as string)} />
+                    </div>
+                  </>
+                ) : null
+              }
+              <hr />
+              <div class='flex center'>
+                {
+                  navigationIndex === 0 ? (
+                    <a
+                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string
+                      )}`}
+                    >
+                      {t('startBack')}
+                    </a>
+                  ) : (
+                    <a
+                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string,
+                        prevPage?.fields?.slug as string
+                      )}`}
+                    >
+                      {prevPage?.fields?.title}
+                    </a>
+                  )
+                }
+                {
+                  nextPage?.fields?.slug ? (
+                    <a
+                      class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string,
+                        nextPage?.fields?.slug as string
+                      )}`}
+                    >
+                      {nextPage.fields.title}
+                    </a>
+                  ) : null
+                }
+              </div>
             </div>
           </div>
         </section>
       </div>
     </div>
+    <!-- <Resources class='lt-border-t-light' /> -->
     <div class='bg-secondary lt-border-t-light'>
       <div class='container'>
         <section class='section'>
@@ -372,7 +433,7 @@ const base = import.meta.env.BASE_URL
                               </picture>
                               <div class='content'>
                                 <a
-                                  href={`/resource/${o.fields.slug as string}`}
+                                  href={`${makeUrl(base, locale, 'resource', o.fields.slug as string)}`}
                                 >
                                   <>
                                     <p>{o.fields.title as string}</p>
@@ -404,6 +465,8 @@ const base = import.meta.env.BASE_URL
 <script>
   import accordion from '../lib/accordion'
 
+  // accordion('.js-accordion.requirements h2', 'H2', 2)
   accordion('.js-accordion h2', 'H2', 2)
   accordion('.js-accordion h3', 'H3', 3)
+  accordion('.js-accordion h4', 'H4', 4)
 </script>
