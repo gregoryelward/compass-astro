@@ -55,7 +55,7 @@ export async function getStaticPaths() {
       function myCallback({ quantity } : any) {
   return quantity > 5 ? "ok" : "restock";
 }
-//@ts-expect-error
+
 const result2 = Object.groupBy(inventory, myCallback);
 console.log('result2 ',result2)
 
