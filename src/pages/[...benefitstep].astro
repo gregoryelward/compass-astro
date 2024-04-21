@@ -42,7 +42,8 @@ export async function getStaticPaths() {
         Entry<TypeStepsSkeleton>
       >
       let index = 1
-      let navigationIndex = 0
+      // let navigationIndex = 0
+      const navigationIndex = 2 //fixed
       for (const b of benefitApplySteps) {
         paths.push({
           params: {
@@ -59,7 +60,7 @@ export async function getStaticPaths() {
             nextPage: benefitPages[navigationIndex + 1]
           }
         })
-        navigationIndex = navigationIndex + 1
+        // navigationIndex = navigationIndex + 1
         index = index + 1
       }
     }
@@ -87,6 +88,7 @@ const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
 const nextPage = Astro.props.nextPage
 
+const isLastStep = benefit?.fields?.steps?.length === stepIndex
 const base = import.meta.env.BASE_URL
 ---
 
@@ -157,25 +159,55 @@ const base = import.meta.env.BASE_URL
             <h1><strong>{`${t('step')} ${stepIndex}`}</strong></h1>
 
             <hr class='hr-light' />
-
-            <div class='pro-card--top-border pro-card--orange-outline'>
-              <p class='large'>{page?.fields?.title}</p>
-              <a
-                class='btn btn-primary btn-lg'
-                href={`step-${stepIndex + 1}?a=y`}
-                >{t('yes')}
-              </a>
-              <a
-                class='btn btn-primary btn-lg'
-                href={`step-${stepIndex}-no?a=n`}>{t('no')}</a
-              >
-              <a
-                class='btn btn-primary btn-lg'
-                href={`step-${stepIndex}-no?a=d`}
-                >{t('notsure')}
-              </a>
-              <div class='mb-3'></div>
-            </div>
+            {
+              !isLastStep ? (
+                <div class='pro-card--top-border pro-card--orange-outline'>
+                  <p class='large'>{page?.fields?.title}</p>
+                  <a
+                    class='btn btn-primary btn-lg'
+                    href={`${makeUrl(
+                      base,
+                      locale,
+                      getJurisdiction(benefit.fields.authority, locale)?.slug,
+                      benefit?.fields?.slug as string,
+                      'apply',
+                      `step-${stepIndex + 1}?a=y`
+                    )}`}
+                  >
+                    {t('yes')}
+                  </a>
+                  <a
+                    class='btn btn-primary btn-lg'
+                    href={`${makeUrl(
+                      base,
+                      locale,
+                      getJurisdiction(benefit.fields.authority, locale)?.slug,
+                      benefit?.fields?.slug as string,
+                      'apply',
+                      `step-${stepIndex}-no?a=n`
+                    )}`}
+                  >
+                    {t('no')}
+                  </a>
+                  <a
+                    class='btn btn-primary btn-lg'
+                    href={`${makeUrl(
+                      base,
+                      locale,
+                      getJurisdiction(benefit.fields.authority, locale)?.slug,
+                      benefit?.fields?.slug as string,
+                      'apply',
+                      `step-${stepIndex}-no?a=d`
+                    )}`}
+                  >
+                    {t('notsure')}
+                  </a>
+                  <div class='mb-3' />
+                </div>
+              ) : page?.fields?.content ? (
+                <div set:html={marked(page.fields.content as string)} />
+              ) : null
+            }
             <h2 class='h5' id='steps-title'>{t('steps')}</h2>
             <nav aria-labelledby='steps-title'>
               <ul class='pagination'>
