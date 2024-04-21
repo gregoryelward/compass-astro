@@ -57,7 +57,7 @@ export async function getStaticPaths() {
 }
 //@ts-ignore
 const result2 = Object.groupBy(inventory, myCallback);
-console.log('result2 ',result2)
+// console.log('result2 ',result2)
 
 /* Result is:
 {
@@ -225,7 +225,7 @@ const base = import.meta.env.BASE_URL
             <section class='section'>
               <div class='row justify-content-md-center'>
                 <div class='col-12'>
-                  <h2>Steps</h2>
+                  <h2>{t('steps')}</h2>
                   <div class='mb-3 pb-3' />
                   <ol class='tertiary-blue'>
                     {benefit?.fields?.steps
@@ -235,7 +235,8 @@ const base = import.meta.env.BASE_URL
                             return (
                               <li>
                                 <a
-                                  href={`${makeUrl(base, locale, 'apply', `step-${index + 1}`)}`}
+                                  href={`${makeUrl(base, locale,    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string, 'apply', `step-${index + 1}`)}`}
                                 >
                                   {s.fields?.title}
                                 </a>
@@ -247,7 +248,9 @@ const base = import.meta.env.BASE_URL
                   </ol>
                   <div class='mb-3 pb-3'>
                     <a
-                      href={`${makeUrl(base, locale, getJurisdiction(benefit.fields.authority, locale)?.slug, 'apply', `step-1`)}`}
+                      href={`${makeUrl(base, locale, 
+                        getJurisdiction(benefit.fields.authority, locale)?.slug, 
+                        benefit?.fields?.slug as string,'apply', `step-1`)}`}
                       class='a js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none'
                     >
                       {t('startsteppart1')}&nbsp;

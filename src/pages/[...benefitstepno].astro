@@ -45,13 +45,23 @@ export async function getStaticPaths() {
       >
       // console.log('steps length ', benefitApplySteps.length)
       let index = 1
+      let navigationIndex = 0
       for (const b of benefitApplySteps) {
         paths.push({
           params: {
             benefitstepno: `${path}/step-${index}-no`
           },
-          props: { page: { ...b }, benefit: { ...i }, index, applyPage }
+          props: {
+            page: { ...b },
+            benefit: { ...i },
+            index,
+            applyPage,
+            navigationIndex,
+            prevPage: benefitPages[navigationIndex - 1],
+            nextPage: benefitPages[navigationIndex + 1]
+          }
         })
+        navigationIndex = navigationIndex + 1
         index = index + 1
       }
     }
@@ -74,6 +84,10 @@ const page = Astro.props.page as Entry<TypeStepsSkeleton>
 const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
 const stepIndex = Astro.props.index
 const applyPage = Astro.props.applyPage
+
+const navigationIndex = Astro.props.navigationIndex
+const prevPage = Astro.props.prevPage
+const nextPage = Astro.props.nextPage
 
 const base = import.meta.env.BASE_URL
 ---
@@ -197,7 +211,14 @@ const base = import.meta.env.BASE_URL
           </div>
           <a
             class='btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill'
-            href={`${makeUrl(base, locale, 'apply', `step-${stepIndex + 1}`)}`}
+            href={`${makeUrl(
+              base,
+              locale,
+              getJurisdiction(benefit.fields.authority, locale)?.slug,
+              benefit?.fields?.slug as string,
+              'apply',
+              `step-${stepIndex + 1}`
+            )}`}
           >
             {t('continuesteppart1')}&nbsp;
             <strong>{t('continuesteppart2')}&nbsp;{stepIndex + 1}</strong>
@@ -227,7 +248,17 @@ const base = import.meta.env.BASE_URL
                               >
                                 <a
                                   class='page-link'
-                                  href={`${makeUrl(base, locale, 'apply', `step-${index + 1}`)}`}
+                                  href={`${makeUrl(
+                                    base,
+                                    locale,
+                                    getJurisdiction(
+                                      benefit.fields.authority,
+                                      locale
+                                    )?.slug,
+                                    benefit?.fields?.slug as string,
+                                    'apply',
+                                    `step-${index + 1}`
+                                  )}`}
                                 >
                                   {index + 1}
                                 </a>
@@ -239,6 +270,58 @@ const base = import.meta.env.BASE_URL
                 </ul>
               </nav>
             </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='flex center'>
+            {
+              navigationIndex === 0 ? (
+                <a
+                  class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                  href={`${makeUrl(
+                    base,
+                    locale,
+                    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string
+                  )}`}
+                >
+                  {t('startBack')}
+                </a>
+              ) : (
+                <a
+                  class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                  href={`${makeUrl(
+                    base,
+                    locale,
+                    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string,
+                    prevPage?.fields?.slug as string
+                  )}`}
+                >
+                  {prevPage?.fields?.title}
+                </a>
+              )
+            }
+            {
+              nextPage?.fields?.slug ? (
+                <a
+                  class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
+                  href={`${makeUrl(
+                    base,
+                    locale,
+                    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string,
+                    nextPage?.fields?.slug as string
+                  )}`}
+                >
+                  {nextPage.fields.title}
+                </a>
+              ) : null
+            }
           </div>
         </section>
       </div>

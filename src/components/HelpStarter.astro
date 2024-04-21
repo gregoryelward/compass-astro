@@ -1,6 +1,7 @@
 ---
 import { getLangFromUrl } from '../i18n/utils'
 import { contentfulClient } from '../lib/contentful'
+import makeUrl from '../lib/helpers'
 import type { TypeStartHelpSkeleton } from '../types/contentful/TypeStartHelp'
 
 const lang = getLangFromUrl(Astro.url)
@@ -13,6 +14,8 @@ const helpRes = await contentfulClient.getEntries<TypeStartHelpSkeleton>({
   locale
 })
 let helpSection = helpRes.items[0]?.fields
+
+const base = import.meta.env.BASE_URL
 ---
 
 <div class='bg-secondary'>
@@ -34,7 +37,7 @@ let helpSection = helpRes.items[0]?.fields
                   <div class='icon blue-gradient'>
                     <img
                       alt=''
-                      src='../../public/img/starting-points/play.svg'
+                      src={`${makeUrl(base, locale)}public/img/starting-points/play.svg`}
                     />
                   </div>
                   <a
@@ -62,7 +65,7 @@ let helpSection = helpRes.items[0]?.fields
                   <div class='icon blue-gradient'>
                     <img
                       alt=''
-                      src='../../public/img/starting-points/doc.svg'
+                      src={`${makeUrl(base, locale)}public/img/starting-points/doc.svg`}
                     />
                   </div>
                   <a href={helpSection.cta2Url as unknown as string}>
