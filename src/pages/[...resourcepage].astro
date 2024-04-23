@@ -1,0 +1,125 @@
+---
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import Layout from '../layouts/Layout.astro'
+import { contentfulClient } from '../lib/contentful'
+import type { Entry } from 'contentful'
+import type { TypePageSkeleton } from '../types/contentful/TypePage'
+
+export async function getStaticPaths() {
+  let paths = []
+  const LOCALES = ['en-CA', 'fr-CA']
+  for (const locale of LOCALES) {
+    const res = await contentfulClient.getEntries<TypePageSkeleton>({
+      content_type: 'page',
+      locale
+    })
+
+    const page = res.items
+
+    for (const i of page) {
+      // const others = allitems.filter((f) => f.fields.slug !== i.fields.slug)
+      // maybe have an attribute basic page
+      if (i.fields.slug === 'resources') {
+        // move this to howTo content type, removed as a page
+        // so far, only disclaimer, all-benefits
+        paths.push({
+          params: {
+            resourcepage: `${locale === 'en-CA' ? i.fields.slug : `fr/${i.fields.slug}`}`
+          },
+          props: { page: { ...i } }
+        })
+      }
+    }
+  }
+  return paths
+}
+
+const options = {
+  prefix: 'my-prefix-'
+}
+
+marked.use(gfmHeadingId(options))
+
+const page = Astro.props.page as Entry<TypePageSkeleton>
+---
+
+<Layout
+  title={page?.fields.title as string}
+  description={page?.fields.metaDescription as string}
+  className=''
+>
+  <main
+    class={`page ${page?.fields?.slug}`}
+    id='maincontent'
+    data-page-title={page?.fields.title as string}
+    data-page-category=''
+  >
+    <div class='container block1'>
+      <section class='section'>
+        <div class='row justify-content-md-center'>
+          <div class='col-12 col-md-10'>
+            <h1>
+              <strong>{page?.fields.title as string}</strong>MAIN RESOURCES
+            </h1>
+            <!-- <h2>{page?.fields.subTitle as string}</h2> -->
+            TO DO List benefit and agency resource - see groupby
+            <p class='large'>
+              {page?.fields.lead as string}
+            </p>
+            {
+              page?.fields?.block1 ? (
+                <div set:html={marked(page.fields.block1 as string)} />
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+    {
+      page?.fields?.block2 ? (
+        <div class='bg-white lt-border-t-light block2'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block2 as string)} />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    {
+      page?.fields?.block3 ? (
+        <div class='bg-secondary block3'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block3 as string)} />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    {
+      page?.fields?.block4 ? (
+        <div class='bg-white lt-border-t-light block4'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block4 as string)} />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+  </main>
+</Layout>

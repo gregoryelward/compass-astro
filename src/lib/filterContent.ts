@@ -70,11 +70,11 @@ function hideEmptyAgency() {
 }
 
 export default function showProvincialDataOnly() {
-  console.log('CALLED')
+  // console.log('CALLED')
   // check for existing province, filter accordingly
   //@ts-ignore
   const userProvince = JSON.parse(localStorage.getItem('province'))
-  console.log('userProvince ', userProvince)
+  // console.log('userProvince ', userProvince)
   if (userProvince) {
     filterContent(userProvince)
     // showElements(userProvince, 'data-province-filter')

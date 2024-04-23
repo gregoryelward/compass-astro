@@ -22,19 +22,20 @@ import type {
 
 export async function getStaticPaths() {
 
-  const inventory = [
-  { name: "asparagus", type: "vegetables", quantity: 5 },
-  { name: "bananas", type: "fruit", quantity: 0 },
-  { name: "goat", type: "meat", quantity: 23 },
-  { name: "cherries", type: "fruit", quantity: 5 },
-  { name: "fish", type: "meat", quantity: 22 },
-];
+//   const inventory = [
+//   { name: "asparagus", type: "vegetables", quantity: 5 },
+//   { name: "bananas", type: "fruit", quantity: 0 },
+//   { name: "goat", type: "meat", quantity: 23 },
+//   { name: "cherries", type: "fruit", quantity: 5 },
+//   { name: "fish", type: "meat", quantity: 22 },
+// ];
 
   let paths = []
   const LOCALES = ['en-CA', 'fr-CA']
   for (const locale of LOCALES) {
     const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
       content_type: 'benefit',
+      include:  3,
       locale
     })
 
@@ -48,15 +49,57 @@ export async function getStaticPaths() {
     let warning = warningRes.items[0]?.fields
 
     const benefits = benefitRes.items
-    for (const i of benefits) {
-      const jurisdiction = getJurisdiction(i.fields.authority, locale)
-      // console.log("benefit resource ", i.fields.agencyResource)
 
-      function myCallback({ quantity } : any) {
-  return quantity > 5 ? "ok" : "restock";
-}
-//@ts-ignore
-const result2 = Object.groupBy(inventory, myCallback);
+    function myCallback(agencyResource: any) {
+      //@ts-ignore
+      return agencyResource?.agency || "notitle"
+    }
+    // function myCallback({ quantity } : any) {
+    //   return quantity > 5 ? "ok" : "restock";
+    // }
+
+    for (const i of benefits) {
+      let result2;
+      const jurisdiction = getJurisdiction(i.fields.authority, locale)
+      
+      let agencyResource = i.fields?.agencyResource?.map((a) => {
+        // console.log("a?.agency?.fields? ",a?.fields)
+        //@ts-ignore
+        return {
+          //@ts-ignore
+          ...a?.fields,
+          //@ts-ignore
+          agency : a?.fields?.agency?.fields?.title
+        }
+      })
+
+      // console.log("agencyResource ", agencyResource)
+      if (agencyResource) {
+        result2 = Object.groupBy(agencyResource, myCallback);
+        // console.log("result2 ", result2)
+      }
+      
+      // if (agencyResource) {
+      //   console.log("benefit agencyResource ", i.fields.agencyResource)
+      //      //@ts-ignore
+      //   // result2 = Object.groupBy(agencyResource, myCallback);
+      //   // console.log('result2 ',result2)
+      //   //  result2.notitle.forEach(element => {
+      //   //   console.log('agency ', element?.fields)
+      //   // });
+      //   // agencyResource.forEach(element => {
+      //   //   console.log('agency ', element?.fields?.agency)
+      //   // });
+      // }
+      //i.fields.agencyResource
+      //i.fields.agencyResource.fields.
+      //
+
+//       function myCallback({ quantity } : any) {
+//   return quantity > 5 ? "ok" : "restock";
+// }
+// //@ts-ignore
+// const result2 = Object.groupBy(inventory, myCallback);
 // console.log('result2 ',result2)
 
 /* Result is:
@@ -95,7 +138,8 @@ const result2 = Object.groupBy(inventory, myCallback);
             navigationIndex,
             prevPage: benefitPages[navigationIndex - 1],
             nextPage: benefitPages[navigationIndex + 1],
-            warning
+            warning,
+            result2
           }
         })
         navigationIndex = navigationIndex + 1
@@ -122,6 +166,14 @@ const resources = benefit.fields.resources
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
 const nextPage = Astro.props.nextPage
+const result2 = Astro.props.result2
+
+// console.log('resut ', result2)
+
+// Object.entries(result2).map(([key, value]) => {
+//   console.log(`${key} ${JSON.stringify(value)}`); // "a 5", "b 7", "c 9"
+ 
+// });
 
 let agency
 
@@ -149,6 +201,11 @@ const base = import.meta.env.BASE_URL
     <div class='container'>
       <div class='row justify-content-md-center'>
         <div class='col-12 col-md-10'>
+          <!-- <p>{JSON.stringify(Object.entries(result2))}</p> -->
+          <!-- <p>{Object.entries(result2)}</p> -->
+
+          
+          
           <nav aria-label='breadcrumb'>
             <ol class='breadcrumb'>
               <li class='breadcrumb-item'>
@@ -184,7 +241,7 @@ const base = import.meta.env.BASE_URL
               {benefit.fields.acronym}
             </div>
             <div class='mb-3 pb-3'></div>
-            <h1><strong>{page.fields.title}</strong></h1>
+            <h1><strong>{page.fields.title}</strong>BENEFIT PAGE</h1>
             {
               page?.fields?.lead ? (
                 <p>{page.fields.lead}</p>
@@ -265,7 +322,46 @@ const base = import.meta.env.BASE_URL
       ) : null
     }
 
-    {
+{
+      page?.fields.slug === 'resources' ? (
+        <div class='bg-white lt-border-t-light'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div class='js-accordion resources'>
+                    {result2
+                      ? Object.entries(result2).map(([key, value], index) => {
+                          return (
+                            <>
+                              <h2 id={`agencyv2-${index}`}>{key}</h2>
+                              {value
+                                ? //@ts-ignore
+                                  value.map(
+                                    (
+                                      v,
+                                      index: number
+                                    ) => {
+                                      return (
+                                        <h3 id={`agencyv2-resource-${index}`}>{v.title}</h3>
+                                        <div set:html={marked(v.content)} />
+                                      )
+                                    }
+                                  )
+                                : null}
+                            </>
+                          )
+                        })
+                      : null}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    <!-- {
       page?.fields.slug === 'resources' ? (
         <div class='bg-white lt-border-t-light'>
           <div class='container'>
@@ -277,6 +373,7 @@ const base = import.meta.env.BASE_URL
                       ? agency.map((a, index) => {
                           return (
                             <>
+                            TODO
                               <h2 id={`agency-${index}`}>{a.fields.title}</h2>
                               {a.fields?.resource
                                 ? //@ts-ignore
@@ -316,7 +413,7 @@ const base = import.meta.env.BASE_URL
           </div>
         </div>
       ) : null
-    }
+    } -->
 
     <div class=' bg-white  lt-border-t-light'>
       <div class='container'>
