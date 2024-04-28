@@ -5,6 +5,9 @@ import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
 import type { Entry } from 'contentful'
 import type { TypePageSkeleton } from '../types/contentful/TypePage'
+import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
+import getJurisdiction from '../lib/jurisdictions'
+import BenefitResources from '../components/BenefitResources.astro'
 
 export async function getStaticPaths() {
   let paths = []
@@ -14,6 +17,15 @@ export async function getStaticPaths() {
       content_type: 'page',
       locale
     })
+    const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
+      content_type: 'benefit',
+      include: 3,
+      //@ts-ignore
+      order: 'fields.order',
+      locale
+    })
+
+    const benefits = benefitRes.items
 
     const page = res.items
 
@@ -27,7 +39,7 @@ export async function getStaticPaths() {
           params: {
             resourcepage: `${locale === 'en-CA' ? i.fields.slug : `fr/${i.fields.slug}`}`
           },
-          props: { page: { ...i } }
+          props: { page: { ...i }, benefits }
         })
       }
     }
@@ -42,12 +54,13 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const page = Astro.props.page as Entry<TypePageSkeleton>
+const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 ---
 
 <Layout
   title={page?.fields.title as string}
   description={page?.fields.metaDescription as string}
-  className=''
+  className='page_resourcesall'
 >
   <main
     class={`page ${page?.fields?.slug}`}
@@ -76,6 +89,48 @@ const page = Astro.props.page as Entry<TypePageSkeleton>
         </div>
       </section>
     </div>
+
+    <div class='bg-white lt-border-t-light'>
+      <div class='container'>
+        <section class='section'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <div class='mb-3 pb-2'>
+                {
+                  benefits
+                    ? benefits.map((b) => {
+                        return (
+                          <div
+                            class='js-accordion benefit-agency'
+                            data-province-filter={
+                              getJurisdiction(b.fields.authority)?.code || ''
+                            }
+                            XXXdata-province-hide-filter={
+                              b.fields.hideForProvinces || ''
+                            }
+                          >
+                            <h2 id={`benefit${b?.sys?.id}`}>
+                              {b?.fields?.title}
+                            </h2>
+                            <div class='card-body mb-3'>
+                              <div class='js-accordion'>
+                                <BenefitResources
+                                  resources={b?.fields.agencyResource}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })
+                    : null
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
     {
       page?.fields?.block2 ? (
         <div class='bg-white lt-border-t-light block2'>
@@ -123,3 +178,47 @@ const page = Astro.props.page as Entry<TypePageSkeleton>
     }
   </main>
 </Layout>
+
+<script>
+  import accordion from '../lib/accordion'
+
+  function hideEmptyAgency() {
+    // PREACCORDION
+    const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
+
+    // console.log('agencyList ', agencyList)
+
+    agencyList.forEach(function (agencyItem) {
+      const name = agencyItem.querySelectorAll('h2')[0].innerText
+      // console.log('name ', name)
+
+      const agencyResources = agencyItem.querySelectorAll(
+        '.js-accordion > [data-province-filter]'
+      )
+      // console.log('agencyResources ', agencyResources)
+      var nodes = Array.prototype.slice.call(agencyResources)
+      let nodeLength = nodes.filter(function (node) {
+        return node.style.display !== 'none'
+      }).length
+
+      if (nodeLength === 0) {
+        console.log('hide', name)
+        agencyItem.style.display = 'none'
+      } else {
+        console.log('show', name)
+        agencyItem.style.display = 'block'
+      }
+    })
+  }
+
+  hideEmptyAgency()
+
+  // accordion('.js-accordion h2', 'H2', 2)
+  // accordion('.js-accordion h3', 'H3', 3)
+</script>
+
+<style>
+  .accordion p {
+    margin-top: 1rem;
+  }
+</style>

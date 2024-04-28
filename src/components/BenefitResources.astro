@@ -1,0 +1,104 @@
+---
+import type { Entry } from 'contentful'
+import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
+import { marked } from 'marked'
+import getJurisdiction from '../lib/jurisdictions'
+
+interface Props {
+  resources: Array<Entry<TypeAgencyResourceSkeleton>>
+  //   title: string
+  //   body: string
+  //   href: string
+  //   img: string
+  //   alt: string
+  //   linkTitle: string
+}
+
+// EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TypeAgencyResourceSkeleton>>
+
+// const { href, title, body, img, alt, linkTitle } = Astro.props
+const { resources } = Astro.props
+
+function myCallback(agencyResource: any) {
+  //@ts-ignore
+  return agencyResource?.agency || 'notitle'
+}
+// console.log('passed in ', resources)
+
+// TO DO make it grouped by
+
+let result2
+
+let agencyResource = resources?.map((a) => {
+  // console.log("a?.agency?.fields? ",a?.fields)
+  //@ts-ignore
+  return {
+    //@ts-ignore
+    ...a?.fields,
+    //@ts-ignore
+    authority: a?.fields?.agency?.fields?.authority,
+    //@ts-ignore
+    showLocalyOnly: a?.fields?.agency?.fields?.showLocalyOnly, // some benefit related resources provided by agencies are to be consumned only for local people
+    //@ts-ignore
+    agency: a?.fields?.agency?.fields?.title
+  }
+})
+
+// console.log("agencyResource ", agencyResource)
+if (agencyResource) {
+  result2 = Object.groupBy(agencyResource, myCallback)
+  // console.log("result2 ", result2)
+}
+
+console.log('result2 ', result2)
+---
+
+{
+  result2 ? (
+    Object.entries(result2).map(([key, value], index) => {
+      return (
+        <div
+          data-province-filter={
+            value[0]?.showLocalyOnly
+              ? getJurisdiction(value[0]?.authority)?.code || ''
+              : ''
+          }
+        >
+          <h3 id={`agency-resource-${index}`}>{key}</h3>
+          {value
+            ? //@ts-ignore
+              value.map((v, index: number) => {
+                return (
+                  <div
+                    XXdata-province-filter={
+                      v.showLocalyOnly
+                        ? getJurisdiction(v.authority)?.code || ''
+                        : ''
+                    }
+                  >
+                    <h4 class='agency resource'>{v.title}</h4>
+                    <div set:html={marked(v.content as string)} />
+                    <hr />
+                  </div>
+                )
+              })
+            : null}
+        </div>
+      )
+    })
+  ) : (
+    <div>{'no resoruces'}</div>
+  )
+}
+
+<style>
+  .card-body p {
+    margin-top: 1rem;
+  }
+</style>
+<!-- <script>
+    import accordion from '../lib/accordion'
+
+    accordion('.js-accordion h2', 'H2', 2)
+    accordion('.js-accordion h3', 'H3', 3)
+  </script> -->
