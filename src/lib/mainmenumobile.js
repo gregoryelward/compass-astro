@@ -1,5 +1,6 @@
 const filterContent = function (filter) {
   // show those benefits for the selected province
+  // console.log('filterContent 1')
   const provinceItems = document.querySelectorAll('[data-province-filter]')
 
   provinceItems.forEach(function (item) {
@@ -21,6 +22,7 @@ const filterContent = function (filter) {
 }
 export default function showProvincialDataOnly() {
   try {
+    // console.log(' called mobile showProvincialDataOnly')
     /* MOBILE PROVINCE MENU*/
     /* Set selected province
      */
@@ -65,7 +67,7 @@ export default function showProvincialDataOnly() {
 
       // TODO use observer pattern?
       localStorage.setItem('province', JSON.stringify(provinceCode))
-      filterContent(provinceCode)
+      // filterContent(provinceCode)
     })
   } catch (error) {}
 }

@@ -2,7 +2,8 @@ import jurisdictions from './jurisdictions.json'
 
 // console.log('jurisdictions ', jurisdictions)
 
-function filterContent(filter: string) {
+export function filterContent(filter: string) {
+  // console.log('filterContent 2')
   // console.log('TODO filter ', filter)
   // show those benefits for the selected province
   const provinceItems = document.querySelectorAll('[data-province-filter]')
@@ -47,12 +48,11 @@ function filterContent(filter: string) {
 
 //@ts-ignore
 function hideEmptyAgency() {
-  console.log('TODO filter agency resource page ')
+  // console.log('TODO filter agency resource page ')
   // PREACCORDION
   //   const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
   //   agencyList.forEach(function (agencyItem) {
   //     const name = agencyItem.querySelectorAll('h2')[0].innerText
-
   //     const agencyResources = agencyItem.querySelectorAll(
   //       '.js-accordion > [data-province-filter]'
   //     )
@@ -60,7 +60,6 @@ function hideEmptyAgency() {
   //     let nodeLength = nodes.filter(function (node) {
   //       return node.style.display !== 'none'
   //     }).length
-
   //     if (nodeLength === 0) {
   //       agencyItem.style.display = 'none'
   //     } else {
@@ -70,16 +69,13 @@ function hideEmptyAgency() {
 }
 
 export default function showProvincialDataOnly() {
-  // console.log('CALLED')
+  console.log('CALLED', 'showProvincialDataOnly')
   // check for existing province, filter accordingly
   //@ts-ignore
   const userProvince = JSON.parse(localStorage.getItem('province'))
   // console.log('userProvince ', userProvince)
   if (userProvince) {
     filterContent(userProvince)
-    // showElements(userProvince, 'data-province-filter')
-    // hideElements(userProvince, 'data-province-hide-filter')
-    // filterContentv2(userProvince, '[data-province-filter]')
   }
 
   // Province selector - Desktop
@@ -119,34 +115,35 @@ export default function showProvincialDataOnly() {
       }
 
       // assign province selection dropdown
-      const provinceList = document.querySelector(
-        '#navbarDropdown2 + ul.dropdown-menu'
-      ) as HTMLElement
+      // const provinceList = document.querySelector(
+      //   '#navbarDropdown2 + ul.dropdown-menu'
+      // ) as HTMLElement
 
-      provinceList.addEventListener('click', function (event) {
-        // console.log('subnav click')
-        event.preventDefault()
-        const targetElement = event.target
-        //@ts-ignore
-        const closest = targetElement?.closest('.js--sub-link')
-        if (closest) {
-          const provinceCode = closest.getAttribute('data-province')
-          const provinceName = closest.text
+      // console.log('attach listener to ', provinceList)
+      // provinceList.addEventListener('click', function (event) {
+      //   console.log('subnav click')
+      //   event.preventDefault()
+      //   const targetElement = event.target
+      //   //@ts-ignore
+      //   const closest = targetElement?.closest('.js--sub-link')
+      //   if (closest) {
+      //     const provinceCode = closest.getAttribute('data-province')
+      //     const provinceName = closest.text
 
-          provinceList.querySelectorAll('li a').forEach((a) => {
-            if (a.getAttribute('data-province') === provinceCode) {
-              a.classList.add('is-active')
-            } else {
-              a.classList.remove('is-active')
-            }
-          })
+      //     provinceList.querySelectorAll('li a').forEach((a) => {
+      //       if (a.getAttribute('data-province') === provinceCode) {
+      //         a.classList.add('is-active')
+      //       } else {
+      //         a.classList.remove('is-active')
+      //       }
+      //     })
 
-          provinceSelect.textContent = provinceName
-          // TODO use observer pattern?
-          localStorage.setItem('province', JSON.stringify(provinceCode))
-          filterContent(provinceCode)
-        }
-      })
+      //     provinceSelect.textContent = provinceName
+      //     // TODO use observer pattern?
+      //     localStorage.setItem('province', JSON.stringify(provinceCode))
+      //     filterContent(provinceCode)
+      //   }
+      // })
       //   provinceList.addEventListener('click', function (event) {
       //     event.preventDefault()
       //     const targetElement = event.target

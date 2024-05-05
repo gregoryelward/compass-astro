@@ -50,7 +50,7 @@ if (agencyResource) {
   // console.log("result2 ", result2)
 }
 
-console.log('result2 ', result2)
+// console.log('result2 ', result2)
 ---
 
 {
@@ -58,6 +58,7 @@ console.log('result2 ', result2)
     Object.entries(result2).map(([key, value], index) => {
       return (
         <div
+          data-foobar='baz'
           data-province-filter={
             value[0]?.showLocalyOnly
               ? getJurisdiction(value[0]?.authority)?.code || ''
@@ -70,7 +71,7 @@ console.log('result2 ', result2)
               value.map((v, index: number) => {
                 return (
                   <div
-                    XXdata-province-filter={
+                    data-province-filter={
                       v.showLocalyOnly
                         ? getJurisdiction(v.authority)?.code || ''
                         : ''

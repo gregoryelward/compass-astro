@@ -73,10 +73,10 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
             <h1>
-              <strong>{page?.fields.title as string}</strong>MAIN RESOURCES
+              <strong>{page?.fields.title as string}</strong>
             </h1>
             <!-- <h2>{page?.fields.subTitle as string}</h2> -->
-            TO DO List benefit and agency resource - see groupby
+            <!-- TO DO List benefit and agency resource - see groupby -->
             <p class='large'>
               {page?.fields.lead as string}
             </p>
@@ -98,30 +98,32 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
               <div class='mb-3 pb-2'>
                 {
                   benefits
-                    ? benefits.map((b) => {
-                        return (
-                          <div
-                            class='js-accordion benefit-agency'
-                            data-province-filter={
-                              getJurisdiction(b.fields.authority)?.code || ''
-                            }
-                            XXXdata-province-hide-filter={
-                              b.fields.hideForProvinces || ''
-                            }
-                          >
-                            <h2 id={`benefit${b?.sys?.id}`}>
-                              {b?.fields?.title}
-                            </h2>
-                            <div class='card-body mb-3'>
-                              <div class='js-accordion'>
-                                <BenefitResources
-                                  resources={b?.fields.agencyResource}
-                                />
+                    ? benefits
+                        .filter((b) => b?.fields?.agencyResource?.length > 0)
+                        .map((b, index) => {
+                          return (
+                            <div
+                              class={`js-accordion benefit-agency ${b?.fields?.agencyResource?.length > 0 ? '' : 'empty'}`}
+                              data-province-filter={
+                                getJurisdiction(b.fields.authority)?.code || ''
+                              }
+                              data-province-hide-filter={
+                                b.fields.hideForProvinces || ''
+                              }
+                            >
+                              <h2 id={`benefit${b?.sys?.id}`}>
+                                {b?.fields?.title}
+                              </h2>
+                              <div class='card-body mb-3'>
+                                <div class='js-accordion'>
+                                  <BenefitResources
+                                    resources={b?.fields.agencyResource}
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )
-                      })
+                          )
+                        })
                     : null
                 }
               </div>
@@ -182,6 +184,10 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 <script>
   import accordion from '../lib/accordion'
 
+  import showProvincialDataOnly from '../lib/filterContent'
+  console.log('resouece showProvincialDataOnly in resource page ')
+  showProvincialDataOnly()
+
   function hideEmptyAgency() {
     // PREACCORDION
     const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
@@ -190,31 +196,39 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
     agencyList.forEach(function (agencyItem) {
       const name = agencyItem.querySelectorAll('h2')[0].innerText
-      // console.log('name ', name)
-
+      // console.log('Nane ', name)
       const agencyResources = agencyItem.querySelectorAll(
         '.js-accordion > [data-province-filter]'
       )
-      // console.log('agencyResources ', agencyResources)
+
       var nodes = Array.prototype.slice.call(agencyResources)
+
       let nodeLength = nodes.filter(function (node) {
+        if (name === 'BENEFIT - Canada Pension Plan–Disability benefit - 1') {
+          console.log('name ', name, `[${node.style.display}]`)
+          // console.log('agencyResources ', agencyResources)
+        }
+
         return node.style.display !== 'none'
       }).length
 
+      // console.log('nodeLength ', nodeLength)
       if (nodeLength === 0) {
         console.log('hide', name)
         agencyItem.style.display = 'none'
+        agencyItem.style.color = 'red'
       } else {
         console.log('show', name)
         agencyItem.style.display = 'block'
+        agencyItem.style.color = 'blue'
       }
     })
   }
 
   hideEmptyAgency()
 
-  // accordion('.js-accordion h2', 'H2', 2)
-  // accordion('.js-accordion h3', 'H3', 3)
+  accordion('.js-accordion h2', 'H2', 2)
+  accordion('.js-accordion h3', 'H3', 3)
 </script>
 
 <style>

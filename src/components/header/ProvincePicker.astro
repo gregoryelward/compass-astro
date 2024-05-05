@@ -31,6 +31,42 @@ const t = useTranslations(lang)
 </ul>
 
 <script>
-  import showProvincialDataOnly from '../../lib/filterContent'
-  showProvincialDataOnly()
+  // import showProvincialDataOnly from '../../lib/filterContent'
+  import { filterContent } from '../../lib/filterContent'
+  // console.log('Province Picker showProvincialDataOnly ')
+  // showProvincialDataOnly()
+
+  const provinceSelect = document.getElementById('navbarDropdown2')
+
+  if (provinceSelect) {
+    const provinceList = document.querySelector(
+      '#navbarDropdown2 + ul.dropdown-menu'
+    ) as HTMLElement
+
+    // console.log('attach listener to ', provinceList)
+    provinceList.addEventListener('click', function (event) {
+      // console.log('subnav click')
+      event.preventDefault()
+      const targetElement = event.target
+      //@ts-ignore
+      const closest = targetElement?.closest('.js--sub-link')
+      if (closest) {
+        const provinceCode = closest.getAttribute('data-province')
+        const provinceName = closest.text
+
+        provinceList.querySelectorAll('li a').forEach((a) => {
+          if (a.getAttribute('data-province') === provinceCode) {
+            a.classList.add('is-active')
+          } else {
+            a.classList.remove('is-active')
+          }
+        })
+
+        provinceSelect.textContent = provinceName
+        // TODO use observer pattern?
+        localStorage.setItem('province', JSON.stringify(provinceCode))
+        filterContent(provinceCode)
+      }
+    })
+  }
 </script>
