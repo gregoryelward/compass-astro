@@ -25,9 +25,13 @@
     line-height: 1.2;
     color: var(--reverse);
 
-    .light-theme &, &.dark, .bg-light &, .bg-light--alt &, , .bg-white &, .accordion &, .benefit-card & {
+    // GLE fix syntax
+    .light-theme &, &.dark, .bg-light &, .bg-light--alt &,  .bg-white &, .accordion &, .benefit-card & {
         color: var(--body);
     }
+    // .light-theme &, &.dark, .bg-light &, .bg-light--alt &, , .bg-white &, .accordion &, .benefit-card & {
+    //     color: var(--body);
+    // }
 
     @media print {
         color: #212529;

@@ -453,13 +453,15 @@ dd.glossary {
     margin-top: 2rem;
 }
 
-.bg-light .callout {
-    background-color: #fff;
-} 
+// GREG 202405  removed
+// .bg-light .callout {
+//     background-color: #fff;
+// } 
 
-.light-theme .bg-light .callout {
-    background-color: var(--lt-secondary);
-}
+// GREG 202405 removed
+// .light-theme .bg-light .callout {
+//     background-color: var(--lt-secondary);
+// }
 
 ul + h5 {
     margin-top: 2rem;
@@ -587,4 +589,104 @@ P + ul, p + ol {
 
 .about .partner  p:first-of-type,.about .reviewer p:first-of-type {
     font-size: 1.5rem;
+}
+
+
+// GREG TRYING
+.benefit-card {
+    background: var(--secondary);
+}
+
+.benefit-card .btn-link, .benefit-card p, .benefit-card .h4,
+.benefit-card h3,.benefit-card .h4 span,
+.benefit-card h3 span {
+color: var(--white);
+}
+
+.benefit-card .benefit-card--benefit {
+    // background: var(--secondary);
+    background: var(--primary);
+    color: var(--white);
+}
+
+.light-theme .benefit-card {
+        background-color: var(--white);
+            color: var(--body);
+}
+
+.light-theme .benefit-card--benefit {
+    margin-left: var(--card-padding);
+    margin-right: var(--card-padding);
+    padding: 1rem;
+    background-color: var(--light-brown-tint);
+    border-radius: 6px;
+}
+
+.light-theme .benefit-card .btn-link,
+.light-theme .benefit-card p,
+.light-theme .benefit-card .h4,
+.light-theme .benefit-card h3,
+.light-theme .benefit-card .h4 span,
+.light-theme .benefit-card h3 span {
+color: var(--body);
+}
+
+.benefit-card .btn-link,
+.benefit-card p,
+.benefit-card .h4,
+.benefit-card h3,
+.benefit-card .h4 span,
+.benefit-card h3 span {
+    color: var(--white);
+}
+
+
+
+.benefit-card {
+    background: var(--secondary);
+}
+
+.card .btn-link,
+.card p,
+.card .h4,
+.card h3,
+.card .h4 span,
+.card h3 span {
+    color: var(--white);
+}
+
+.card  {
+    // background: var(--secondary);
+    background: var(--primary);
+    color: var(--white);
+}
+
+.light-theme .card {
+    background-color: var(--white);
+    color: var(--body);
+}
+
+
+.light-theme .card .btn-link,
+.light-theme .card p,
+.light-theme .card .h4,
+.light-theme .card h3,
+.light-theme .card .h4 span,
+.light-theme .card h3 span {
+    color: var(--body);
+}
+
+
+.light-theme .accordion .card-header {
+    background-color: white;
+}
+
+.accordion .card-header {
+        background: var(--primary);
+}
+.accordion .card-header .btn-link span {
+    color: var(--white);
+}
+.light-theme .accordion .card-header .btn-link span {
+    color: var(--body);
 }
