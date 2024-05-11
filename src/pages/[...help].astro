@@ -228,5 +228,20 @@ const agencyHeading = Astro.props
   import accordion from '../lib/accordion'
   import showProvincialDataOnly from '../lib/filterContent'
   showProvincialDataOnly()
+
+  const provinceList = document.querySelector(
+    '#navbarDropdown2 + ul.dropdown-menu'
+  ) as HTMLElement
+
+  // console.log('attach listener to ', provinceList)
+  provinceList.addEventListener('click', function (event) {
+    // console.log('provinceList.Listener clicked 2 ')
+    event.preventDefault()
+    // console.log('in resourcepage calling showProvincialDataOnly()')
+    showProvincialDataOnly()
+
+    // console.log('in resourcepage calling hideEmptyAgency()')
+    // hideEmptyAgency()
+  })
   accordion('.js-accordion h2', 'H2', 2)
 </script>
