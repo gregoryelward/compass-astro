@@ -8,6 +8,7 @@ import type { TypePageSkeleton } from '../types/contentful/TypePage'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
 import BenefitResources from '../components/BenefitResources.astro'
+import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
 
 export async function getStaticPaths() {
   let paths = []
@@ -99,11 +100,11 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                 {
                   benefits
                     ? benefits
-                        .filter((b) => b?.fields?.agencyResource?.length > 0)
+                        .filter((b) => b?.fields?.agencyResource)
                         .map((b, index) => {
                           return (
                             <div
-                              class={`js-accordion benefit-agency ${b?.fields?.agencyResource?.length > 0 ? '' : 'empty'}`}
+                              class={`js-accordion benefit-agency ${b.fields.agencyResource ? '' : 'empty'}`}
                               data-province-filter={
                                 getJurisdiction(b.fields.authority)?.code || ''
                               }
@@ -117,7 +118,11 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                               <div class='card-body mb-3'>
                                 <div class='js-accordion'>
                                   <BenefitResources
-                                    resources={b?.fields.agencyResource}
+                                    resources={
+                                      b?.fields.agencyResource as Array<
+                                        Entry<TypeAgencyResourceSkeleton>
+                                      >
+                                    }
                                   />
                                 </div>
                               </div>
@@ -183,11 +188,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
 <script>
   import accordion from '../lib/accordion'
-
   import showProvincialDataOnly from '../lib/filterContent'
-  console.log('resouece showProvincialDataOnly in resource page ')
-  showProvincialDataOnly()
-
   function hideEmptyAgency() {
     // PREACCORDION
     const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
@@ -204,28 +205,45 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
       var nodes = Array.prototype.slice.call(agencyResources)
 
       let nodeLength = nodes.filter(function (node) {
-        if (name === 'BENEFIT - Canada Pension Plan–Disability benefit - 1') {
-          console.log('name ', name, `[${node.style.display}]`)
-          // console.log('agencyResources ', agencyResources)
-        }
+        // if (name === 'BENEFIT - Canada Pension Plan–Disability benefit - 1') {
+        //   console.log('name ', name, `[${node.style.display}]`)
+        //   // console.log('agencyResources ', agencyResources)
+        // }
 
         return node.style.display !== 'none'
       }).length
 
       // console.log('nodeLength ', nodeLength)
       if (nodeLength === 0) {
-        console.log('hide', name)
-        agencyItem.style.display = 'none'
-        agencyItem.style.color = 'red'
+        // console.log('hide', name)
+        ;(agencyItem as HTMLElement).style.display = 'none'
+        ;(agencyItem as HTMLElement).style.color = 'red'
       } else {
-        console.log('show', name)
-        agencyItem.style.display = 'block'
-        agencyItem.style.color = 'blue'
+        // console.log('show', name)
+        ;(agencyItem as HTMLElement).style.display = 'block'
+        ;(agencyItem as HTMLElement).style.color = 'blue'
       }
     })
   }
+  const provinceList = document.querySelector(
+    '#navbarDropdown2 + ul.dropdown-menu'
+  ) as HTMLElement
 
-  hideEmptyAgency()
+  // console.log('attach listener to ', provinceList)
+  provinceList.addEventListener('click', function (event) {
+    // console.log('provinceList.Listener clicked 2 ')
+    event.preventDefault()
+    // console.log('in resourcepage calling showProvincialDataOnly()')
+    showProvincialDataOnly()
+
+    // console.log('in resourcepage calling hideEmptyAgency()')
+    hideEmptyAgency()
+  })
+  // console.log('in resourcepage calling showProvincialDataOnly()')
+  // showProvincialDataOnly()
+
+  // console.log('in resourcepage calling hideEmptyAgency()')
+  // hideEmptyAgency()
 
   accordion('.js-accordion h2', 'H2', 2)
   accordion('.js-accordion h3', 'H3', 3)

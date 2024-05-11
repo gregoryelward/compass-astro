@@ -3,6 +3,7 @@ import jurisdictions from './jurisdictions.json'
 // console.log('jurisdictions ', jurisdictions)
 
 export function filterContent(filter: string) {
+  console.log('CALLED filterContent ')
   // console.log('filterContent 2')
   // console.log('TODO filter ', filter)
   // show those benefits for the selected province
@@ -79,85 +80,85 @@ export default function showProvincialDataOnly() {
   }
 
   // Province selector - Desktop
-  const provinceSelect = document.getElementById('navbarDropdown2')
+  // const provinceSelect = document.getElementById('navbarDropdown2')
 
-  if (provinceSelect) {
-    try {
-      //@ts-ignore
-      const provinceCode = JSON.parse(localStorage.getItem('province'))
+  // if (provinceSelect) {
+  //   try {
+  //     //@ts-ignore
+  //     const provinceCode = JSON.parse(localStorage.getItem('province'))
 
-      // console.log('province code ', provinceCode)
-      if (provinceCode) {
-        const language =
-          document.getElementsByTagName('html')[0].getAttribute('lang') ||
-          'en-CA'
-        // console.log('language ', language)
-        // console.log(
-        //   'jurisdictions[language] ',
-        //   language,
-        //   // jurisdictions,
-        //   jurisdictions.jurisdictions[language]
-        // )
-        //@ts-ignore
-        provinceSelect.textContent = jurisdictions.jurisdictions[language].find(
-          (j: { code: any }) => j.code === provinceCode
-        ).title
+  //     // console.log('province code ', provinceCode)
+  //     if (provinceCode) {
+  //       const language =
+  //         document.getElementsByTagName('html')[0].getAttribute('lang') ||
+  //         'en-CA'
+  //       // console.log('language ', language)
+  //       // console.log(
+  //       //   'jurisdictions[language] ',
+  //       //   language,
+  //       //   // jurisdictions,
+  //       //   jurisdictions.jurisdictions[language]
+  //       // )
+  //       //@ts-ignore
+  //       provinceSelect.textContent = jurisdictions.jurisdictions[language].find(
+  //         (j: { code: any }) => j.code === provinceCode
+  //       ).title
 
-        // console.log('provinceSelect.textContent ', provinceSelect.textContent)
-        document
-          .querySelectorAll('#navbarDropdown2 + ul.dropdown-menu li a')
-          .forEach((a) => {
-            if (a.getAttribute('data-province') === provinceCode) {
-              a.classList.add('is-active')
-              return
-            }
-          })
-      }
+  //       // console.log('provinceSelect.textContent ', provinceSelect.textContent)
+  //       document
+  //         .querySelectorAll('#navbarDropdown2 + ul.dropdown-menu li a')
+  //         .forEach((a) => {
+  //           if (a.getAttribute('data-province') === provinceCode) {
+  //             a.classList.add('is-active')
+  //             return
+  //           }
+  //         })
+  //     }
 
-      // assign province selection dropdown
-      // const provinceList = document.querySelector(
-      //   '#navbarDropdown2 + ul.dropdown-menu'
-      // ) as HTMLElement
+  //     // assign province selection dropdown
+  //     // const provinceList = document.querySelector(
+  //     //   '#navbarDropdown2 + ul.dropdown-menu'
+  //     // ) as HTMLElement
 
-      // console.log('attach listener to ', provinceList)
-      // provinceList.addEventListener('click', function (event) {
-      //   console.log('subnav click')
-      //   event.preventDefault()
-      //   const targetElement = event.target
-      //   //@ts-ignore
-      //   const closest = targetElement?.closest('.js--sub-link')
-      //   if (closest) {
-      //     const provinceCode = closest.getAttribute('data-province')
-      //     const provinceName = closest.text
+  //     // console.log('attach listener to ', provinceList)
+  //     // provinceList.addEventListener('click', function (event) {
+  //     //   console.log('subnav click')
+  //     //   event.preventDefault()
+  //     //   const targetElement = event.target
+  //     //   //@ts-ignore
+  //     //   const closest = targetElement?.closest('.js--sub-link')
+  //     //   if (closest) {
+  //     //     const provinceCode = closest.getAttribute('data-province')
+  //     //     const provinceName = closest.text
 
-      //     provinceList.querySelectorAll('li a').forEach((a) => {
-      //       if (a.getAttribute('data-province') === provinceCode) {
-      //         a.classList.add('is-active')
-      //       } else {
-      //         a.classList.remove('is-active')
-      //       }
-      //     })
+  //     //     provinceList.querySelectorAll('li a').forEach((a) => {
+  //     //       if (a.getAttribute('data-province') === provinceCode) {
+  //     //         a.classList.add('is-active')
+  //     //       } else {
+  //     //         a.classList.remove('is-active')
+  //     //       }
+  //     //     })
 
-      //     provinceSelect.textContent = provinceName
-      //     // TODO use observer pattern?
-      //     localStorage.setItem('province', JSON.stringify(provinceCode))
-      //     filterContent(provinceCode)
-      //   }
-      // })
-      //   provinceList.addEventListener('click', function (event) {
-      //     event.preventDefault()
-      //     const targetElement = event.target
-      //     const closest = (targetElement as HTMLElement)?.closest('.js--sub-link')
-      //     if (closest) {
-      //       const provinceCode = closest.getAttribute('data-province')
-      //       if (provinceCode) {
-      //         filterContent(provinceCode)
-      //       }
-      //       hideEmptyAgency()
-      //     }
-      //   })
-    } catch (error) {
-      console.log('Error', error)
-    }
-  }
+  //     //     provinceSelect.textContent = provinceName
+  //     //     // TODO use observer pattern?
+  //     //     localStorage.setItem('province', JSON.stringify(provinceCode))
+  //     //     filterContent(provinceCode)
+  //     //   }
+  //     // })
+  //     //   provinceList.addEventListener('click', function (event) {
+  //     //     event.preventDefault()
+  //     //     const targetElement = event.target
+  //     //     const closest = (targetElement as HTMLElement)?.closest('.js--sub-link')
+  //     //     if (closest) {
+  //     //       const provinceCode = closest.getAttribute('data-province')
+  //     //       if (provinceCode) {
+  //     //         filterContent(provinceCode)
+  //     //       }
+  //     //       hideEmptyAgency()
+  //     //     }
+  //     //   })
+  //   } catch (error) {
+  //     console.log('Error', error)
+  //   }
+  // }
 }

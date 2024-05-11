@@ -60,8 +60,10 @@ if (agencyResource) {
         <div
           data-foobar='baz'
           data-province-filter={
+            //@ts-ignore
             value[0]?.showLocalyOnly
-              ? getJurisdiction(value[0]?.authority)?.code || ''
+              ? //@ts-ignore
+                getJurisdiction(value[0]?.authority)?.code || ''
               : ''
           }
         >
