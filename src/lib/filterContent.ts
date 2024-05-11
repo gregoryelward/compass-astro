@@ -1,9 +1,9 @@
-import jurisdictions from './jurisdictions.json'
+// import jurisdictions from './jurisdictions.json'
 
 // console.log('jurisdictions ', jurisdictions)
 
 export function filterContent(filter: string) {
-  console.log('CALLED filterContent ')
+  // console.log('CALLED filterContent ')
   // console.log('filterContent 2')
   // console.log('TODO filter ', filter)
   // show those benefits for the selected province
@@ -47,27 +47,26 @@ export function filterContent(filter: string) {
   })
 }
 
-//@ts-ignore
-function hideEmptyAgency() {
-  // console.log('TODO filter agency resource page ')
-  // PREACCORDION
-  //   const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
-  //   agencyList.forEach(function (agencyItem) {
-  //     const name = agencyItem.querySelectorAll('h2')[0].innerText
-  //     const agencyResources = agencyItem.querySelectorAll(
-  //       '.js-accordion > [data-province-filter]'
-  //     )
-  //     var nodes = Array.prototype.slice.call(agencyResources)
-  //     let nodeLength = nodes.filter(function (node) {
-  //       return node.style.display !== 'none'
-  //     }).length
-  //     if (nodeLength === 0) {
-  //       agencyItem.style.display = 'none'
-  //     } else {
-  //       agencyItem.style.display = 'block'
-  //     }
-  //   })
-}
+// function hideEmptyAgency() {
+//   // console.log('TODO filter agency resource page ')
+//   // PREACCORDION
+//   //   const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
+//   //   agencyList.forEach(function (agencyItem) {
+//   //     const name = agencyItem.querySelectorAll('h2')[0].innerText
+//   //     const agencyResources = agencyItem.querySelectorAll(
+//   //       '.js-accordion > [data-province-filter]'
+//   //     )
+//   //     var nodes = Array.prototype.slice.call(agencyResources)
+//   //     let nodeLength = nodes.filter(function (node) {
+//   //       return node.style.display !== 'none'
+//   //     }).length
+//   //     if (nodeLength === 0) {
+//   //       agencyItem.style.display = 'none'
+//   //     } else {
+//   //       agencyItem.style.display = 'block'
+//   //     }
+//   //   })
+// }
 
 export default function showProvincialDataOnly() {
   console.log('CALLED', 'showProvincialDataOnly')

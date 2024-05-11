@@ -12,6 +12,7 @@ assert(CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN)
 assert(CONTENTFUL_SPACE_ID)
 assert(CONTENTFUL_ENVIRONMENT)
 
+//@ts-ignore
 const getContentfulEnvironment: EnvironmentGetter = () => {
   const contentfulClient = contentfulManagement.createClient({
     accessToken: CONTENTFUL_MANAGEMENT_API_ACCESS_TOKEN

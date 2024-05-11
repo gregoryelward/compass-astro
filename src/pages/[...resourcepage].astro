@@ -101,7 +101,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                   benefits
                     ? benefits
                         .filter((b) => b?.fields?.agencyResource)
-                        .map((b, index) => {
+                        .map((b) => {
                           return (
                             <div
                               class={`js-accordion benefit-agency ${b.fields.agencyResource ? '' : 'empty'}`}
@@ -197,7 +197,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
     // console.log('agencyList ', agencyList)
 
     agencyList.forEach(function (agencyItem) {
-      const name = agencyItem.querySelectorAll('h2')[0].innerText
+      // const name = agencyItem.querySelectorAll('h2')[0].innerText
       // console.log('Nane ', name)
       const agencyResources = agencyItem.querySelectorAll(
         '.js-accordion > [data-province-filter]'
