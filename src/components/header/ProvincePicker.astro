@@ -47,7 +47,7 @@ const t = useTranslations(lang)
 
     // console.log('attach listener to ', provinceList)
     provinceList.addEventListener('click', function (event) {
-      console.log('provinceList.Listener clicked')
+      // console.log('provinceList.Listener clicked')
       event.preventDefault()
       const targetElement = event.target
       //@ts-ignore
@@ -66,7 +66,7 @@ const t = useTranslations(lang)
 
         provinceSelect.textContent = provinceName
         // TODO use observer pattern?
-        console.log('Province picker callling filterContent()')
+        // console.log('Province picker callling filterContent()')
         localStorage.setItem('province', JSON.stringify(provinceCode))
         // filterContent(provinceCode)
       }
@@ -81,7 +81,7 @@ const t = useTranslations(lang)
       //@ts-ignore
       const provinceCode = JSON.parse(localStorage.getItem('province'))
 
-      console.log('XX province code ', provinceCode)
+      // console.log('XX province code ', provinceCode)
       if (provinceCode) {
         const language =
           document.getElementsByTagName('html')[0].getAttribute('lang') ||

@@ -6,6 +6,7 @@ interface Props {
   title: string
   description: string
   className: string
+  pageSlug?: string
 }
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 // import LanguagePicker from "../components/LanguagePicker.astro";
@@ -17,7 +18,7 @@ import type { TypeNeedHelpSkeleton } from '../types/contentful/TypeNeedHelp'
 const lang = getLangFromUrl(Astro.url)
 // const langSlug = lang === 'en' ? '' : `${lang}/`
 const t = useTranslations(lang)
-const { title, description, className } = Astro.props
+const { title, description, className, pageSlug } = Astro.props
 const tagLine = `- ${t('siteName')}`
 const base = import.meta.env.BASE_URL
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
@@ -110,7 +111,7 @@ let needhelp = needhelpRes.items[0]?.fields
       >
       </iframe>
     </noscript>
-    <Header />
+    <Header pageSlug={pageSlug} />
     <slot />
     <aside class='need-help' id='need-help'>
       <p class='xsmall'>

@@ -5,8 +5,8 @@ export default function goToTop() {
     // When the user scrolls down 20px from the top of the document, show the button
     window.onscroll = function () {
       if (
-        document.body.scrollTop > 20 ||
-        document.documentElement.scrollTop > 20
+        document.body.scrollTop > 40 ||
+        document.documentElement.scrollTop > 40
       ) {
         mybutton.style.display = 'block'
       } else {

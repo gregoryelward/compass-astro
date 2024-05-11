@@ -9,6 +9,7 @@ import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
 import BenefitResources from '../components/BenefitResources.astro'
 import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
+import Feedback from '../components/Feedback.astro'
 
 export async function getStaticPaths() {
   let paths = []
@@ -62,6 +63,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
   title={page?.fields.title as string}
   description={page?.fields.metaDescription as string}
   className='page_resourcesall'
+  pageSlug='resources'
 >
   <main
     class={`page ${page?.fields?.slug}`}
@@ -183,6 +185,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
         </div>
       ) : null
     }
+    <Feedback />
   </main>
 </Layout>
 
@@ -241,10 +244,10 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
     hideEmptyAgency()
   })
   // console.log('in resourcepage calling showProvincialDataOnly()')
-  // showProvincialDataOnly()
+  showProvincialDataOnly()
 
   // console.log('in resourcepage calling hideEmptyAgency()')
-  // hideEmptyAgency()
+  hideEmptyAgency()
 
   accordion('.js-accordion h2', 'H2', 2)
   accordion('.js-accordion h3', 'H3', 3)

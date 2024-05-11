@@ -69,7 +69,7 @@ export function filterContent(filter: string) {
 // }
 
 export default function showProvincialDataOnly() {
-  console.log('CALLED', 'showProvincialDataOnly')
+  // console.log('CALLED', 'showProvincialDataOnly')
   // check for existing province, filter accordingly
   //@ts-ignore
   const userProvince = JSON.parse(localStorage.getItem('province'))
