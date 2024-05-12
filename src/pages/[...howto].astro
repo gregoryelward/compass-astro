@@ -199,6 +199,7 @@ const base = import.meta.env.BASE_URL
 
 <script>
   import accordion from '../lib/accordion'
+  import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
   showProvincialDataOnly()
 
@@ -206,12 +207,17 @@ const base = import.meta.env.BASE_URL
     '#navbarDropdown2 + ul.dropdown-menu'
   ) as HTMLElement
 
-  // console.log('attach listener to ', provinceList)
   provinceList.addEventListener('click', function (event) {
-    // console.log('provinceList.Listener clicked 2 ')
     event.preventDefault()
+    const targetElement = event.target
+    //@ts-ignore
+    const closest = targetElement?.closest('.js--sub-link')
+    if (closest) {
+      const provinceCode = closest.getAttribute('data-province') as string
+      filterContent(provinceCode)
+    }
     // console.log('in resourcepage calling showProvincialDataOnly()')
-    showProvincialDataOnly()
+    // showProvincialDataOnly()
 
     // console.log('in resourcepage calling hideEmptyAgency()')
     // hideEmptyAgency()

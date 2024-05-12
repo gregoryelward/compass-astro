@@ -258,7 +258,7 @@ const base = import.meta.env.BASE_URL
                                       class='js--sub-link'
                                       href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
                                     >
-                                      {b.fields.title}??
+                                      {b.fields.title}
                                     </a>
                                   </li>
                                 )
@@ -393,7 +393,31 @@ const base = import.meta.env.BASE_URL
 
 <script>
   import prepareThemeToggle from '../lib/themeToggle'
-  prepareThemeToggle()
-</script>
+  import { filterContent } from '../lib/filterContent'
+  import showProvincialDataOnly from '../lib/filterContent'
 
-<style></style>
+  showProvincialDataOnly()
+  prepareThemeToggle()
+
+  const provinceList = document.querySelector(
+    '#navbarDropdown2 + ul.dropdown-menu'
+  ) as HTMLElement
+
+  // console.log('Header attach listener ')
+  provinceList.addEventListener('click', function (event) {
+    // console.log('Header listener called ')
+    event.preventDefault()
+    const targetElement = event.target
+    //@ts-ignore
+    const closest = targetElement?.closest('.js--sub-link')
+    if (closest) {
+      const provinceCode = closest.getAttribute('data-province') as string
+      filterContent(provinceCode)
+    }
+    // console.log('in resourcepage calling showProvincialDataOnly()')
+    // showProvincialDataOnly()
+
+    // console.log('in resourcepage calling hideEmptyAgency()')
+    // hideEmptyAgency()
+  })
+</script>
