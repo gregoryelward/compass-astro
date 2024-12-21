@@ -23,4 +23,3 @@ pnpm-debug.log*
 # contentful
 contentful/*error-log*
 contentful/*images.*
-contentful/export.json

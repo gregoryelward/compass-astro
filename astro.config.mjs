@@ -1,19 +1,17 @@
 import { defineConfig } from 'astro/config'
-// import icon from "astro-icon";
-// import { marked } from "marked";
-// https://astro.build/config
-// export default defineConfig({});
 
-let base = ''
-// console.log("@@@@@@@@@@@@@@@@@@@@@process.env --> ", process.env.NODE_ENV);
-if (process.env.NODE_ENV === 'production') {
-  // console.log("building for production");
-  base = 'compass-astro/'
-} // else "development"
 export default defineConfig({
-  site: 'https://gregoryelward.github.io', //
-  base
-  //   trailingSlash: "always",
+  site: 'https://realtorjian.ca',
+  // site: "https://prospercanada.github.io", //
+  // base: "/trove/",
+  // trailingSlash: "always",
+  vite: {
+    build: {
+      rollupOptions: {
+        external: [/public\//] // Skip files in the public folder
+      }
+    }
+  }
 })
 // https://gregoryelward.github.io/trove-astro/
 
