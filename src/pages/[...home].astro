@@ -167,7 +167,6 @@ const base = import.meta.env.BASE_URL
               {
                 mainCallout ? (
                   <div class='callout callout--no-border p-3'>
-                    <>
                       <h2 class='h4'>{mainCallout.title}</h2>
                       <div
                         set:html={marked(
@@ -182,7 +181,6 @@ const base = import.meta.env.BASE_URL
                           {mainCallout?.cta}
                         </a>
                       ) : null}
-                    </>
                   </div>
                 ) : null
               }
