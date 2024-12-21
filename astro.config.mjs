@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config'
 
 export default defineConfig({
-  site: 'https://realtorjian.ca',
-  // site: "https://prospercanada.github.io", //
-  // base: "/trove/",
+  // site: 'https://realtorjian.ca',
+  site: 'https://prospercanada.github.io', //
+  base: '/compass-astro/',
   // trailingSlash: "always",
   vite: {
     build: {
