@@ -49,6 +49,7 @@ export async function getStaticPaths() {
     let warning = warningRes.items[0]?.fields
 
     const benefits = benefitRes.items
+    // console.log('benefits ', benefits)
 
     function myCallback(agencyResource: any) {
       //@ts-ignore
@@ -123,11 +124,19 @@ export async function getStaticPaths() {
       }
       path = path + '/' + i.fields.slug
 
+      // const benefitId = i.sys.id; // Extract the benefit's id
+
       const benefitPages = i.fields.benefitPages as Array<
         Entry<TypeBenefitPageSkeleton>
       >
+      const benefitSteps = i.fields.steps as Array<
+        Entry<TypeStepsSkeleton>
+      >
       let navigationIndex = 0
       for (const b of benefitPages) {
+        // console.log(b)
+        // Filter steps that are specific to this benefit
+        // const relatedSteps = benefitSteps.filter(step => step.fields.benefitId === i.sys.id);
         paths.push({
           params: {
             benefitpage: path + '/' + b.fields.slug
@@ -135,6 +144,7 @@ export async function getStaticPaths() {
           props: {
             page: { ...b },
             benefit: { ...i },
+            steps: b.fields.slug === "how-to-apply" ? benefitSteps : null ,
             navigationIndex,
             prevPage: benefitPages[navigationIndex - 1],
             nextPage: benefitPages[navigationIndex + 1],
@@ -161,6 +171,7 @@ const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
 const page = Astro.props.page as Entry<TypeBenefitPageSkeleton>
 const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
+const steps = Astro.props.steps as Array<Entry<TypeStepsSkeleton>> | null
 const warning = Astro.props.warning
 const resources = benefit.fields.resources
 const navigationIndex = Astro.props.navigationIndex
@@ -241,6 +252,7 @@ const base = import.meta.env.BASE_URL
               {benefit.fields.acronym}
             </div>
             <div class='mb-3 pb-3'></div>
+            <!-- <pre>{JSON.stringify(benefit)}</pre> -->
             <h1><strong>{page.fields.title}</strong>BENEFIT PAGE</h1>
             {
               page?.fields?.lead ? (
@@ -425,12 +437,10 @@ const base = import.meta.env.BASE_URL
               {
                 page?.fields?.showWarning && warning?.content ? (
                   <div class='bg-light--alt p-3 my-3'>
-                    <>
                       {warning?.title ? (
                         <h3 class='h5'>{warning.title}</h3>
                       ) : null}
                       <div set:html={marked(warning.content as string)} />
-                    </>
                   </div>
                 ) : null
               }
@@ -483,7 +493,7 @@ const base = import.meta.env.BASE_URL
                   </>
                 ) : null
               }
-              <hr />
+              <!-- <hr />
               <div class='flex center'>
                 {
                   navigationIndex === 0 ? (
@@ -529,14 +539,15 @@ const base = import.meta.env.BASE_URL
                     </a>
                   ) : null
                 }
-              </div>
+              </div> -->
             </div>
           </div>
         </section>
       </div>
     </div>
     <!-- <Resources class='lt-border-t-light' /> -->
-    <div class='bg-secondary lt-border-t-light'>
+    
+    {resources?.length  ? <div class='bg-secondary lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
@@ -567,7 +578,6 @@ const base = import.meta.env.BASE_URL
                                 <a
                                   href={`${makeUrl(base, locale, 'resource', o.fields.slug as string)}`}
                                 >
-                                  <>
                                     <p>{o.fields.title as string}</p>
                                     <p class='xsmall'>
                                       {o.fields.lead as string}
@@ -575,7 +585,6 @@ const base = import.meta.env.BASE_URL
                                     <span class='btn-link btn-icon-right bi bi-arrow-right'>
                                       <span />
                                     </span>
-                                  </>
                                 </a>
                               </div>
                             </div>
@@ -589,8 +598,82 @@ const base = import.meta.env.BASE_URL
           </div>
         </section>
       </div>
-    </div>
-    <Feedback />
+    </div>: null }
+
+<!-- {steps?.length  ? <p>{JSON.stringify(steps)}</p> : null} -->
+
+<div class="bg-secondary">
+   <div class="container" data-benefit-id="1XqxwrXDdemUblRO51zLKZ">
+      <section class="section">
+         <div class="row justify-content-md-center">
+            <div class="col-12">
+              {steps?.length  ? <h2>Steps</h2>
+               <div class="mb-3 pb-3"></div>
+               <ol class="">
+                {steps?.map((s, index) => {
+                   return (<li><a href={`how-to-apply/step-${index+1}`}>{s?.fields?.title}</a></li>)
+                })
+              }
+               </ol>
+               
+               <div class="mb-3 pb-3"></div>
+               <a class="js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none" href="how-to-apply/step-1">Start&nbsp; <strong>step 1</strong></a>
+               : null}
+             
+               {/* <div class="flex center"><a class="btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left" href="/alberta/assured-income-for-the-severely-handicapped/eligibility">Eligibility </a><a class="btn btn-lg btn-icon-right bi bi-arrow-right btn-outline-secondary" href="/alberta/assured-income-for-the-severely-handicapped/after-you-apply">After you apply – approved or denied</a></div> */}
+               <hr />
+               <div class='flex center'>
+                 {
+                   navigationIndex === 0 ? (
+                     <a
+                       class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                       href={`${makeUrl(
+                         base,
+                         locale,
+                         getJurisdiction(benefit.fields.authority, locale)?.slug,
+                         benefit?.fields?.slug as string
+                       )}`}
+                     >
+                       {t('startBack')}
+                     </a>
+                   ) : (
+                     <a
+                       class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                       href={`${makeUrl(
+                         base,
+                         locale,
+                         getJurisdiction(benefit.fields.authority, locale)?.slug,
+                         benefit?.fields?.slug as string,
+                         prevPage?.fields?.slug as string
+                       )}`}
+                     >
+                       {prevPage?.fields?.title}
+                     </a>
+                   )
+                 }
+                 {
+                   nextPage?.fields?.slug ? (
+                     <a
+                       class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
+                       href={`${makeUrl(
+                         base,
+                         locale,
+                         getJurisdiction(benefit.fields.authority, locale)?.slug,
+                         benefit?.fields?.slug as string,
+                         nextPage?.fields?.slug as string
+                       )}`}
+                     >
+                       {nextPage.fields.title}
+                     </a>
+                   ) : null
+                 }
+               </div>
+              </div>
+         </div>
+      </section>
+   </div>
+</div> 
+ <Feedback />
   </main>
 </Layout>
 

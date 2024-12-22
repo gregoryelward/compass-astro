@@ -161,7 +161,7 @@ const base = import.meta.env.BASE_URL
       </section>
     </div>
     <!-- <Resources class='lt-border-t-light' /> -->
-    <div class='bg-secondary lt-border-t-light'>
+    {resources?.length  ? <div class='bg-secondary lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
@@ -192,7 +192,6 @@ const base = import.meta.env.BASE_URL
                                 <a
                                 href={`${makeUrl(base, locale, 'resource', o.fields.slug as string)}`}
                                 >
-                                  <>
                                     <p>{o.fields.title as string}</p>
                                     <p class='xsmall'>
                                       {o.fields.lead as string}
@@ -200,7 +199,6 @@ const base = import.meta.env.BASE_URL
                                     <span class='btn-link btn-icon-right bi bi-arrow-right'>
                                       <span />
                                     </span>
-                                  </>
                                 </a>
                               </div>
                             </div>
@@ -214,7 +212,7 @@ const base = import.meta.env.BASE_URL
           </div>
         </section>
       </div>
-    </div>
+    </div> : null }
     <Feedback />
     </main>
 </Layout>

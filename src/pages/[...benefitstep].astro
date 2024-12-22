@@ -34,9 +34,14 @@ export async function getStaticPaths() {
       if (jurisdictionSlug) {
         path = path + '/' + jurisdictionSlug
       }
+      // path = path + '/' + "how-to-apply"
+      // /alberta/assured-income-for-the-severely-handicapped/how-to-apply/step-1
       path = path + '/' + i.fields.slug
 
+      // path = path + '/' + "how-to-apply"
       path = path + '/' + applyPage.fields.slug
+
+      // console.log("path ",path)
 
       const benefitApplySteps = i.fields.steps?.filter(Boolean) as Array<
         Entry<TypeStepsSkeleton>
@@ -130,7 +135,8 @@ const base = import.meta.env.BASE_URL
                     locale,
                     getJurisdiction(benefit.fields.authority, locale)?.slug,
                     benefit?.fields?.slug as string,
-                    'apply'
+                    // 'apply'
+                    applyPage.fields.slug
                   )}`}
                 >
                   {applyPage?.fields?.title}
@@ -170,7 +176,8 @@ const base = import.meta.env.BASE_URL
                       locale,
                       getJurisdiction(benefit.fields.authority, locale)?.slug,
                       benefit?.fields?.slug as string,
-                      'apply',
+                      // 'apply'
+                    applyPage.fields.slug,
                       `step-${stepIndex + 1}?a=y`
                     )}`}
                   >
@@ -183,7 +190,8 @@ const base = import.meta.env.BASE_URL
                       locale,
                       getJurisdiction(benefit.fields.authority, locale)?.slug,
                       benefit?.fields?.slug as string,
-                      'apply',
+                      // 'apply'
+                    applyPage.fields.slug,
                       `step-${stepIndex}-no?a=n`
                     )}`}
                   >
@@ -196,7 +204,8 @@ const base = import.meta.env.BASE_URL
                       locale,
                       getJurisdiction(benefit.fields.authority, locale)?.slug,
                       benefit?.fields?.slug as string,
-                      'apply',
+                      // 'apply'
+                    applyPage.fields.slug,
                       `step-${stepIndex}-no?a=d`
                     )}`}
                   >
@@ -232,7 +241,8 @@ const base = import.meta.env.BASE_URL
                                     locale
                                   )?.slug,
                                   benefit?.fields?.slug as string,
-                                  'apply',
+                                  // 'apply'
+                    applyPage.fields.slug,
                                   `step-${index + 1}`
                                 )}`}
                               >

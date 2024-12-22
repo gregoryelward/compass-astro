@@ -688,7 +688,8 @@ p + ol {
 .modal-content {
   /* background-color: #343a40; Dark background */
 
-  background-color: #002244; /* Dark background */
+  //   background-color: #002244; /* Dark background */
+  background-color: var(--secondary); /* Dark background */
 
   color: #ffffff; /* Light text */
 
@@ -702,11 +703,11 @@ p + ol {
   box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2); /* Subtle glow */
 }
 .modal-header {
-  border-bottom-color: #fff;
+  border-bottom-color: #555;
 }
 
 .modal-footer {
-  border-top-color: #fff;
+  border-top-color: #555;
 }
 
 .modal-body {
@@ -714,7 +715,7 @@ p + ol {
 }
 
 .modal-header button.close {
-  color: #fff;
+  color: #555;
 
   opacity: 1;
 }
@@ -737,3 +738,21 @@ body.light-theme .modal-footer {
 body.light-theme .modal-body {
   color: #212529; /* Ensure text readability */
 }
+
+/************accordion begin ******************/
+/* Default (Dark Mode) Modal Styles */
+
+.accordion .card {
+  border: 1px solid #555; /* Subtle bright border for contrast */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6); /* Add depth */
+}
+
+body.light-theme .accordion .card {
+  border: inherit; /* Subtle bright border for contrast */
+
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Light Theme Modal Styles */
+
+/************accordion begin ******************/
