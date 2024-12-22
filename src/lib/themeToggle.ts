@@ -33,6 +33,7 @@ export default function prepareThemeToggle() {
       'js--theme-toggle'
     ) as HTMLButtonElement
 
+    console.log('themeToggle ', themeToggle)
     if (themeToggle) {
       themeToggle.addEventListener('click', function (e) {
         const currentState = (
