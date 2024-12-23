@@ -756,3 +756,206 @@ body.light-theme .accordion .card {
 /* Light Theme Modal Styles */
 
 /************accordion begin ******************/
+
+.benefit-card a::before {
+  color: #fff;
+}
+
+body.light-theme .benefit-card a::before {
+  color: var(--primary);
+}
+
+.benefit-card .btn-link:focus,
+.benefit-card .btn-link:hover {
+  color: #fff;
+}
+
+body.light-theme .benefit-card .btn-link:focus,
+body.light-theme .benefit-card .btn-link:hover {
+  color: var(--body);
+}
+
+.benefit-card:hover a span,
+.benefit-card:hover a::before {
+  color: #fff;
+}
+body.light-theme .benefit-card:hover a span,
+body.light-theme .benefit-card:hover a::before {
+  color: var(--tertiary);
+}
+
+.home .resources {
+  border-bottom: solid 1px var(--primary);
+}
+body.light-theme .home .resources {
+  border-bottom: 0;
+}
+
+.cta.explore p a {
+  color: #fff !important;
+}
+
+body.light-theme .cta.explore p a {
+  color: var(--tertiary) !important;
+}
+
+.page.glossary dt {
+  color: #fff;
+}
+body.light-theme .page.glossary dt {
+  color: var(--body);
+}
+
+.feedback h2 {
+  color: #fff !important;
+}
+body.light-theme .feedback h2 {
+  color: var(--body) !important;
+}
+
+.page_resourcesall h4.agency.resource {
+  color: #fff;
+}
+
+body.light-theme .page_resourcesall h4.agency.resource {
+  color: var(--body);
+}
+
+// .js-accordion.benefit-agency.parent:not(
+//     :has(.js-accordion.child .accordion.accordion--small .childresource)
+//   ) {
+//   display: none;
+// }
+
+.bg-light--alt {
+  background-color: var(--tertiary);
+}
+
+.accordion p a:hover {
+  color: #fff;
+}
+
+a svg {
+  fill: #fff;
+}
+
+body.light-theme a svg {
+  fill: var(--body);
+}
+
+.card-body h4 {
+  color: #fff;
+}
+
+body.light-theme .card-body h4 {
+  color: var(--body);
+}
+
+.bg-light--alt h2 {
+  color: #fff;
+}
+
+body.light-theme .bg-light--alt h2 {
+  color: var(--body);
+}
+
+.share label,
+.tandclink,
+a.tandclink:hover,
+.form-check-label a:hover {
+  color: #fff;
+}
+
+body.light-theme.share label,
+body.light-theme .tandclink,
+body.light-theme a.tandclink:hover,
+body.light-theme .form-check-label a:hover {
+  color: var(--body);
+}
+
+h1 + p:first-of-type {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.bg-light--alt p {
+  color: #fff;
+}
+
+body.light-theme .bg-light--alt p {
+  color: var(--body);
+}
+
+/* Default Styles for Input and Textarea */
+textarea,
+input.form-control {
+  background-color: #2b2b2b; /* Dark background */
+  color: #f5f5f5; /* Light text */
+  border: 1px solid #444; /* Subtle border */
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Placeholder Text */
+textarea::placeholder,
+input.form-control::placeholder {
+  color: #a8a8a8; /* Medium gray */
+  opacity: 1; /* Ensure visibility */
+}
+
+/* Focused State */
+textarea:focus,
+input.form-control:focus {
+  border-color: var(--orange); /* Bright orange or any highlight color */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 4px rgba(210, 95, 42, 0.5); /* Add subtle glow */
+  background-color: #2b2b2b; /* Dark background */
+  color: #fff;
+}
+
+/* Disabled State */
+textarea:disabled,
+input:disabled {
+  background-color: #3a3a3a; /* Slightly lighter dark */
+  color: #a8a8a8; /* Medium gray text */
+  border-color: #555; /* Muted border */
+  cursor: not-allowed;
+}
+
+body.light-theme textarea:focus,
+body.light-theme input.form-control:focus {
+  // border-color: var(--orange); /* Bright orange or any highlight color */
+  // outline: none; /* Remove default outline */
+  // box-shadow: 0 0 4px rgba(210, 95, 42, 0.5); /* Add subtle glow */
+  background-color: #fff; /* Dark background */
+  color: var(--body);
+}
+
+body.light-theme textarea,
+body.light-theme input.form-control {
+  background-color: #fff; /* Dark background */
+  color: var(--body);
+}
+
+#copied {
+  color: #fff;
+}
+
+body.light-theme #copied {
+  color: var(--body);
+}
+
+.about p img,
+.about a img {
+  background-color: #eee;
+}
+
+body.light-theme .about p img,
+body.light-theme .about a img {
+  background-color: inherit;
+}
+
+body.light-theme .reviewers div:nth-child(2) img {
+  background-color: #000;
+}

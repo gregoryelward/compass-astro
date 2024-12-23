@@ -110,8 +110,10 @@ let needhelp = needhelpRes.items[0]?.fields
         style='display:none;visibility:hidden'
       >
       </iframe>
-    </noscript>
+    </noscript> 
+    <a class="sr-only sr-only-focusable" href="#maincontent">{t('skip')}</a>
     <Header pageSlug={pageSlug} />
+   
     <slot />
     <aside class='need-help' id='need-help'>
       <p class='xsmall'>
@@ -218,6 +220,7 @@ if (!provinceCode) {
         }
 
         // TODO: call onchange on drop down
+        console.log('FILTER B')
         filterContent(modalSelect.value);
       }
     });

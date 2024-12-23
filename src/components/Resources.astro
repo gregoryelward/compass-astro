@@ -20,7 +20,7 @@ const resources = resourcesRes.items
 const base = import.meta.env.BASE_URL
 ---
 
-<div class='bg-secondary'>
+<div class='bg-secondary resources'>
   <div class='container'>
     <section class='section'>
       <div class='row justify-content-md-center'>
@@ -45,7 +45,6 @@ const base = import.meta.env.BASE_URL
                             style='display: block;'
                           >
                             <div class='pro-card--full-img equal-height'>
-                              <>
                                 <picture>
                                   <img
                                     alt=''
@@ -59,16 +58,13 @@ const base = import.meta.env.BASE_URL
                                   <a
                                     href={`${makeUrl(base, locale, 'resource', r.fields?.slug as string)}`}
                                   >
-                                    <>
                                       <p>{r.fields?.title}</p>
                                       <p class='xsmall'>{r.fields?.lead}</p>
-                                      <span class='btn-link btn-icon-right bi bi-arrow-right'>
+                                      <span class='btn-link'>
                                         <span />
                                       </span>
-                                    </>
                                   </a>
                                 </div>
-                              </>
                             </div>
                           </div>
                         )

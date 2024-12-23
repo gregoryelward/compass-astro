@@ -121,10 +121,11 @@ const agencyHeading = Astro.props
                           <h2 id={`help${b?.sys.id}`}>{b.fields.title}</h2>
                           <div class='card-body'>
                             {b?.fields?.helpAgency ? (
-                              <div
+                              <div class="mb-4"
                                 set:html={marked(b.fields.helpAgency as string)}
                               />
                             ) : null}
+
                             {b?.fields?.agency ? (
                               <div>
                                 <p class='bg-light--alt p-3'>
@@ -137,14 +138,14 @@ const agencyHeading = Astro.props
                                     (a: TypeAgencySkeleton) => {
                                       return (
                                         <div
-                                          class='mt-3'
+                                          class='my-5'
                                           data-province-filter={
                                             a.fields.showLocalyOnly &&
                                             getJurisdiction(a.fields.authority)
                                               ?.code
                                           }
                                         >
-                                          <h3 class='h4'>{a.fields.title}</h3>
+                                          <h3 class='h4 mb-3'>{a.fields.title}</h3>
                                           {a?.fields?.content ? (
                                             <div
                                               set:html={marked(
@@ -152,13 +153,14 @@ const agencyHeading = Astro.props
                                                   .content as unknown as string
                                               )}
                                             />
+                                            <hr class="hr-light"/>
                                           ) : null}
                                         </div>
                                       )
                                     }
                                   )
                                 }
-                                <hr />
+                                {/* <hr /> */}
                               </div>
                             ) : null}
                           </div>
@@ -229,6 +231,7 @@ const agencyHeading = Astro.props
   import accordion from '../lib/accordion'
   import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
+  console.log('HELP CALL showProvincialDataOnly() ')
   showProvincialDataOnly()
 
   const provinceList = document.querySelector(
@@ -242,6 +245,7 @@ const agencyHeading = Astro.props
     const closest = targetElement?.closest('.js--sub-link')
     if (closest) {
       const provinceCode = closest.getAttribute('data-province') as string
+      console.log('FILTER E')
       filterContent(provinceCode)
     }
     // console.log('in resourcepage calling showProvincialDataOnly()')

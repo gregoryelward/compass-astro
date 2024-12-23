@@ -16,12 +16,12 @@ const setMode = function (target: HTMLButtonElement, isDarkMode: boolean) {
   console.log('setMode isDarkMode', isDarkMode)
   if (!isDarkMode) {
     document.body.classList.add('light-theme')
-    console.log('add light-theme')
+    // console.log('add light-theme')
     target.setAttribute('aria-pressed', 'true')
     target.innerHTML = `${translations[language].lightmode}&nbsp<span><span></span></span>`
   } else {
     document.body.classList.remove('light-theme')
-    console.log('remove light-theme')
+    // console.log('remove light-theme')
     target.setAttribute('aria-pressed', 'false')
     target.innerHTML = `${translations[language].darkmode}&nbsp<span><span></span></span>`
   }
@@ -33,7 +33,7 @@ export default function prepareThemeToggle() {
       'js--theme-toggle'
     ) as HTMLButtonElement
 
-    console.log('themeToggle ', themeToggle)
+    // console.log('themeToggle ', themeToggle)
     if (themeToggle) {
       themeToggle.addEventListener('click', function (e) {
         const currentState = (

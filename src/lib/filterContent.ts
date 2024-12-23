@@ -3,7 +3,7 @@
 // console.log('jurisdictions ', jurisdictions)
 
 export function filterContent(filter: string) {
-  // console.log('CALLED filterContent ')
+  console.log('CALLED filterContent ')
   // console.log('filterContent 2')
   // console.log('TODO filter ', filter)
   // show those benefits for the selected province
@@ -75,6 +75,7 @@ export default function showProvincialDataOnly() {
   const userProvince = JSON.parse(localStorage.getItem('province'))
   console.log('userProvince ', userProvince)
   if (userProvince) {
+    console.log('showProvincialDataOnly calling filterContent ' + userProvince)
     filterContent(userProvince)
   }
 

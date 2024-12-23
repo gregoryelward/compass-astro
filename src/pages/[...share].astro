@@ -45,7 +45,7 @@ const metaDescription = page.fields.metaDescription || ''
 const block1 = page.fields.block1 ? marked(page.fields.block1) : null
 const block2 = page.fields.block2 ? marked(page.fields.block2) : null
 const block3 = page.fields.block3 ? marked(page.fields.block3) : null
-
+const block4 = page.fields.block4 ? marked(page.fields.block4) : null
 const terms = Astro.props.terms
 const introduction = marked(terms?.fields?.introduction as string)
 const agreeQuestion = terms?.fields?.agreeQuestion as string
@@ -66,7 +66,7 @@ if (lang === 'fr') {
 }
 ---
 
-<Layout title={pageTitle} description={metaDescription} className='home'>
+<Layout title={pageTitle} description={metaDescription} className='share'>
   <main>
     <div class='container block1'>
       <section class='section'>
@@ -93,9 +93,7 @@ if (lang === 'fr') {
                   <picture>
                     <img alt='' src={image1URL} width='300' height='300' />
                   </picture>
-                  <div class='content'>
-                    <a href='#'><p>{t('embedOption1')}</p></a>
-                  </div>
+                  <p>{t('embedOption1')}</p>
                 </div>
               </div>
             </div>
@@ -105,9 +103,7 @@ if (lang === 'fr') {
                   <picture>
                     <img alt='' src={image2URL} width='300' height='300' />
                   </picture>
-                  <div class='content'>
-                    <a href='#'><p>{t('embedOption2')}</p></a>
-                  </div>
+                  <p>{t('embedOption2')}</p>
                 </div>
               </div>
             </div>
@@ -119,7 +115,7 @@ if (lang === 'fr') {
       <div class='container'>
         <div class='row'>
           <div class='col-md-6 offset-md-3 card p-4 shadow-lg mb-5'>
-            <p class='text-muted font-italic'>{t(`emdedMandatory`)}</p><form
+            <p class=' font-italic'>{t(`emdedMandatory`)}</p><form
               id='share'
             >
               <div class='form-group'>
@@ -141,7 +137,7 @@ if (lang === 'fr') {
                   required=''
                   value=''
                 />
-                <small class='form-text text-muted' id='webSiteHelp'>
+                <small class='form-text' id='webSiteHelp'>
                   https://yourwebsite.com
                 </small>
               </div>
@@ -208,7 +204,7 @@ if (lang === 'fr') {
                 </fieldset>
               </div>
               <div set:html={block2} />
-              <div class='form-check'>
+              <div class='form-check mt-4'>
                 <input
                   class='form-check-input'
                   id='iagree'
@@ -258,8 +254,9 @@ if (lang === 'fr') {
             >
             </textarea>
           </div>
-          <div class='mb-3'>
-            <div set:html={block3} />
+          <div set:html={block4} />
+          <div class='mb-3 my-5'>
+            
             <button class='btn btn-secondary' id='copy' type='button'>
               {t(`emdedCopy`)}
             </button>
@@ -310,7 +307,7 @@ if (lang === 'fr') {
           <div class='modal-footer'>
             <button
               type='button'
-              class='btn btn-secondary'
+              class='btn btn-secondary modalclose'
               data-dismiss='modal'
             >
               {t('close')}
@@ -376,6 +373,7 @@ if (lang === 'fr') {
   }
 
   function closeHandler() {
+    console.log('close modal')
     if (myModal) {
       myModal.style.display = 'none'
       myModal.removeAttribute('role')
@@ -387,7 +385,8 @@ if (lang === 'fr') {
   document.querySelectorAll('.modalclose').forEach((item) => {
     item.addEventListener('click', closeHandler)
   })
-  document.querySelectorAll('.btn-close').forEach((item) => {
+  // document.querySelectorAll('.btn-close').forEach((item) => {
+    document.querySelectorAll('.close').forEach((item) => {
     item.addEventListener('click', closeHandler)
   })
 

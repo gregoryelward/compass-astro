@@ -39,7 +39,7 @@ const page = Astro.props.page as Entry<TypeAboutSkeleton>
 <Layout
   title={page?.fields.title as string}
   description={page?.fields.metaDescription as string}
-  className=''
+  className='about'
 >
   <main
     class={`page ${page?.fields?.slug}`}

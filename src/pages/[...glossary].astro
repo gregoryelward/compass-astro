@@ -5,12 +5,27 @@ import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
 import type { Entry } from 'contentful'
 import type { TypeGlossarySkeleton } from '../types/contentful/TypeGlossary'
+import type { TypePageSkeleton } from '../types/contentful/TypePage'
 import Feedback from '../components/Feedback.astro'
 
 export async function getStaticPaths() {
   let paths = []
+
   const LOCALES = ['en-CA', 'fr-CA']
   for (const locale of LOCALES) {
+    const pageres = await contentfulClient.getEntries<TypePageSkeleton>({
+      content_type: 'page',
+      locale,
+      'fields.slug': "glossary",
+    });
+
+    // if (pageres.items.length > 0) {
+    //   return pageres.items[0]; // Return the first matching entry
+    // } else {
+    //   console.log("Can this be ")
+    //   // throw new Error(`No page found for slug: ${slug}`);
+    // }
+
     const res = await contentfulClient.getEntries<TypeGlossarySkeleton>({
       content_type: 'glossary',
       locale,
@@ -26,7 +41,7 @@ export async function getStaticPaths() {
       params: {
         glossary: `${locale === 'en-CA' ? 'glossary' : `fr/glossary`}`
       },
-      props: { page: [...glossaryItems] }
+      props: { glossaryItems: [...glossaryItems], page : pageres?.items[0] ? pageres.items[0] : null }
     })
     return paths
   }
@@ -37,7 +52,7 @@ const options = {
 }
 
 marked.use(gfmHeadingId(options))
-const glossaryItems = Astro.props.page as Array<Entry<TypeGlossarySkeleton>>
+const glossaryItems = Astro.props.glossaryItems as Array<Entry<TypeGlossarySkeleton>>
 const alphabet = [
   'A',
   'B',
@@ -84,8 +99,8 @@ for (const [key] of Object.entries(glossaryGroups)) {
 ---
 
 <Layout
-  title={'page?.fields.title as string'}
-  description={'page?.fields.metaDescription as string'}
+  title={Astro.props.page?.fields?.title as string}
+  description={Astro.props.page?.fields.metaDescription as string}
   className=''
   pageSlug='glossary'
 >
@@ -97,7 +112,7 @@ for (const [key] of Object.entries(glossaryGroups)) {
         </div>
       </section>
     </div>
-    <div class='bg-light--alt lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>

@@ -76,7 +76,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
             <h1>
-              <strong>{page?.fields.title as string}</strong>
+              <strong>{page?.fields.title as string}</strong>MAINRESOURCE
             </h1>
             <!-- <h2>{page?.fields.subTitle as string}</h2> -->
             <!-- TO DO List benefit and agency resource - see groupby -->
@@ -106,7 +106,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                         .map((b) => {
                           return (
                             <div
-                              class={`js-accordion benefit-agency ${b.fields.agencyResource ? '' : 'empty'}`}
+                              class={`js-accordion benefit-agency parent ${b.fields.agencyResource ? '' : 'empty'}`}
                               data-province-filter={
                                 getJurisdiction(b.fields.authority)?.code || ''
                               }
@@ -118,7 +118,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                                 {b?.fields?.title}
                               </h2>
                               <div class='card-body mb-3'>
-                                <div class='js-accordion'>
+                                <div class='js-accordion child'>
                                   <BenefitResources
                                     resources={
                                       b?.fields.agencyResource as Array<
@@ -247,17 +247,20 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
   provinceList.addEventListener('click', function (event) {
     event.preventDefault()
-    const targetElement = event.target
-    //@ts-ignore
-    const closest = targetElement?.closest('.js--sub-link')
-    if (closest) {
-      const provinceCode = closest.getAttribute('data-province') as string
-      filterContent(provinceCode)
-    }
+    // const targetElement = event.target
+    // //@ts-ignore
+    // const closest = targetElement?.closest('.js--sub-link')
+    // if (closest) {
+    //   const provinceCode = closest.getAttribute('data-province') as string
+    //   console.log('FILTER H')
+    //   filterContent(provinceCode)
+    // }
     hideEmptyAgency()
   })
 
   // console.log('in resourcepage calling showProvincialDataOnly()')
+
+  console.log('RESOURCE PAGE showProvincialDataOnly() ')
   showProvincialDataOnly()
 
   // console.log('in resourcepage calling hideEmptyAgency()')

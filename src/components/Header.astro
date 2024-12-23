@@ -396,7 +396,8 @@ const base = import.meta.env.BASE_URL
   import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
 
-  showProvincialDataOnly()
+  // console.log('Heading clling showProvincialDataOnly ')
+  // showProvincialDataOnly()
   prepareThemeToggle()
 
   const provinceList = document.querySelector(
@@ -412,6 +413,7 @@ const base = import.meta.env.BASE_URL
     const closest = targetElement?.closest('.js--sub-link')
     if (closest) {
       const provinceCode = closest.getAttribute('data-province') as string
+      console.log('FILTER A')
       filterContent(provinceCode)
     }
     // console.log('in resourcepage calling showProvincialDataOnly()')
