@@ -13,12 +13,15 @@ export async function getStaticPaths() {
 
   const LOCALES = ['en-CA', 'fr-CA']
   for (const locale of LOCALES) {
+    console.log("locale", locale)
     const pageres = await contentfulClient.getEntries<TypePageSkeleton>({
       content_type: 'page',
       locale,
       'fields.slug': "glossary",
     });
 
+    const page = pageres.items[0]
+    console.log(locale, page)
     // if (pageres.items.length > 0) {
     //   return pageres.items[0]; // Return the first matching entry
     // } else {
@@ -39,12 +42,14 @@ export async function getStaticPaths() {
 
     paths.push({
       params: {
-        glossary: `${locale === 'en-CA' ? 'glossary' : `fr/glossary`}`
+        // glossary: `${locale === 'en-CA' ? 'glossary' : `fr/glossary`}`
+        glossary: `${locale === 'en-CA' ? page.fields.slug : `fr/${page.fields.slug}`}`
       },
       props: { glossaryItems: [...glossaryItems], page : pageres?.items[0] ? pageres.items[0] : null }
-    })
-    return paths
+    })   
   }
+  console.log('paths ', paths)
+  return paths
 }
 
 const options = {

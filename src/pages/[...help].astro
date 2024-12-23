@@ -15,7 +15,9 @@ import Resources from '../components/Resources.astro'
 
 export async function getStaticPaths() {
   let paths = []
+
   const LOCALES = ['en-CA', 'fr-CA']
+  
   for (const locale of LOCALES) {
     const res = await contentfulClient.getEntries<TypePageSkeleton>({
       content_type: 'page',

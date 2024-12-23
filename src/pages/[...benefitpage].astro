@@ -16,7 +16,8 @@ import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
 // import Resources from '../components/Resources.astro'
 import type {
   // TypeBenefitWarning,
-  TypeBenefitWarningSkeleton
+  TypeBenefitWarningSkeleton,
+  TypeCta, TypeCtaFields, TypeCtaSkeleton
 } from '../types/contentful'
 
 
@@ -48,7 +49,16 @@ export async function getStaticPaths() {
       })
     let warning = warningRes.items[0]?.fields
 
+
+
     const benefits = benefitRes.items
+
+
+    const ctaOtherBenefitsyId = 'vbcbiuCwY8oajVj8Q9x2P';
+    const ctaOtherBenefits :Entry<TypeCtaSkeleton>= await contentfulClient.getEntry(ctaOtherBenefitsyId);
+    console.log('Entry:', ctaOtherBenefits );
+    
+
     // console.log('benefits ', benefits)
 
     function myCallback(agencyResource: any) {
@@ -79,43 +89,6 @@ export async function getStaticPaths() {
         result2 = Object.groupBy(agencyResource, myCallback);
         // console.log("result2 ", result2)
       }
-      
-      // if (agencyResource) {
-      //   console.log("benefit agencyResource ", i.fields.agencyResource)
-      //      //@ts-ignore
-      //   // result2 = Object.groupBy(agencyResource, myCallback);
-      //   // console.log('result2 ',result2)
-      //   //  result2.notitle.forEach(element => {
-      //   //   console.log('agency ', element?.fields)
-      //   // });
-      //   // agencyResource.forEach(element => {
-      //   //   console.log('agency ', element?.fields?.agency)
-      //   // });
-      // }
-      //i.fields.agencyResource
-      //i.fields.agencyResource.fields.
-      //
-
-//       function myCallback({ quantity } : any) {
-//   return quantity > 5 ? "ok" : "restock";
-// }
-// //@ts-ignore
-// const result2 = Object.groupBy(inventory, myCallback);
-// console.log('result2 ',result2)
-
-/* Result is:
-{
-  restock: [
-    { name: "asparagus", type: "vegetables", quantity: 5 },
-    { name: "bananas", type: "fruit", quantity: 0 },
-    { name: "cherries", type: "fruit", quantity: 5 }
-  ],
-  ok: [
-    { name: "goat", type: "meat", quantity: 23 },
-    { name: "fish", type: "meat", quantity: 22 }
-  ]
-}
-*/
 
       const jurisdictionSlug = jurisdiction?.slug
       let path = locale === 'en-CA' ? '' : `/fr`
@@ -146,10 +119,12 @@ export async function getStaticPaths() {
             benefit: { ...i },
             steps: b.fields.slug === "how-to-apply" ? benefitSteps : null ,
             navigationIndex,
+            ctaOtherBenefits,
             prevPage: benefitPages[navigationIndex - 1],
             nextPage: benefitPages[navigationIndex + 1],
             warning,
-            result2
+            result2,
+            allBenefits: benefits,
           }
         })
         navigationIndex = navigationIndex + 1
@@ -178,6 +153,8 @@ const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
 const nextPage = Astro.props.nextPage
 const result2 = Astro.props.result2
+const ctaOtherBenefits = Astro.props.ctaOtherBenefits
+const allBenefits = Astro.props.allBenefits
 
 // console.log('resut ', result2)
 
@@ -278,7 +255,6 @@ const base = import.meta.env.BASE_URL
                   <div class='js-accordion'>
                     <div set:html={marked(page.fields.content1 as string)} />
                   </div>
-                  <!--  next page here -->
                 </div>
               </div>
             </section>
@@ -287,14 +263,14 @@ const base = import.meta.env.BASE_URL
       ) : null
     }
 
-    {
+    <!-- {
       page?.fields.slug === 'apply' ? (
         <div class='xbg-white lt-border-t-light'>
           <div class='container' data-benefit-id='1dPLuwsYC0vnelqpxncb47'>
             <section class='section'>
               <div class='row justify-content-md-center'>
                 <div class='col-12'>
-                  <h2>{t('steps')}</h2>
+                  <h2>{t('steps')}</h2>STEPS
                   <div class='mb-3 pb-3' />
                   <ol class='tertiary-blue'>
                     {benefit?.fields?.steps
@@ -307,7 +283,7 @@ const base = import.meta.env.BASE_URL
                                   href={`${makeUrl(base, locale,    getJurisdiction(benefit.fields.authority, locale)?.slug,
                     benefit?.fields?.slug as string, 'apply', `step-${index + 1}`)}`}
                                 >
-                                  {s.fields?.title}
+                                  {s.fields?.title}  !!
                                 </a>
                               </li>
                             )
@@ -332,7 +308,7 @@ const base = import.meta.env.BASE_URL
           </div>
         </div>
       ) : null
-    }
+    } -->
 
 {
       page?.fields.slug === 'resources' ? (
@@ -373,7 +349,49 @@ const base = import.meta.env.BASE_URL
         </div>
       ) : null
     }
-    <!-- {
+
+
+
+{
+  page?.fields.slug === 'after-you-apply' ? (
+  <div class="bg-secondary lt-border-t-light">
+	<div class="container">
+		<section class="section">
+			<div class="row justify-content-md-center pt-3">
+				<div class="col-12">
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab2" role="tablist">
+							<a class="nav-item nav-link  active show" id="nav-tab-0" data-toggle="tab" href="#nav-tab-0-content" role="tab" aria-controls="nav-tab-0-content" aria-selected="true">{page?.fields.content2Title}</a>
+							<a class="nav-item nav-link" id="nav-tab-1" data-toggle="tab" href="#nav-tab-1-content" role="tab" aria-controls="nav-tab-1-content" >{page?.fields.content3Title}</a>
+						</div>
+					</nav>
+					<div class="tab-content" id="nav-tabContent2">
+						<div class="tab-pane fade" id="nav-tab-0-content" role="tabpanel" aria-labelledby="nav-tab-0">
+							<h2>{page?.fields.content2Title}</h2>
+							<div
+                class='js-accordion'
+                set:html={marked(page.fields.content2 as string)}
+              />
+						</div>
+						<div class="tab-pane fade active show" id="nav-tab-1-content" role="tabpanel" aria-labelledby="nav-tab-1">
+							<h2>{page?.fields.content3Title}</h2>
+              <div
+                class='js-accordion'
+                set:html={marked(page.fields.content3 as string)}
+              />
+						</div>
+					</div>
+					<hr>
+						
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+  ) : null
+}
+
+     {/* {
       page?.fields.slug === 'resources' ? (
         <div class='bg-white lt-border-t-light'>
           <div class='container'>
@@ -425,7 +443,7 @@ const base = import.meta.env.BASE_URL
           </div>
         </div>
       ) : null
-    } -->
+    }  */}
 
     <div class=' xbg-white  lt-border-t-light'>
       <div class='container'>
@@ -458,7 +476,7 @@ const base = import.meta.env.BASE_URL
               }
 
               {
-                page?.fields?.content2 ? (
+                page?.fields.slug !== 'after-you-apply' && page?.fields?.content2 ? (
                   <section>
                     <div class='js-accordion'>
                       <div
@@ -470,7 +488,7 @@ const base = import.meta.env.BASE_URL
                 ) : null
               }
               {
-                page.fields.content3 ? (
+               page?.fields.slug !== 'after-you-apply' &&  page.fields.content3 ? (
                   <section>
                     {page.fields?.content3Title ? (
                       <h3>{page.fields?.content3Title}</h3>
@@ -493,7 +511,7 @@ const base = import.meta.env.BASE_URL
                   </>
                 ) : null
               }
-              <!-- <hr />
+              {/* <hr />
               <div class='flex center'>
                 {
                   navigationIndex === 0 ? (
@@ -539,14 +557,57 @@ const base = import.meta.env.BASE_URL
                     </a>
                   ) : null
                 }
-              </div> -->
+              </div> */}
             </div>
           </div>
         </section>
       </div>
     </div>
-    <!-- <Resources class='lt-border-t-light' /> -->
+     {/* <Resources class='lt-border-t-light' /> */}
     
+     {
+  page?.fields.slug === 'after-you-apply' ? (<div class="bg-light--alt">
+	<div class="container">
+		<section class="section">
+			<div class="row justify-content-md-center pt-3">
+				<div class="col-12 cta key">
+					<h2 class="mb-0">{ctaOtherBenefits?.fields?.title}</h2>
+					<p>{ctaOtherBenefits?.fields?.content}</p>
+					<div class="mb-3 pb-3"></div>
+
+          {
+                allBenefits
+                  ? allBenefits.map((b) => {
+                      return (
+                        <p
+                          class='medium'
+                          data-province-filter={
+                            getJurisdiction(b.fields.authority)?.code || ''
+                          }
+                          data-province-hide-filter={
+                            b.fields.hideForProvinces || ''
+                          }
+                        >
+                          <a
+                            class='medium'
+                            href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
+                          >
+                             {b.fields.title}
+                          </a>
+
+                          
+                        </p>
+                      )
+                    })
+                  : null
+              }
+					
+				</div>
+			</div>
+		</section>
+	</div>
+</div>) : null}
+     
     {resources?.length  ? <div class='bg-secondary lt-border-t-light'>
       <div class='container'>
         <section class='section'>
@@ -600,7 +661,7 @@ const base = import.meta.env.BASE_URL
       </div>
     </div>: null }
 
-<!-- {steps?.length  ? <p>{JSON.stringify(steps)}</p> : null} -->
+{/* {steps?.length  ? <p>{JSON.stringify(steps)}</p> : null}  */}
 
 <div class="bg-secondary">
    <div class="container" data-benefit-id="1XqxwrXDdemUblRO51zLKZ">
@@ -611,13 +672,27 @@ const base = import.meta.env.BASE_URL
                <div class="mb-3 pb-3"></div>
                <ol class="">
                 {steps?.map((s, index) => {
-                   return (<li><a href={`how-to-apply/step-${index+1}`}>{s?.fields?.title}</a></li>)
+                   return (<li><a
+                                  href={`${makeUrl(base, locale,    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string, 'how-to-apply', `step-${index + 1}`)}`}
+                                >
+                                  {s?.fields?.title}
+                                </a></li>)
+                  //  return (<li><a href={`how-to-apply/step-${index+1}`}>{s?.fields?.title}</a></li>)
                 })
               }
                </ol>
+
+               
                
                <div class="mb-3 pb-3"></div>
-               <a class="js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none" href="how-to-apply/step-1">Start&nbsp; <strong>step 1</strong></a>
+               <a class="js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none"
+                                  href={`${makeUrl(base, locale,    getJurisdiction(benefit.fields.authority, locale)?.slug,
+                    benefit?.fields?.slug as string, 'how-to-apply', `step-1`)}`}
+                                >
+                                  Start&nbsp; <strong>step 1</strong>
+                                </a>
+              //  <a class="js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none" href="how-to-apply/step-1">Start&nbsp; <strong>step 1</strong></a>
                : null}
              
                {/* <div class="flex center"><a class="btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left" href="/alberta/assured-income-for-the-severely-handicapped/eligibility">Eligibility </a><a class="btn btn-lg btn-icon-right bi bi-arrow-right btn-outline-secondary" href="/alberta/assured-income-for-the-severely-handicapped/after-you-apply">After you apply – approved or denied</a></div> */}

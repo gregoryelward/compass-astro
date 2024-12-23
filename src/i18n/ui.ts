@@ -64,14 +64,7 @@ export const ui = {
 
     embedTitle: 'Share this tool',
     embedSubTitle: 'Sample buttons',
-    embedPara0DELETE:
-      'If you are a frontline service provider, help us share this tool broadly.',
-    embedPara1DELETE:
-      'Our graphic buttons let you direct your web visitors to the Disability Benefits Compass website landing page',
-    embedPara3DELETE:
-      'Complete the information below and the "Get Button" will generate the code you need to copy and paste into the source code of any page on your website.',
-    embedPara3TailDELETE: ' if you have any questions.',
-    embedPara3LinkDELETE: 'Contact Us',
+
     embedOrg: 'Organization name:',
     embedURL: 'Website URL:',
     embedLangSelect: 'Select a language:',
@@ -151,14 +144,7 @@ export const ui = {
     sponsored: 'Commanditaire principal',
     embedTitle: 'Partager cet outil',
     embedSubTitle: 'Modèles de boutons',
-    embedPara0DELETE:
-      'Si vous êtes un fournisseur de services de première ligne, aidez-nous à faire connaître cet outil au plus grand nombre de personnes possible.',
-    embedPara1DELETE:
-      'Nos boutons graphiques permettent de rediriger vos internautes vers le site Web de Boussole des mesures d’aide liées à l’invalidité',
-    embedPara3DELETE:
-      'Fournissez les renseignements demandés, puis choisissez le bouton qui vous convient. Le lien Obtenir le button permet de générer le code que vous devez copier et coller dans le code source de n’importe quelle page de votre site Web.',
-    embedPara3TailDELETE: '  pour toute question.',
-    embedPara3LinkDELETE: 'Communiquez avec nous',
+
     embedOrg: 'Nom de l’organisation :',
     embedURL: 'URL du site Web :',
     embedLangSelect: 'Sélectionnez une langue :',
