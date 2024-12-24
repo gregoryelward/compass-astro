@@ -13,7 +13,7 @@ const setMode = function (target: HTMLButtonElement, isDarkMode: boolean) {
   const language =
     document.getElementsByTagName('html')[0].getAttribute('lang') || 'en-CA'
 
-  console.log('setMode isDarkMode', isDarkMode)
+  // console.log('setMode isDarkMode', isDarkMode)
   if (!isDarkMode) {
     document.body.classList.add('light-theme')
     // console.log('add light-theme')

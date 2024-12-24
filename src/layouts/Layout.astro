@@ -151,7 +151,7 @@ let needhelp = needhelpRes.items[0]?.fields
 
 
 
-   console.log('LAYOUT CALL showProvincialDataOnly() ')
+  //  console.log('LAYOUT CALL showProvincialDataOnly() ')
   showProvincialDataOnly()
 
   const provinceList = document.querySelector(
@@ -165,7 +165,7 @@ let needhelp = needhelpRes.items[0]?.fields
     const closest = targetElement?.closest('.js--sub-link')
     if (closest) {
       const provinceCode = closest.getAttribute('data-province') as string
-      console.log('FILTER F')
+      // console.log('FILTER F')
       filterContent(provinceCode)
     }
     // console.log('in resourcepage calling showProvincialDataOnly()')
@@ -246,7 +246,7 @@ if (!provinceCode) {
         }
 
         // TODO: call onchange on drop down
-        console.log('FILTER B')
+        // console.log('FILTER B')
         filterContent(modalSelect.value);
       }
     });

@@ -482,10 +482,10 @@ p + ol {
   @extend .large;
 }
 
-.page_apply .callout {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
+// .page_apply .callout {
+//   margin-top: 2rem;
+//   margin-bottom: 2rem;
+// }
 
 .page_apply h2.h4 {
   margin-top: 2rem;
@@ -998,6 +998,12 @@ body.light-theme .tab-content p a:hover {
   color: inherit;
 }
 
+.nav-tabs {
+  border-bottom: 0;
+}
+.nav-item {
+  margin-bottom: 0;
+}
 /* Dark Theme for Tab Navigation */
 .nav-tabs .nav-link {
   background-color: #2b2b2b; /* Dark background */
@@ -1034,6 +1040,7 @@ body.light-theme .nav-tabs .nav-link {
   transition: 0.35s ease all;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0);
 }
 .bg-light--alt p a {
   color: #fff;
@@ -1051,3 +1058,7 @@ body.light-theme .bg-light--alt h3,
 body.light-theme .bg-light--alt .h5 {
   color: var(--body);
 }
+
+// .callout--helpful {
+//   margin-top: 0;
+// }

@@ -11,6 +11,7 @@ import makeUrl from '../lib/helpers'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
 import type { TypeCtaSkeleton } from '../types/contentful'
+import OtherBenefits from '../components/OtherBenefits.astro'
 
 export async function getStaticPaths() {
   let paths = []
@@ -339,8 +340,13 @@ const base = import.meta.env.BASE_URL
     <!-- {isLastStep ? <div>LAST STEP!</div> : null} -->
 
 
+    {
+      isLastStep ? (<div class="bg-light--alt">
+      <OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits} base={base} locale={locale}/>
+    </div>) : null}
+
   
-    {isLastStep ? <div class="bg-light--alt">
+    <!-- {isLastStep ? <div class="bg-light--alt">
     <div class="container">
       <section class="section">
         <div class="row justify-content-md-center pt-3">
@@ -380,7 +386,7 @@ const base = import.meta.env.BASE_URL
         </div>
       </section>
     </div>
-  </div> : null}
+  </div> : null} -->
   </main>
 </Layout>
 

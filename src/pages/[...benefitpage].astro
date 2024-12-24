@@ -22,6 +22,7 @@ TypeExploreMoreBenefitsCalloutFields,
 TypeExploreMoreBenefitsCalloutSkeleton
 
 } from '../types/contentful'
+import OtherBenefits from '../components/OtherBenefits.astro'
 
 
 export async function getStaticPaths() {
@@ -121,9 +122,9 @@ export async function getStaticPaths() {
       >
       let navigationIndex = 0
       for (const b of benefitPages) {
-        if (b?.fields?.showWarning) {
-         console.log(b?.fields?.title, b?.fields?.showWarning)
-        }
+        // if (b?.fields?.showWarning) {
+        //  console.log(b?.fields?.title, b?.fields?.showWarning)
+        // }
         // Filter steps that are specific to this benefit
         // const relatedSteps = benefitSteps.filter(step => step.fields.benefitId === i.sys.id);
         paths.push({
@@ -812,7 +813,12 @@ const base = import.meta.env.BASE_URL
 </div> 
 
 {
-  page?.fields.slug === 'after-you-apply' ? (<div class="bg-light--alt">
+  (page?.fields.slug === 'after-you-apply' || page?.fields.slug === 'resources') ? (<div class="bg-light--alt">
+	<OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits} base={base} locale={locale}/>
+</div>) : null}
+
+{/* {
+  (page?.fields.slug === 'after-you-apply' || page?.fields.slug === 'resources') ? (<div class="bg-light--alt">
 	<div class="container">
 		<section class="section">
 			<div class="row justify-content-md-center pt-3">
@@ -852,7 +858,7 @@ const base = import.meta.env.BASE_URL
 			</div>
 		</section>
 	</div>
-</div>) : null}
+</div>) : null} */}
 
 
 {
