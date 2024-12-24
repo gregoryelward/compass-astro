@@ -143,13 +143,39 @@ let needhelp = needhelpRes.items[0]?.fields
 
 <script>
   // import prepareThemeToggle from '../lib/themeToggle'
-  import pdateExternalLinks from '../lib/externalLinks'
+  import updateExternalLinks from '../lib/externalLinks'
   import goToTop from '../lib/gototop'
   import help from '../lib/help'
+    import { filterContent } from '../lib/filterContent'
+  import showProvincialDataOnly from '../lib/filterContent'
 
-  import { filterContent } from '../lib/filterContent'
 
-  pdateExternalLinks()
+
+   console.log('LAYOUT CALL showProvincialDataOnly() ')
+  showProvincialDataOnly()
+
+  const provinceList = document.querySelector(
+    '#navbarDropdown2 + ul.dropdown-menu'
+  ) as HTMLElement
+
+  provinceList.addEventListener('click', function (event) {
+    event.preventDefault()
+    const targetElement = event.target
+    //@ts-ignore
+    const closest = targetElement?.closest('.js--sub-link')
+    if (closest) {
+      const provinceCode = closest.getAttribute('data-province') as string
+      console.log('FILTER F')
+      filterContent(provinceCode)
+    }
+    // console.log('in resourcepage calling showProvincialDataOnly()')
+    // showProvincialDataOnly()
+
+    // console.log('in resourcepage calling hideEmptyAgency()')
+    // hideEmptyAgency()
+  })
+
+  updateExternalLinks()
   goToTop()
   help()
 

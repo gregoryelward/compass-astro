@@ -231,30 +231,30 @@ const agencyHeading = Astro.props
 
 <script>
   import accordion from '../lib/accordion'
-  import { filterContent } from '../lib/filterContent'
-  import showProvincialDataOnly from '../lib/filterContent'
-  console.log('HELP CALL showProvincialDataOnly() ')
-  showProvincialDataOnly()
+  // import { filterContent } from '../lib/filterContent'
+  // import showProvincialDataOnly from '../lib/filterContent'
+  // console.log('HELP CALL showProvincialDataOnly() ')
+  // showProvincialDataOnly()
 
-  const provinceList = document.querySelector(
-    '#navbarDropdown2 + ul.dropdown-menu'
-  ) as HTMLElement
+  // const provinceList = document.querySelector(
+  //   '#navbarDropdown2 + ul.dropdown-menu'
+  // ) as HTMLElement
 
-  provinceList.addEventListener('click', function (event) {
-    event.preventDefault()
-    const targetElement = event.target
-    //@ts-ignore
-    const closest = targetElement?.closest('.js--sub-link')
-    if (closest) {
-      const provinceCode = closest.getAttribute('data-province') as string
-      console.log('FILTER E')
-      filterContent(provinceCode)
-    }
-    // console.log('in resourcepage calling showProvincialDataOnly()')
-    // showProvincialDataOnly()
+  // provinceList.addEventListener('click', function (event) {
+  //   event.preventDefault()
+  //   const targetElement = event.target
+  //   //@ts-ignore
+  //   const closest = targetElement?.closest('.js--sub-link')
+  //   if (closest) {
+  //     const provinceCode = closest.getAttribute('data-province') as string
+  //     console.log('FILTER E')
+  //     filterContent(provinceCode)
+  //   }
+  //   // console.log('in resourcepage calling showProvincialDataOnly()')
+  //   // showProvincialDataOnly()
 
-    // console.log('in resourcepage calling hideEmptyAgency()')
-    // hideEmptyAgency()
-  })
+  //   // console.log('in resourcepage calling hideEmptyAgency()')
+  //   // hideEmptyAgency()
+  // })
   accordion('.js-accordion h2', 'H2', 2)
 </script>

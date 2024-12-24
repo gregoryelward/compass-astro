@@ -191,80 +191,81 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
 <script>
   import accordion from '../lib/accordion'
-  import { filterContent } from '../lib/filterContent'
-  import showProvincialDataOnly from '../lib/filterContent'
+  // import { filterContent } from '../lib/filterContent'
+  // import showProvincialDataOnly from '../lib/filterContent'
 
-  function hideEmptyAgency() {
-    // PREACCORDION
-    const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
+  // // TODO ADD A HANDLER FOR PROVINCE CHAGE TO CLEAN UP AGENCY
+  // function hideEmptyAgency() {
+  //   // PREACCORDION
+  //   const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
 
-    // console.log('agencyList ', agencyList)
+  //   // console.log('agencyList ', agencyList)
 
-    agencyList.forEach(function (agencyItem) {
-      // const name = agencyItem.querySelectorAll('h2')[0].innerText
-      // console.log('Nane ', name)
-      const agencyResources = agencyItem.querySelectorAll(
-        '.js-accordion > [data-province-filter]'
-      )
+  //   agencyList.forEach(function (agencyItem) {
+  //     // const name = agencyItem.querySelectorAll('h2')[0].innerText
+  //     // console.log('Nane ', name)
+  //     const agencyResources = agencyItem.querySelectorAll(
+  //       '.js-accordion > [data-province-filter]'
+  //     )
 
-      var nodes = Array.prototype.slice.call(agencyResources)
+  //     var nodes = Array.prototype.slice.call(agencyResources)
 
-      let nodeLength = nodes.filter(function (node) {
-        // if (name === 'BENEFIT - Canada Pension Plan–Disability benefit - 1') {
-        //   console.log('name ', name, `[${node.style.display}]`)
-        //   // console.log('agencyResources ', agencyResources)
-        // }
+  //     let nodeLength = nodes.filter(function (node) {
+  //       // if (name === 'BENEFIT - Canada Pension Plan–Disability benefit - 1') {
+  //       //   console.log('name ', name, `[${node.style.display}]`)
+  //       //   // console.log('agencyResources ', agencyResources)
+  //       // }
 
-        return node.style.display !== 'none'
-      }).length
+  //       return node.style.display !== 'none'
+  //     }).length
 
-      // console.log('nodeLength ', nodeLength)
-      if (nodeLength === 0) {
-        // console.log('hide', name)
-        ;(agencyItem as HTMLElement).style.display = 'none'
-        ;(agencyItem as HTMLElement).style.color = 'red'
-      } else {
-        // console.log('show', name)
-        ;(agencyItem as HTMLElement).style.display = 'block'
-        ;(agencyItem as HTMLElement).style.color = 'blue'
-      }
-    })
-  }
-  const provinceList = document.querySelector(
-    '#navbarDropdown2 + ul.dropdown-menu'
-  ) as HTMLElement
+  //     // console.log('nodeLength ', nodeLength)
+  //     if (nodeLength === 0) {
+  //       // console.log('hide', name)
+  //       ;(agencyItem as HTMLElement).style.display = 'none'
+  //       ;(agencyItem as HTMLElement).style.color = 'red'
+  //     } else {
+  //       // console.log('show', name)
+  //       ;(agencyItem as HTMLElement).style.display = 'block'
+  //       ;(agencyItem as HTMLElement).style.color = 'blue'
+  //     }
+  //   })
+  // }
+  // const provinceList = document.querySelector(
+  //   '#navbarDropdown2 + ul.dropdown-menu'
+  // ) as HTMLElement
 
-  // // console.log('attach listener to ', provinceList)
+  // // // console.log('attach listener to ', provinceList)
+  // // provinceList.addEventListener('click', function (event) {
+  // //   // console.log('provinceList.Listener clicked 2 ')
+  // //   event.preventDefault()
+  // //   // console.log('in resourcepage calling showProvincialDataOnly()')
+  // //   showProvincialDataOnly()
+
+  // //   // console.log('in resourcepage calling hideEmptyAgency()')
+  // //   hideEmptyAgency()
+  // // })
+
   // provinceList.addEventListener('click', function (event) {
-  //   // console.log('provinceList.Listener clicked 2 ')
   //   event.preventDefault()
-  //   // console.log('in resourcepage calling showProvincialDataOnly()')
-  //   showProvincialDataOnly()
-
-  //   // console.log('in resourcepage calling hideEmptyAgency()')
+  //   // const targetElement = event.target
+  //   // //@ts-ignore
+  //   // const closest = targetElement?.closest('.js--sub-link')
+  //   // if (closest) {
+  //   //   const provinceCode = closest.getAttribute('data-province') as string
+  //   //   console.log('FILTER H')
+  //   //   filterContent(provinceCode)
+  //   // }
   //   hideEmptyAgency()
   // })
 
-  provinceList.addEventListener('click', function (event) {
-    event.preventDefault()
-    // const targetElement = event.target
-    // //@ts-ignore
-    // const closest = targetElement?.closest('.js--sub-link')
-    // if (closest) {
-    //   const provinceCode = closest.getAttribute('data-province') as string
-    //   console.log('FILTER H')
-    //   filterContent(provinceCode)
-    // }
-    hideEmptyAgency()
-  })
+  // // console.log('in resourcepage calling showProvincialDataOnly()')
 
-  // console.log('in resourcepage calling showProvincialDataOnly()')
+  // console.log('RESOURCE PAGE showProvincialDataOnly() ')
+  // showProvincialDataOnly()
 
-  console.log('RESOURCE PAGE showProvincialDataOnly() ')
-  showProvincialDataOnly()
-
-  // console.log('in resourcepage calling hideEmptyAgency()')
-  hideEmptyAgency()
+  // // console.log('in resourcepage calling hideEmptyAgency()')
+  // hideEmptyAgency()
 
   accordion('.js-accordion h2', 'H2', 2)
   accordion('.js-accordion h3', 'H3', 3)

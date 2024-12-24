@@ -10,6 +10,7 @@ import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
 import makeUrl from '../lib/helpers'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
+import type { TypeCtaSkeleton } from '../types/contentful'
 
 export async function getStaticPaths() {
   let paths = []
@@ -20,6 +21,10 @@ export async function getStaticPaths() {
       locale
     })
 
+
+    const ctaOtherBenefitsyId = 'vbcbiuCwY8oajVj8Q9x2P';
+    const ctaOtherBenefits :Entry<TypeCtaSkeleton>= await contentfulClient.getEntry(ctaOtherBenefitsyId);
+      
     const benefits = benefitRes.items
     for (const i of benefits) {
       const benefitPages = i.fields.benefitPages as Array<
@@ -59,10 +64,12 @@ export async function getStaticPaths() {
             benefit: { ...i },
             index,
             applyPage,
-
+            ctaOtherBenefits,
             navigationIndex,
-            prevPage: benefitPages[navigationIndex - 1],
-            nextPage: benefitPages[navigationIndex + 1]
+            prevPage: benefitPages[navigationIndex], //steps
+            // prevPage: benefitPages[navigationIndex - 1],
+            nextPage: benefitPages[navigationIndex + 1],
+            allBenefits: benefits,
           }
         })
         // navigationIndex = navigationIndex + 1
@@ -92,6 +99,9 @@ const applyPage = Astro.props.applyPage
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
 const nextPage = Astro.props.nextPage
+
+const ctaOtherBenefits = Astro.props.ctaOtherBenefits
+const allBenefits = Astro.props.allBenefits
 
 const isLastStep = benefit?.fields?.steps?.length === stepIndex
 const base = import.meta.env.BASE_URL
@@ -161,12 +171,24 @@ const base = import.meta.env.BASE_URL
                 </div>
               ) : null
             }
-            <div class='mb-3 pb-3'></div>
+            <!-- <div class='mb-3 pb-3'></div> -->
             <h1><strong>{`${t('step')} ${stepIndex}`}</strong></h1>
+            {page?.fields?.introduction ? (
+            <div set:html={marked(page.fields.introduction as string)} />
+              ) : null
+            }
 
+   <!-- <p>{JSON.stringify(page?.fields?.customStep)}</p> -->
+            {page?.fields?.customStep ? (
+                 <hr class='hr-light' />
+              <div class='js-accordion'>
+                <div set:html={marked(page.fields.customStep as string)} />
+              </div>
+                ) : null
+            }
             <hr class='hr-light' />
             {
-              !isLastStep ? (
+              !page?.fields?.customStep && !isLastStep ? (
                 <div class='pro-card--top-border pro-card--orange-outline'>
                   <p class='large'>{page?.fields?.title}</p>
                   <a
@@ -197,7 +219,7 @@ const base = import.meta.env.BASE_URL
                   >
                     {t('no')}
                   </a>
-                  <a
+                  {page?.fields?.notSure ? <a
                     class='btn btn-primary btn-lg'
                     href={`${makeUrl(
                       base,
@@ -210,13 +232,14 @@ const base = import.meta.env.BASE_URL
                     )}`}
                   >
                     {t('notsure')}
-                  </a>
+                  </a> : null }
                   <div class='mb-3' />
                 </div>
               ) : page?.fields?.content ? (
                 <div set:html={marked(page.fields.content as string)} />
               ) : null
             }
+            <hr class="hr-light" />
             <h2 class='h5' id='steps-title'>{t('steps')}</h2>
             <nav aria-labelledby='steps-title'>
               <ul class='pagination'>
@@ -312,5 +335,58 @@ const base = import.meta.env.BASE_URL
         </section>
       </div>
     </div>
+    
+    <!-- {isLastStep ? <div>LAST STEP!</div> : null} -->
+
+
+  
+    {isLastStep ? <div class="bg-light--alt">
+    <div class="container">
+      <section class="section">
+        <div class="row justify-content-md-center pt-3">
+          <div class="col-12 cta key">
+            <h2 class="mb-0">{ctaOtherBenefits?.fields?.title}</h2>
+            <p>{ctaOtherBenefits?.fields?.content}</p>
+            <div class="mb-3 pb-3"></div>
+  
+            {
+                  allBenefits
+                    ? allBenefits.map((b) => {
+                        return (
+                          <p
+                            class='medium'
+                            data-province-filter={
+                              getJurisdiction(b.fields.authority)?.code || ''
+                            }
+                            data-province-hide-filter={
+                              b.fields.hideForProvinces || ''
+                            }
+                          >
+                            <a
+                              class='medium'
+                              href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
+                            >
+                               {b.fields.title}
+                            </a>
+  
+                            
+                          </p>
+                        )
+                      })
+                    : null
+                }
+            
+          </div>
+        </div>
+      </section>
+    </div>
+  </div> : null}
   </main>
 </Layout>
+
+
+<script>
+  import accordion from '../lib/accordion'
+  accordion('.js-accordion h2', 'H2', 2)
+</script>
+

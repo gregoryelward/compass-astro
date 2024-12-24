@@ -1041,3 +1041,13 @@ body.light-theme .nav-tabs .nav-link {
 body.light-theme .bg-light--alt p a {
   color: var(--body);
 }
+
+.bg-light--alt h3,
+.bg-light--alt .h5 {
+  color: #fff;
+}
+
+body.light-theme .bg-light--alt h3,
+body.light-theme .bg-light--alt .h5 {
+  color: var(--body);
+}
