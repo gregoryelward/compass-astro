@@ -3,6 +3,7 @@ import type { Entry } from 'contentful'
 import makeUrl from '../lib/helpers'
 import getJurisdiction from '../lib/jurisdictions'
 import type { TypeBenefitSkeleton, TypeCtaSkeleton } from '../types/contentful'
+import { marked } from 'marked'
 
 interface Props {
 
@@ -20,7 +21,14 @@ const { ctaOtherBenefits,allBenefits,base, locale } = Astro.props
     <div class="row justify-content-md-center pt-3">
       <div class="col-12 cta key">
         <h2 class="mb-0">{ctaOtherBenefits?.fields?.title}</h2>
-        <p>{ctaOtherBenefits?.fields?.content}</p>
+        <!-- <p>{ctaOtherBenefits?.fields?.content}</p> -->
+        {ctaOtherBenefits?.fields?.content ? (
+          <div
+            set:html={marked(
+              ctaOtherBenefits.fields.content  as unknown as string
+            )}
+          />
+        ) : null}
         <div class="mb-3 pb-3"></div>
 
         {

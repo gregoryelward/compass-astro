@@ -1,25 +1,26 @@
-const filterContent = function (filter) {
-  // show those benefits for the selected province
-  // console.log('filterContent 1')
-  const provinceItems = document.querySelectorAll('[data-province-filter]')
+// const filterContent = function (filter) {
+//   // show those benefits for the selected province
+//   // console.log('filterContent 1')
+//   const provinceItems = document.querySelectorAll('[data-province-filter]')
 
-  provinceItems.forEach(function (item) {
-    const province = item.getAttribute('data-province-filter')
-    if (province === '' || province === filter) {
-      item.style.display = 'block'
-      // hide benefits for the selected province CPP-D, a Federal benefit should not be shown for the Province of Quebec
-      // change GLE Apr 20, 2023.  Maybe should be hidden for certain provinces
-      const excludeProvince = item.getAttribute('data-province-hide-filter')
-      if (excludeProvince && excludeProvince.includes(filter)) {
-        item.style.display = 'none'
-      } else {
-        item.style.display = 'block'
-      }
-    } else {
-      item.style.display = 'none'
-    }
-  })
-}
+//   provinceItems.forEach(function (item) {
+//     const province = item.getAttribute('data-province-filter')
+//     if (province === '' || province === filter) {
+//       item.style.display = 'block'
+//       // hide benefits for the selected province CPP-D, a Federal benefit should not be shown for the Province of Quebec
+//       // change GLE Apr 20, 2023.  Maybe should be hidden for certain provinces
+//       const excludeProvince = item.getAttribute('data-province-hide-filter')
+//       if (excludeProvince && excludeProvince.includes(filter)) {
+//         item.style.display = 'none'
+//       } else {
+//         item.style.display = 'block'
+//       }
+//     } else {
+//       item.style.display = 'none'
+//     }
+//   })
+// }
+
 export default function showProvincialDataOnly() {
   try {
     // console.log(' called mobile showProvincialDataOnly')

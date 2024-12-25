@@ -24,7 +24,9 @@ export async function getStaticPaths() {
 
 
     const ctaOtherBenefitsyId = 'vbcbiuCwY8oajVj8Q9x2P';
-    const ctaOtherBenefits :Entry<TypeCtaSkeleton>= await contentfulClient.getEntry(ctaOtherBenefitsyId);
+    const ctaOtherBenefits :Entry<TypeCtaSkeleton>= await contentfulClient.getEntry(ctaOtherBenefitsyId, {
+  locale, // Replace with the desired locale
+});
       
     const benefits = benefitRes.items
     for (const i of benefits) {

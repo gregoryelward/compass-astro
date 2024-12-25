@@ -1062,3 +1062,11 @@ body.light-theme .bg-light--alt .h5 {
 // .callout--helpful {
 //   margin-top: 0;
 // }
+
+.page_introduction .info h3 {
+  color: #fff;
+}
+
+body.light-theme .page_introduction .info h3 {
+  color: var(--body);
+}

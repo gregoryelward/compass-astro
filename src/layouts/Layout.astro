@@ -15,6 +15,14 @@ import Footer from '../components/Footer.astro'
 import '../styles/sass/styles.scss'
 import { contentfulClient } from '../lib/contentful'
 import type { TypeNeedHelpSkeleton } from '../types/contentful/TypeNeedHelp'
+import type { TypeCtaSkeleton } from '../types/contentful'
+import type { Entry } from 'contentful'
+
+import data from '../lib/jurisdictions.json'; // Import JSON data
+import { marked } from 'marked'
+
+
+
 const lang = getLangFromUrl(Astro.url)
 // const langSlug = lang === 'en' ? '' : `${lang}/`
 const t = useTranslations(lang)
@@ -23,6 +31,11 @@ const tagLine = `- ${t('siteName')}`
 const base = import.meta.env.BASE_URL
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
+console.log('locale ', locale)
+const jurisdictions = data.jurisdictions[locale]; // Filter enabled jurisdictions
+
+// console.log('jurisdictions ',jurisdictions)
+
 const needhelpRes = await contentfulClient.getEntries<TypeNeedHelpSkeleton>({
   skip: 0,
   limit: 1,
@@ -30,6 +43,12 @@ const needhelpRes = await contentfulClient.getEntries<TypeNeedHelpSkeleton>({
   locale
 })
 let needhelp = needhelpRes.items[0]?.fields
+
+const ctaProvinceModalId = '1Tzqvxdjr14tlBvI7pHKiQ';
+// const ctaProvinceModal :Entry<TypeCtaSkeleton>= await contentfulClient.getEntry(ctaProvinceModalId);
+  const ctaProvinceModal: Entry<TypeCtaSkeleton> = await contentfulClient.getEntry(ctaProvinceModalId, {
+  locale, // Replace with the desired locale
+});
 ---
 
 <!doctype html>
@@ -133,7 +152,41 @@ let needhelp = needhelpRes.items[0]?.fields
       aria-label={t('topAria')}
       style='display: block;'>{t('top')}</button
     >
-    <div class="dialog-container js--dialog-container is-Xopen" id="dialog-001"><div class="dialog"><button class="btn bi bi-x js--close-dialog close-dialog" type="button" aria-label="Close" dialog-id="dialog-001"></button><p class="h4">What province are you from?</p><p>Knowing your province helps us make this tool the best experience for you.</p><div><select class="custom-select custom-select-lg"><option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NT">Northwest Territories</option><option value="NS">Nova Scotia</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option></select><button class="submit btn btn-primary btn-lg" type="button">Select</button></div></div></div>
+    <div class="dialog-container js--dialog-container is-Xopen" id="dialog-001">
+      <div class="dialog">
+        <button class="btn bi bi-x js--close-dialog close-dialog" type="button" aria-label="Close" dialog-id="dialog-001"></button>
+        <p class="h4">{ctaProvinceModal?.fields?.title}</p>
+        <!-- <p>Knowing your province helps us make this tool the best experience for you.</p> -->
+        {ctaProvinceModal?.fields?.content ? (
+          <div
+            set:html={marked(
+              ctaProvinceModal.fields?.content  as unknown as string
+            )}
+          />
+        ) : null}
+        <div>
+          <select class="custom-select custom-select-lg">
+            {jurisdictions.map(j => (
+              <option value={j.code}>{j.title}</option>
+            ))}
+            <!-- <option value="AB">Alberta</option>
+            <option value="BC">British Columbia</option>
+            <option value="MB">Manitoba</option>
+            <option value="NB">New Brunswick</option>
+            <option value="NL">Newfoundland and Labrador</option>
+            <option value="NT">Northwest Territories</option>
+            <option value="NS">Nova Scotia</option>
+            <option value="NU">Nunavut</option>
+            <option value="ON">Ontario</option>
+            <option value="PE">Prince Edward Island</option>
+            <option value="QC">Quebec</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="YT">Yukon</option> -->
+          </select>
+          <button class="submit btn btn-primary btn-lg" type="button">{t(`select`)}</button>
+        </div>
+      </div>
+    </div>
   </body>
 
   <script>
@@ -146,7 +199,7 @@ let needhelp = needhelpRes.items[0]?.fields
   import updateExternalLinks from '../lib/externalLinks'
   import goToTop from '../lib/gototop'
   import help from '../lib/help'
-    import { filterContent } from '../lib/filterContent'
+  import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
 
 
