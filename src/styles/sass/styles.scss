@@ -1080,3 +1080,34 @@ body.light-theme .page_introduction .info h3 {
 body.light-theme .step.answer.dontknow {
   color: var(--body);
 }
+
+.nav-bottom .navbar .navbar-collapse {
+  background-color: var(--secondary);
+  // color: #ffffff;
+}
+body.light-theme .nav-bottom .navbar .navbar-collapse {
+  background-color: #fff;
+  // color: var(--body);
+}
+
+.nav-bottom .navbar .navbar-collapse a {
+  color: #ffffff;
+}
+body.light-theme .nav-bottom .navbar .navbar-collapse a {
+  color: var(--body);
+}
+// .navbar.mobile-only .navbar-nav {
+// }
+
+// body.light-theme .navbar.mobile-only .navbar-nav {
+// }
+
+.dropdown-item.is-active {
+  background-color: var(--body);
+  color: #ffffff;
+}
+
+body.light-theme .dropdown-item.is-active {
+  background-color: var(--tertiary);
+  color: #ffffff;
+}

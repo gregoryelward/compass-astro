@@ -1,0 +1,37 @@
+---
+import { getLangFromUrl, useTranslations } from '../../i18n/utils'
+import jurisdictions from '../../lib/jurisdictions.json'
+
+const lang = getLangFromUrl(Astro.url)
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+const t = useTranslations(lang)
+// const base = import.meta.env.BASE_URL
+---
+
+<a
+  class='nav-link dropdown-toggle'
+  id='navbarDropdown-2'
+  href='#'
+  role='button'
+  data-toggle='dropdown'
+  aria-haspopup='true'
+  aria-expanded='false'>{t('select')}</a
+>
+<div class='dropdown-menu' aria-labelledby='navbarDropdown-2'>
+  {
+    jurisdictions.jurisdictions[locale].map((j) => {
+      return (
+        <a class='dropdown-item' href='#' data-province={j.code}>
+          {j.title}
+        </a>
+      )
+    })
+  }
+</div>
+
+<script>
+  // import showProvincialDataOnly from '../../lib/mainmenumobile'
+
+  // // console.log('mobile call ', 'showProvincialDataOnly')
+  // showProvincialDataOnly()
+</script>

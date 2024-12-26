@@ -196,37 +196,46 @@ const ctaProvinceModalId = '1Tzqvxdjr14tlBvI7pHKiQ';
 
 <script>
   // import prepareThemeToggle from '../lib/themeToggle'
+  import { addPostHandlerListener, runPostHandlerCallbacks } from '../lib/provinceChangeHandler.js';
   import updateExternalLinks from '../lib/externalLinks'
   import goToTop from '../lib/gototop'
   import help from '../lib/help'
   import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
 
+  // console.log('can I access provice from here ',provinceList)
 
 
   //  console.log('LAYOUT CALL showProvincialDataOnly() ')
   showProvincialDataOnly()
 
-  const provinceList = document.querySelector(
-    '#navbarDropdown2 + ul.dropdown-menu'
-  ) as HTMLElement
 
-  provinceList.addEventListener('click', function (event) {
-    event.preventDefault()
-    const targetElement = event.target
-    //@ts-ignore
-    const closest = targetElement?.closest('.js--sub-link')
-    if (closest) {
-      const provinceCode = closest.getAttribute('data-province') as string
-      // console.log('FILTER F')
-      filterContent(provinceCode)
-    }
-    // console.log('in resourcepage calling showProvincialDataOnly()')
-    // showProvincialDataOnly()
+  addPostHandlerListener(() => {
+    console.log(`LAYOUT RUNNING IN REACTION Other page reacting to province change`);
+    showProvincialDataOnly()
+  });
+  // const provinceList = document.querySelector(
+  //   '#navbarDropdown2 + ul.dropdown-menu'
+  // ) as HTMLElement
 
-    // console.log('in resourcepage calling hideEmptyAgency()')
-    // hideEmptyAgency()
-  })
+  // provinceList.addEventListener('click', function (event) {
+
+  //   console.log('layout provinceList province picker called')
+  //   event.preventDefault()
+  //   const targetElement = event.target
+  //   //@ts-ignore
+  //   const closest = targetElement?.closest('.js--sub-link')
+  //   if (closest) {
+  //     const provinceCode = closest.getAttribute('data-province') as string
+  //     // console.log('FILTER F')
+  //     filterContent(provinceCode)
+  //   }
+  //   // console.log('in resourcepage calling showProvincialDataOnly()')
+  //   // showProvincialDataOnly()
+
+  //   // console.log('in resourcepage calling hideEmptyAgency()')
+  //   // hideEmptyAgency()
+  // })
 
   updateExternalLinks()
   goToTop()

@@ -1,0 +1,158 @@
+---
+import { getLangFromUrl, useTranslations } from '../../i18n/utils'
+import jurisdictions from '../../lib/jurisdictions.json'
+
+const lang = getLangFromUrl(Astro.url)
+const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
+const t = useTranslations(lang)
+---
+
+<button
+  class='dropdown-toggle js--sub-menu-trigger sub-menu-trigger'
+  id='navbarDropdown2'
+  aria-haspopup='true'
+  aria-expanded='false'
+  data-toggle='dropdown'
+>
+  {t(`select`)}
+</button>
+<ul class='dropdown-menu benefits' aria-labelledby='navbarDropdown2'>
+  {
+    jurisdictions.jurisdictions[locale].map((j) => {
+      return (
+        <li>
+          <a class='js--sub-link' href='#' data-province={j.code}>
+            {j.title}
+          </a>
+        </li>
+      )
+    })
+  }
+</ul>
+
+<script>
+  import jurisdictions from '../../lib/jurisdictions.json'
+  // import showProvincialDataOnly from '../../lib/filterContent'
+  // import { filterContent } from '../../lib/filterContent'
+  // console.log('Province Picker showProvincialDataOnly ')
+  // showProvincialDataOnly()
+
+  const provinceSelect = document.getElementById('navbarDropdown2')
+
+  // attach listener
+  if (provinceSelect) {
+    const provinceList = document.querySelector(
+      '#navbarDropdown2 + ul.dropdown-menu'
+    ) as HTMLElement
+
+    // console.log('attach listener Province Picker ')
+    provinceList.addEventListener('click', function (event) {
+      console.log('provinceList province picker called')
+      event.preventDefault()
+      const targetElement = event.target
+      //@ts-ignore
+      const closest = targetElement?.closest('.js--sub-link')
+      if (closest) {
+        const provinceCode = closest.getAttribute('data-province')
+        const provinceName = closest.text
+
+        provinceList.querySelectorAll('li a').forEach((a) => {
+          if (a.getAttribute('data-province') === provinceCode) {
+            a.classList.add('is-active')
+          } else {
+            a.classList.remove('is-active')
+          }
+        })
+
+        provinceSelect.textContent = provinceName
+        // TODO use observer pattern?
+        // console.log('Province picker callling filterContent()')
+        localStorage.setItem('province', JSON.stringify(provinceCode))
+        // filterContent(provinceCode)
+      }
+    })
+  }
+
+  // const provinceSelect = document.getElementById('navbarDropdown2')
+
+  // set dropdown to show current province
+  if (provinceSelect) {
+    try {
+      //@ts-ignore
+      const provinceCode = JSON.parse(localStorage.getItem('province'))
+
+      // console.log('XX province code ', provinceCode)
+      if (provinceCode) {
+        const language =
+          document.getElementsByTagName('html')[0].getAttribute('lang') ||
+          'en-CA'
+        // console.log('language ', language)
+        // console.log(
+        //   'jurisdictions[language] ',
+        //   language,
+        //   // jurisdictions,
+        //   jurisdictions.jurisdictions[language]
+        // )
+        //@ts-ignore
+        provinceSelect.textContent = jurisdictions.jurisdictions[language].find(
+          (j: { code: any }) => j.code === provinceCode
+        ).title
+
+        // console.log('provinceSelect.textContent ', provinceSelect.textContent)
+        document
+          .querySelectorAll('#navbarDropdown2 + ul.dropdown-menu li a')
+          .forEach((a) => {
+            if (a.getAttribute('data-province') === provinceCode) {
+              a.classList.add('is-active')
+              return
+            }
+          })
+      }
+
+      // assign province selection dropdown
+      // const provinceList = document.querySelector(
+      //   '#navbarDropdown2 + ul.dropdown-menu'
+      // ) as HTMLElement
+
+      // console.log('attach listener to ', provinceList)
+      // provinceList.addEventListener('click', function (event) {
+      //   console.log('subnav click')
+      //   event.preventDefault()
+      //   const targetElement = event.target
+      //   //@ts-ignore
+      //   const closest = targetElement?.closest('.js--sub-link')
+      //   if (closest) {
+      //     const provinceCode = closest.getAttribute('data-province')
+      //     const provinceName = closest.text
+
+      //     provinceList.querySelectorAll('li a').forEach((a) => {
+      //       if (a.getAttribute('data-province') === provinceCode) {
+      //         a.classList.add('is-active')
+      //       } else {
+      //         a.classList.remove('is-active')
+      //       }
+      //     })
+
+      //     provinceSelect.textContent = provinceName
+      //     // TODO use observer pattern?
+      //     localStorage.setItem('province', JSON.stringify(provinceCode))
+      //     filterContent(provinceCode)
+      //   }
+      // })
+      //   provinceList.addEventListener('click', function (event) {
+      //     event.preventDefault()
+      //     const targetElement = event.target
+      //     const closest = (targetElement as HTMLElement)?.closest('.js--sub-link')
+      //     if (closest) {
+      //       const provinceCode = closest.getAttribute('data-province')
+      //       if (provinceCode) {
+      //         filterContent(provinceCode)
+      //       }
+      //       hideEmptyAgency()
+      //     }
+      //   })
+    } catch (error) {
+      console.log('Error', error)
+    }
+  }
+</script>

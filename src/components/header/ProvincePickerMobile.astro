@@ -29,6 +29,77 @@ const t = useTranslations(lang)
   }
 </div>
 
+<script >
+
+  import { addPostHandlerListener, runPostHandlerCallbacks } from '../../lib/provinceChangeHandler.js';
+  
+  try {
+  
+  
+    const provinceList = document.querySelector(
+      '#navbarDropdown-2 + .dropdown-menu'
+    ) as HTMLElement
+
+    const provinceSelect = document.getElementById('navbarDropdown-2')
+
+      // Function to set the province from local storage
+    function initializeProvince() {
+      const storedProvinceCode = JSON.parse(localStorage.getItem('province') || 'null');
+      if (storedProvinceCode && provinceList && provinceSelect) {
+        const menuItems = document.querySelectorAll(
+        '.dropdown-item[data-province]'
+        )
+        menuItems.forEach(function (item) {
+        const itemProvince = item.getAttribute('data-province')
+        if (itemProvince === '' || itemProvince === storedProvinceCode) {
+          item.classList.add('is-active')
+        } else {
+          item.classList.remove('is-active')
+        }
+      })
+        
+
+        
+        }
+    }
+      
+  
+    if (provinceList) {
+      provinceList.addEventListener('click', function (e) {
+        console.log('mainmenumobile provinceList province picker called')
+        e.preventDefault()
+        // const provinceCode = e.target?.getAttribute('data-province')
+        const provinceCode = (e.target as HTMLElement)?.getAttribute('data-province');
+
+
+        const menuItems = document.querySelectorAll(
+          '.dropdown-item[data-province]'
+        )
+
+        menuItems.forEach(function (item) {
+          const itemProvince = item.getAttribute('data-province')
+          if (itemProvince === '' || itemProvince === provinceCode) {
+            item.classList.add('is-active')
+          } else {
+            item.classList.remove('is-active')
+          }
+        })
+
+        // TODO use observer pattern?
+        localStorage.setItem('province', JSON.stringify(provinceCode))
+        // filterContent(provinceCode)
+
+         // Run post-handler callbacks
+         console.log('MOBILE PICKER CALLING CALLBACK')
+         runPostHandlerCallbacks();
+      })
+      // Initialize province on page load
+      initializeProvince();
+    }
+  } catch(error) { console.log(error)}
+  
+  </script>
+
 <script>
   // import showProvincialDataOnly from '../../lib/mainmenumobile'
 

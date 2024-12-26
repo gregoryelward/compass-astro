@@ -21,6 +21,7 @@
 //   })
 // }
 
+// NOT IN USE
 export default function showProvincialDataOnly() {
   try {
     // console.log(' called mobile showProvincialDataOnly')
@@ -50,6 +51,7 @@ export default function showProvincialDataOnly() {
     )
 
     provinceList.addEventListener('click', function (e) {
+      console.log('mainmenumobile provinceList province picker called')
       e.preventDefault()
       const provinceCode = e.target.getAttribute('data-province')
 
