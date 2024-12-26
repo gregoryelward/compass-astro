@@ -7,7 +7,7 @@ import type { Entry } from 'contentful'
 import type { TypePageSkeleton } from '../types/contentful/TypePage'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
-import BenefitResources from '../components/BenefitResources.astro'
+// import BenefitResources from '../components/BenefitResources.astro'
 import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
 import Feedback from '../components/Feedback.astro'
 import BenefitAgencyResources from '../components/BenefitAgencyResources.astro'
@@ -120,7 +120,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                               </h2>
                               <div class='card-body mb-3'>
                                 <div class='js-accordion child'>
-                                  benefit resources component (agency)
+                                
                                   <BenefitAgencyResources
                                     resources={
                                       b?.fields.agencyResource as Array<

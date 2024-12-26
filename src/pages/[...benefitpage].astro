@@ -15,6 +15,7 @@ import Feedback from '../components/Feedback.astro'
 import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
 // import Resources from '../components/Resources.astro'
 import type {
+TypeAgencyResourceSkeleton,
   // TypeBenefitWarning,
   TypeBenefitWarningSkeleton,
    TypeCtaSkeleton,
@@ -24,6 +25,7 @@ TypeExploreMoreBenefitsCalloutSkeleton
 } from '../types/contentful'
 import OtherBenefits from '../components/OtherBenefits.astro'
 import BenefitResources from '../components/BenefitResources.astro'
+// import BenefitAgencyResources from '../components/BenefitAgencyResources.astro'
 
 
 export async function getStaticPaths() {
@@ -79,35 +81,69 @@ export async function getStaticPaths() {
 
     // console.log('benefits ', benefits)
 
-    function myCallback(agencyResource: any) {
-      //@ts-ignore
-      return agencyResource?.agency || "notitle"
-    }
+    // function myCallback(agencyResource: any) {
+    //   //@ts-ignore
+    //   // return agencyResource?.agency || "notitle"
+    //   // return agencyResource?.agency?.fields?.title || "notitle"
+    //   return agencyResource?.title || "notitle"
+    // }
     // function myCallback({ quantity } : any) {
     //   return quantity > 5 ? "ok" : "restock";
     // }
 
     for (const i of benefits) {
-      let result2;
+      let groupedAgencyResources;
       const jurisdiction = getJurisdiction(i.fields.authority, locale)
       
-      let agencyResource = i.fields?.agencyResource?.map((a) => {
+      let agencyResource = i.fields?.agencyResource?.filter(Boolean).map((a) => {
         // console.log("a?.agency?.fields? ",a?.fields)
+        // console.log('a?.fields?.agency ',a?.fields?.agency)
         //@ts-ignore
         return {
           //@ts-ignore
           ...a?.fields,
           //@ts-ignore
-          agency : a?.fields?.agency?.fields?.title
+          // agency : a?.fields?.agency?.fields?.title
+          // agency : a?.fields?.agency as TypeAgencySkeleton
+          showLocalyOnly : a?.fields?.agency?.fields?.showLocalyOnly, authority: a?.fields?.agency?.fields?.authority,
+           //@ts-ignore
+          agency : a?.fields?.agency?.fields?.title 
+          // agency : {title: a?.fields?.agency?.fields?.title, showLocalyOnly : a?.fields?.agency?.fields?.showLocalyOnly, authority: a?.fields?.agency?.fields?.authority}
+
+          
         }
       })
 
-      // console.log("agencyResource ", agencyResource)
+    
+
+     
       if (agencyResource) {
-        result2 = Object.groupBy(agencyResource, myCallback);
-        // console.log("result2 ", result2)
+
+        // console.log('agencyResource ',agencyResource)
+        // console.log("agencyResource DEGUG ", agencyResource)
+        // result2 = Object.groupBy(agencyResource, myCallback);
+
+        // const groupedByAgency = Object.groupBy(agencyResource, (resource) => agencyResource.agency.title);
+
+        groupedAgencyResources = Object.groupBy(agencyResource, (resource) => {
+          const title = resource.agency;
+          return title || 'Unknown Agency';
+        });
+        // const groupedByAgency = Object.groupBy(agencyResource, (resource) => {
+        //   const title = resource.agency?.title;
+        //   return title || 'Unknown Agency';
+        // });
+
+        // console.log(groupedByAgency)
+        // result2 =groupedByAgency
+        //@ts-ignore
+        // result2 = Object.groupBy(agencyResource, (resource) => agencyResource.agency?.title || "notitle");
+        // console.log(' result2 ', result2)
+
+        // console.log("result2 ", result2?.title, result2?.agency,result2  )
       }
 
+      // const agencyResources = i.fields?.agencyResource?.filter(Boolean)
       const jurisdictionSlug = jurisdiction?.slug
       let path = locale === 'en-CA' ? '' : `/fr`
       if (jurisdictionSlug) {
@@ -123,7 +159,11 @@ export async function getStaticPaths() {
       const benefitSteps = i.fields.steps as Array<
         Entry<TypeStepsSkeleton>
       >
-      let navigationIndex = 0
+      let navigationIndex = 0  
+      
+      // console.log('benefitPages[2]?.fields.slug ',benefitPages[2]?.fields.slug)
+      let applySlug = benefitPages[2]?.fields.slug || "how-to-apply"
+
       for (const b of benefitPages) {
         // if (b?.fields?.showWarning) {
         //  console.log(b?.fields?.title, b?.fields?.showWarning)
@@ -137,18 +177,21 @@ export async function getStaticPaths() {
           props: {
             page: { ...b },
             benefit: { ...i },
-            steps: b.fields.slug === "how-to-apply" ? benefitSteps : null ,
+            steps: b.fields.slug === "how-to-apply" || b.fields.slug === "apply"  ? benefitSteps : null ,
             navigationIndex,
             ctaOtherBenefits,
             prevPage: benefitPages[navigationIndex - 1],
             nextPage: benefitPages[navigationIndex + 1],
             warning,
-            result2,
+            groupedAgencyResources,
             allBenefits: benefits,
-            exploreSection
+            exploreSection,
+            applySlug,
+            // agencyResources
           }
         })
         navigationIndex = navigationIndex + 1
+        
       }
     }
   }
@@ -173,10 +216,12 @@ const resources = benefit.fields.resources
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
 const nextPage = Astro.props.nextPage
-const result2 = Astro.props.result2
+const groupedAgencyResources = Astro.props.groupedAgencyResources
 const ctaOtherBenefits = Astro.props.ctaOtherBenefits
 const allBenefits = Astro.props.allBenefits
 const mainCTA = Astro.props.page.fields?.mainCta as Entry<TypeCtaSkeleton> | null
+const applySlug = Astro.props.applySlug
+// const agencyResources = Astro.props.agencyResources
 
 // console.log('resut ', result2)
 
@@ -281,7 +326,7 @@ const base = import.meta.env.BASE_URL
             />
             </div> : null} -->
             {
-              page?.fields.slug === 'how-to-apply' && page?.fields?.content2 ? (
+              (page?.fields.slug === applySlug) && page?.fields?.content2 ? (
               
               <h2>{page.fields.content2Title}</h2>
                     <div
@@ -293,7 +338,7 @@ const base = import.meta.env.BASE_URL
             }
 
             {
-              page?.fields.slug === 'how-to-apply' && page?.fields?.content3 ? (
+              (page?.fields.slug === applySlug)  && page?.fields?.content3 ? (
               
               <h2>{page.fields.content3Title}</h2>
                     <div
@@ -309,6 +354,7 @@ const base = import.meta.env.BASE_URL
       </section>
     </div>
 
+    <!-- <p>{applySlug}</p> -->
     {
       page?.fields?.lead ? (
         <div class='xbg-white lt-border-t-light under heere'>
@@ -374,34 +420,120 @@ const base = import.meta.env.BASE_URL
       ) : null
     }  -->
 
+<!-- 
+    <BenefitAgencyResources resources={result2}/> -->
+
+    <!-- {
+      page?.fields.slug === 'resources' ? (
+        <div class='agency resources xbg-white lt-border-t-light'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div class='mb-3 pb-2'>
+                    {
+                      agencyResources
+                        ? agencyResources
+                            .map((b) => {
+                              return (
+                                <div
+                                  class={`js-accordion benefit-agency parent ${b.fields.agencyResource ? '' : 'empty'}`}
+                                  data-province-filter={
+                                    getJurisdiction(b.fields.authority)?.code || ''
+                                  }
+                                  data-province-hide-filter={
+                                    b.fields.hideForProvinces || ''
+                                  }
+                                >
+                                  <h2 id={`benefit${b?.sys?.id}`}>
+                                    {b?.fields?.title}
+                                  </h2>
+                                  <div class='card-body mb-3'>
+                                    <div class='js-accordion child'>
+                                    
+                                      <BenefitAgencyResources
+                                        resources={
+                                          b?.fields.agencyResource as Array<
+                                            Entry<TypeAgencyResourceSkeleton>
+                                          >
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              )
+                            })
+                        : null
+                    }
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    } -->
+
+<!-- VERSION 1 -->
+
+<!-- <div>
+  {result2 ? Object.entries(result2).map(([agencyTitle, resources]) => (
+    <div  class="agency-group">
+      <h2>{agencyTitle}</h2>
+      <ul>
+        {resources ? resources.map((resource, index) => (
+          <li>
+            <h3>{resource.title}</h3>
+            <p>{resource.content}</p>
+          </li>
+        )) : null}
+      </ul>
+    </div>
+  )) : null }
+</div> -->
+
 {
       page?.fields.slug === 'resources' ? (
-        <div class='xbg-white lt-border-t-light'>
+        <div class='agency resources xbg-white lt-border-t-light'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
                 <div class='col-12'>
                   <div class='js-accordion resources'>
-                    {result2
-                      ? Object.entries(result2).map(([key, value], index) => {
+                    {groupedAgencyResources
+                      ? Object.entries(groupedAgencyResources).map(([agencyTitle, resources], index) => {
                           return (
-                            <>
-                              <h2 id={`agencyv2-${index}`}>{key}</h2>
-                              {value
+                          <div
+                             
+                            >
+                              <h2 id={`agencyv2-${index}`}>{agencyTitle}</h2>
+                             
+                              {resources
                                 ? //@ts-ignore
-                                  value.map(
+                                resources.map(
                                     (
                                       v,
                                       index: number
                                     ) => {
                                       return (
-                                        <h3 id={`agencyv2-resource-${index}`}>{v.title}</h3>
-                                        <div set:html={marked(v.content)} />
+                                      <div
+                                        data-province-filter={
+                                          v.showLocalyOnly
+                                            ? getJurisdiction(v.authority)?.code || ''
+                                            : ''
+                                        }
+                                      >
+                                        <h3 id={`agencyv2-resource-${index}`}>{v.title} - {v.authority} - {v.showLocalyOnly}</h3>
+                                        {/* <p>{v.agency?.title}</p>
+                                        <p>{v.agency?.showLocalyOnly}</p>
+                                        <p>{v.agency?.authority}</p> */}
+                                        <div set:html={marked(v.content)} /> 
+                                        </div>
                                       )
                                     }
                                   )
                                 : null}
-                            </>
+                            </div>
                           )
                         })
                       : null}
@@ -548,19 +680,22 @@ const base = import.meta.env.BASE_URL
       ) : null
     }  */}
 
-    {page?.fields?.bodyTitle ? <div class=' xbg-white  lt-border-t-light'>
+
+{(page?.fields?.bodyTitle || 
+   (page?.fields?.slug === 'introduction' && warning?.content) ||
+   page?.fields?.content5Title || 
+   (page?.fields.slug !== 'after-you-apply' && page?.fields?.content2) || 
+   (page?.fields.slug !== 'after-you-apply' && page?.fields?.content3) || 
+   page?.fields?.content4)  ? <div class='xbg-white  lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
             <div class='col-12'>
               
-              <h2>{page?.fields?.bodyTitle}</h2>
+              {page?.fields?.bodyTitle ? <h2>{page?.fields?.bodyTitle}</h2>: null}
               <div class='mb-3 pb-2'></div>
-              {/* <p>{page?.fields?.showWarning}</p>
-              <h3 class='h5'>{JSON.stringify(warning.title)}</h3>
-              <p>{JSON.stringify(warning.content)}</p> */}
               {
-               page?.fields.slug === 'introduction' && warning?.content ? (
+               page?.fields?.slug === 'introduction' && warning?.content ? (
                   <div class='bg-light--alt p-3 my-3'>
                       {warning?.title ? (
                         <h3 class='h5'>{warning.title}</h3>
@@ -583,7 +718,7 @@ const base = import.meta.env.BASE_URL
               }
 
               {
-                page?.fields.slug !== 'after-you-apply' && page?.fields?.content2 ? (
+                ( page?.fields.slug !== 'after-you-apply') && page?.fields?.content2 ? (
                   <section>
                     <div class='js-accordion'>
                       <div
@@ -595,7 +730,7 @@ const base = import.meta.env.BASE_URL
                 ) : null
               }
               {
-               page?.fields.slug !== 'after-you-apply' &&  page.fields.content3 ? (
+               ( page?.fields.slug !== 'after-you-apply') && page.fields.content3 ? (
                   <section>
                     {page.fields?.content3Title ? (
                       <h3>{page.fields?.content3Title}</h3>
@@ -618,58 +753,12 @@ const base = import.meta.env.BASE_URL
                   </>
                 ) : null
               }
-              {/* <hr />
-              <div class='flex center'>
-                {
-                  navigationIndex === 0 ? (
-                    <a
-                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string
-                      )}`}
-                    >
-                      {t('startBack')}
-                    </a>
-                  ) : (
-                    <a
-                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        prevPage?.fields?.slug as string
-                      )}`}
-                    >
-                      {prevPage?.fields?.title}
-                    </a>
-                  )
-                }
-                {
-                  nextPage?.fields?.slug ? (
-                    <a
-                      class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        nextPage?.fields?.slug as string
-                      )}`}
-                    >
-                      {nextPage.fields.title}
-                    </a>
-                  ) : null
-                }
-              </div> */}
             </div>
           </div>
         </section>
       </div>
-    </div>: null}
+    </div> : null}
+
      {/* <Resources class='lt-border-t-light' /> */}
     
      
@@ -730,7 +819,7 @@ const base = import.meta.env.BASE_URL
 {/* {steps?.length  ? <p>{JSON.stringify(steps)}</p> : null}  */}
 
 <div class="bg-secondary">
-   <div class="container" data-benefit-id="1XqxwrXDdemUblRO51zLKZ">
+   <div class="container">
       <section class="section">
          <div class="row justify-content-md-center">
             <div class="col-12">
@@ -740,7 +829,7 @@ const base = import.meta.env.BASE_URL
                 {steps?.map((s, index) => {
                    return (<li><a
                                   href={`${makeUrl(base, locale,    getJurisdiction(benefit.fields.authority, locale)?.slug,
-                    benefit?.fields?.slug as string, 'how-to-apply', `step-${index + 1}`)}`}
+                    benefit?.fields?.slug as string, applySlug, `step-${index + 1}`)}`}
                                 >
                                   {s?.fields?.title}
                                 </a></li>)
@@ -754,7 +843,7 @@ const base = import.meta.env.BASE_URL
                <div class="mb-3 pb-3"></div>
                <a class="js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none"
                                   href={`${makeUrl(base, locale,    getJurisdiction(benefit.fields.authority, locale)?.slug,
-                    benefit?.fields?.slug as string, 'how-to-apply', `step-1`)}`}
+                    benefit?.fields?.slug as string, applySlug, `step-1`)}`}
                                 >
                                   Start&nbsp; <strong>step 1</strong>
                                 </a>
@@ -824,7 +913,7 @@ const base = import.meta.env.BASE_URL
 </div>) : null}
 
 {/* @ts-ignore */}
-{resources?.length && (page?.fields.slug !== 'after-you-apply' && page?.fields.slug !== 'apply' && page?.fields.slug !== 'how-to-apply') ? <BenefitResources resources={resources} /> : null}
+{resources?.length && (page?.fields.slug !== 'after-you-apply' && page?.fields.slug !== applySlug) ? <BenefitResources resources={resources} /> : null}
 
 {/* {
   (page?.fields.slug === 'after-you-apply' || page?.fields.slug === 'resources') ? (<div class="bg-light--alt">

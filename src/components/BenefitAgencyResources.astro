@@ -57,7 +57,7 @@ if (agencyResource) {
   result2 ? (
     Object.entries(result2).map(([key, value], index) => {
       return (
-        <div class="childresource"
+        <div class="benefitagencycomponent childresource"
           data-foobar='baz'
           data-province-filter={
             //@ts-ignore
@@ -67,7 +67,7 @@ if (agencyResource) {
               : ''
           }
         >
-          <h3 id={`agency-resource-${index}`}>{key}</h3> BENEFIT RESOUCE COMPANENT
+          <h3 id={`agency-resource-${index}`}>{key}</h3>
           {value
             ? //@ts-ignore
               value.map((v) => {

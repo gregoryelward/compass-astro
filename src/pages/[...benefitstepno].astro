@@ -217,7 +217,7 @@ const base = import.meta.env.BASE_URL
               locale,
               getJurisdiction(benefit.fields.authority, locale)?.slug,
               benefit?.fields?.slug as string,
-              'how-to-apply',
+              applyPage.fields.slug,
               `step-${stepIndex + 1}`
             )}`}
           >
@@ -257,7 +257,7 @@ const base = import.meta.env.BASE_URL
                                       locale
                                     )?.slug,
                                     benefit?.fields?.slug as string,
-                                    'how-to-apply',
+                                    applyPage.fields.slug,
                                     `step-${index + 1}`
                                   )}`}
                                 >
