@@ -4,7 +4,7 @@ import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
-import type { Asset, Entry } from 'contentful'
+import type { Entry } from 'contentful'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
 import type { TypeBenefitApplyWarningSkeleton } from '../types/contentful/TypeBenefitApplyWarning'
@@ -12,12 +12,13 @@ import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPag
 import Feedback from '../components/Feedback.astro'
 import makeUrl from '../lib/helpers'
 import BenefitResources from '../components/BenefitResources.astro'
-// import Resources from '../components/Resources.astro'
-// import Resources from '../components/Resources.astro'
+import type { TypeResourcesSkeleton } from '../types/contentful'
 
 export async function getStaticPaths() {
   let paths = []
+
   const LOCALES = ['en-CA', 'fr-CA']
+
   for (const locale of LOCALES) {
     const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
       content_type: 'benefit',
@@ -55,7 +56,7 @@ const t = useTranslations(lang)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
 const page = Astro.props.page as Entry<TypeBenefitSkeleton>
-const resources = page.fields.resources
+const resources = page.fields.resources as Array<Entry<TypeResourcesSkeleton>>
 const callout = page.fields
   .applyWarning as Entry<TypeBenefitApplyWarningSkeleton>
 const benefitPages = page.fields.benefitPages as Array<
@@ -76,13 +77,15 @@ const base = import.meta.env.BASE_URL
     data-page-title={page?.fields.title as string}
     data-page-category='resource'
   >
-  <div class='container'>
+    <div class='container'>
       <div class='row justify-content-md-center'>
         <div class='col-12 col-md-10'>
           <nav aria-label='breadcrumb'>
             <ol class='breadcrumb'>
               <li class='breadcrumb-item'>
-                <a class='breadcrumb-item' href={`${makeUrl(base, locale)}`}>{t('home')}</a>
+                <a class='breadcrumb-item' href={`${makeUrl(base, locale)}`}
+                  >{t('home')}</a
+                >
               </li>
               <li class='active breadcrumb-item' aria-current='page'>
                 {page?.fields?.title}
@@ -96,9 +99,10 @@ const base = import.meta.env.BASE_URL
       <section class='section'>
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
-            <h1><strong>{page?.fields?.title as string}</strong>
-            {page?.fields?.acronym ? `(${page?.fields?.acronym})` : null } 
-            </h1>BENEFIT
+            <h1>
+              <strong>{page?.fields?.title as string}</strong>
+              {page?.fields?.acronym ? `(${page?.fields?.acronym})` : null}
+            </h1>
             <p class='large'>
               {page?.fields.lead as string}
             </p>
@@ -108,29 +112,26 @@ const base = import.meta.env.BASE_URL
               ) : null
             }
             <hr class='hr-light hr-small' />
-            {callout?.fields?.title ? <div class='callout callout--no-border p-3 mb-4'>
-              {
-                callout?.fields?.title ? (
-                  <h2 class='h4'>{callout.fields.title}</h2>
-                ) : null
-              }
-              <!-- <div set:html={marked(callout.fields.content as string)} /> -->
-              {
-                callout?.fields?.content ? (
-                  <div set:html={marked(callout.fields.content as string)} />
-                ) : null
-              }
-              {
-                callout?.fields?.ctaurl ? (
-                  <a
-                    class='btn btn-outline-primary btn-small'
-                    href={callout.fields.ctaurl as string}
-                  >
-                    {callout.fields.cta}
-                  </a>
-                ) : null
-              }
-            </div>:null}
+            {
+              callout?.fields?.title ? (
+                <div class='callout callout--no-border p-3 mb-4'>
+                  {callout?.fields?.title ? (
+                    <h2 class='h4'>{callout.fields.title}</h2>
+                  ) : null}
+                  {callout?.fields?.content ? (
+                    <div set:html={marked(callout.fields.content as string)} />
+                  ) : null}
+                  {callout?.fields?.ctaurl ? (
+                    <a
+                      class='btn btn-outline-primary btn-small'
+                      href={callout.fields.ctaurl as string}
+                    >
+                      {callout.fields.cta}
+                    </a>
+                  ) : null}
+                </div>
+              ) : null
+            }
             <h2 class='h4'>{t('inthissection')}</h2>
 
             <ol class='large light-blue'>
@@ -138,8 +139,8 @@ const base = import.meta.env.BASE_URL
                 benefitPages.map((b) => {
                   return (
                     <li>
-                      <a 
-                      href={`${makeUrl(base, locale, getJurisdiction(page?.fields.authority, locale)?.slug, page?.fields.slug,b.fields.slug)}`}
+                      <a
+                        href={`${makeUrl(base, locale, getJurisdiction(page?.fields.authority, locale)?.slug, page?.fields.slug, b.fields.slug)}`}
                       >
                         {b.fields.title}
                       </a>
@@ -150,81 +151,26 @@ const base = import.meta.env.BASE_URL
             </ol>
 
             <hr class='hr-light' />
-         
+
             <a
               class='js-start-button btn btn-tertiary btn-lg btn-icon-right bi bi-arrow-right'
-              href={`${makeUrl(base, locale,getJurisdiction(page?.fields.authority, locale)?.slug, page?.fields.slug,benefitPages[0].fields.slug)}`}
-              >
-              {t('start')}
-              </a
+              href={`${makeUrl(base, locale, getJurisdiction(page?.fields.authority, locale)?.slug, page?.fields.slug, benefitPages[0].fields.slug)}`}
             >
+              {t('start')}
+            </a>
           </div>
         </div>
       </section>
     </div>
-    <!-- <Resources class='lt-border-t-light' /> -->
-     <!-- @ts-ignore -->
-     <BenefitResources resources={resources} />
-    <!-- {resources?.length  ? <div class='bg-secondary lt-border-t-light'>
-      <div class='container'>
-        <section class='section'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12'>
-              <h2>{t('resources')} BENEFIT LANDING PAGE</h2>
-              <div class='mb-4 pb-2'></div>
-              <div class='row'>
-                {
-                  resources
-                    ? //@ts-ignore
-                      resources?.map((o) => {
-                        return (
-                          <div
-                            class='col-12 col-md-4'
-                            data-province-filter=''
-                            style='display: block;'
-                          >
-                            <div class='pro-card--full-img equal-height'>
-                              <picture>
-                                <img
-                                  src={
-                                    (o.fields.cardImage as Asset)?.fields?.file
-                                      ?.url as string
-                                  }
-                                />
-                              </picture>
-                              <div class='content'>
-                                <a
-                                href={`${makeUrl(base, locale, 'resource', o.fields.slug as string)}`}
-                                >
-                                    <p>{o.fields.title as string}</p>
-                                    <p class='xsmall'>
-                                      {o.fields.lead as string}
-                                    </p>
-                                    <span class='btn-link btn-icon-right bi bi-arrow-right'>
-                                      <span />
-                                    </span>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })
-                    : null
-                }
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div> : null } -->
-   
+    <BenefitResources resources={resources} />
+
     <Feedback />
-    </main>
+  </main>
 </Layout>
 
- <script>
-    import accordion from '../lib/accordion'
+<script>
+  import accordion from '../lib/accordion'
 
-    accordion('.js-accordion h2', 'H2', 2)
-    accordion('.js-accordion h3', 'H3', 3)
-  </script>
+  accordion('.js-accordion h2', 'H2', 2)
+  accordion('.js-accordion h3', 'H3', 3)
+</script>

@@ -197,6 +197,12 @@ body {
 
 .glossary.links *,
 dt.letter {
+  color: var(--white);
+  // color: var(--orange);
+}
+
+body.light-theme .glossary.links *,
+dt.letter {
   color: var(--orange);
 }
 
@@ -214,6 +220,10 @@ dd.glossary {
 
 .glossary.links span {
   color: gray;
+}
+
+body.light-theme .glossary.links span {
+  color: grey;
 }
 /* Glossary page END */
 
@@ -414,22 +424,6 @@ dd.glossary {
   bottom: 150px; /* Place the button at the bottom of the page */
   right: 30px; /* Place the button 30px from the right */
   z-index: 99; /* Make sure it does not overlap */
-}
-
-.reviewers div:nth-child(2) img {
-  background-color: #000;
-}
-
-.reviewers div:nth-child(2) img {
-  padding: 0;
-  padding-right: 10px;
-}
-.reviewers div:nth-child(1) img {
-  max-width: 100px; // finautonome is very tall logo
-}
-
-.reviewers div:nth-child(6) img {
-  max-width: 250px;
 }
 
 .accordion p a:hover {
@@ -956,8 +950,22 @@ body.light-theme .about a img {
   background-color: inherit;
 }
 
-body.light-theme .reviewers div:nth-child(2) img {
+// body.light-theme .reviewers div:nth-child(2) img {
+//   background-color: #000;
+// }
+
+.about .reviewers div:nth-child(2) img {
   background-color: #000;
+  padding: 0;
+  padding-right: 10px;
+}
+
+.reviewers div:nth-child(1) img {
+  max-width: 100px; // finautonome is very tall logo
+}
+
+.reviewers div:nth-child(6) img {
+  max-width: 250px;
 }
 
 .step.answer.no {

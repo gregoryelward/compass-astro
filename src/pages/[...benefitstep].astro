@@ -22,12 +22,12 @@ export async function getStaticPaths() {
       locale
     })
 
+    const ctaOtherBenefitsyId = 'vbcbiuCwY8oajVj8Q9x2P'
+    const ctaOtherBenefits: Entry<TypeCtaSkeleton> =
+      await contentfulClient.getEntry(ctaOtherBenefitsyId, {
+        locale // Replace with the desired locale
+      })
 
-    const ctaOtherBenefitsyId = 'vbcbiuCwY8oajVj8Q9x2P';
-    const ctaOtherBenefits :Entry<TypeCtaSkeleton>= await contentfulClient.getEntry(ctaOtherBenefitsyId, {
-  locale, // Replace with the desired locale
-});
-      
     const benefits = benefitRes.items
     for (const i of benefits) {
       const benefitPages = i.fields.benefitPages as Array<
@@ -42,21 +42,15 @@ export async function getStaticPaths() {
       if (jurisdictionSlug) {
         path = path + '/' + jurisdictionSlug
       }
-      // path = path + '/' + "how-to-apply"
-      // /alberta/assured-income-for-the-severely-handicapped/how-to-apply/step-1
       path = path + '/' + i.fields.slug
 
-      // path = path + '/' + "how-to-apply"
       path = path + '/' + applyPage.fields.slug
-
-      // console.log("path ",path)
 
       const benefitApplySteps = i.fields.steps?.filter(Boolean) as Array<
         Entry<TypeStepsSkeleton>
       >
       let index = 1
-      // let navigationIndex = 0
-      const navigationIndex = 2 //fixed
+      const navigationIndex = 2
       for (const b of benefitApplySteps) {
         paths.push({
           params: {
@@ -69,13 +63,11 @@ export async function getStaticPaths() {
             applyPage,
             ctaOtherBenefits,
             navigationIndex,
-            prevPage: benefitPages[navigationIndex], //steps
-            // prevPage: benefitPages[navigationIndex - 1],
+            prevPage: benefitPages[navigationIndex],
             nextPage: benefitPages[navigationIndex + 1],
-            allBenefits: benefits,
+            allBenefits: benefits
           }
         })
-        // navigationIndex = navigationIndex + 1
         index = index + 1
       }
     }
@@ -90,12 +82,12 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const lang = getLangFromUrl(Astro.url)
-// const langSlug = lang === 'en' ? '' : `${lang}/`
 const t = useTranslations(lang)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
 const page = Astro.props.page as Entry<TypeStepsSkeleton>
 const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
+const steps = benefit?.fields?.steps as Entry<TypeStepsSkeleton>[]
 const stepIndex = Astro.props.index
 const applyPage = Astro.props.applyPage
 
@@ -174,20 +166,22 @@ const base = import.meta.env.BASE_URL
                 </div>
               ) : null
             }
-            <!-- <div class='mb-3 pb-3'></div> -->
             <h1><strong>{`${t('step')} ${stepIndex}`}</strong></h1>
-            {page?.fields?.introduction ? (
-            <div set:html={marked(page.fields.introduction as string)} />
+            {
+              page?.fields?.introduction ? (
+                <div set:html={marked(page.fields.introduction as string)} />
               ) : null
             }
 
-   <!-- <p>{JSON.stringify(page?.fields?.customStep)}</p> -->
-            {page?.fields?.customStep ? (
-                 <hr class='hr-light' />
-              <div class='js-accordion'>
-                <div set:html={marked(page.fields.customStep as string)} />
-              </div>
-                ) : null
+            {
+              page?.fields?.customStep ? (
+                <>
+                  <hr class='hr-light' />
+                  <div class='js-accordion'>
+                    <div set:html={marked(page.fields.customStep as string)} />
+                  </div>
+                </>
+              ) : null
             }
             <hr class='hr-light' />
             {
@@ -201,8 +195,7 @@ const base = import.meta.env.BASE_URL
                       locale,
                       getJurisdiction(benefit.fields.authority, locale)?.slug,
                       benefit?.fields?.slug as string,
-                      // 'apply'
-                    applyPage.fields.slug,
+                      applyPage.fields.slug,
                       `step-${stepIndex + 1}?a=y`
                     )}`}
                   >
@@ -215,68 +208,63 @@ const base = import.meta.env.BASE_URL
                       locale,
                       getJurisdiction(benefit.fields.authority, locale)?.slug,
                       benefit?.fields?.slug as string,
-                      // 'apply'
-                    applyPage.fields.slug,
+                      applyPage.fields.slug,
                       `step-${stepIndex}-no?a=n`
                     )}`}
                   >
                     {t('no')}
                   </a>
-                  {page?.fields?.notSure ? <a
-                    class='btn btn-primary btn-lg'
-                    href={`${makeUrl(
-                      base,
-                      locale,
-                      getJurisdiction(benefit.fields.authority, locale)?.slug,
-                      benefit?.fields?.slug as string,
-                      // 'apply'
-                    applyPage.fields.slug,
-                      `step-${stepIndex}-no?a=d`
-                    )}`}
-                  >
-                    {t('notsure')}
-                  </a> : null }
+                  {page?.fields?.notSure ? (
+                    <a
+                      class='btn btn-primary btn-lg'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string,
+                        applyPage.fields.slug,
+                        `step-${stepIndex}-no?a=d`
+                      )}`}
+                    >
+                      {t('notsure')}
+                    </a>
+                  ) : null}
                   <div class='mb-3' />
                 </div>
               ) : page?.fields?.content ? (
                 <div set:html={marked(page.fields.content as string)} />
               ) : null
             }
-            <hr class="hr-light" />
+            <hr class='hr-light' />
             <h2 class='h5' id='steps-title'>{t('steps')}</h2>
             <nav aria-labelledby='steps-title'>
               <ul class='pagination'>
                 {
-                  benefit?.fields?.steps
-                    ? //@ts-ignore
-                      benefit.fields.steps
-                        //@ts-ignore
-                        ?.filter(Boolean)
-                        .map((s: TypeStepsSkeleton, index: number) => {
-                          return (
-                            <li
-                              class={`page-item ${stepIndex - 1 === index ? 'active' : ''}`}
+                  steps
+                    ? steps.map((s, index) => {
+                        return (
+                          <li
+                            class={`page-item ${stepIndex - 1 === index ? 'active' : ''}`}
+                          >
+                            <a
+                              class='page-link'
+                              href={`${makeUrl(
+                                base,
+                                locale,
+                                getJurisdiction(
+                                  benefit.fields.authority,
+                                  locale
+                                )?.slug,
+                                benefit?.fields?.slug as string,
+                                applyPage.fields.slug,
+                                `step-${index + 1}`
+                              )}`}
                             >
-                              <a
-                                class='page-link'
-                                href={`${makeUrl(
-                                  base,
-                                  locale,
-                                  getJurisdiction(
-                                    benefit.fields.authority,
-                                    locale
-                                  )?.slug,
-                                  benefit?.fields?.slug as string,
-                                  // 'apply'
-                    applyPage.fields.slug,
-                                  `step-${index + 1}`
-                                )}`}
-                              >
-                                {index + 1}
-                              </a>
-                            </li>
-                          )
-                        })
+                              {index + 1}
+                            </a>
+                          </li>
+                        )
+                      })
                     : null
                 }
               </ul>
@@ -286,7 +274,7 @@ const base = import.meta.env.BASE_URL
       </section>
     </div>
 
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='flex center'>
@@ -338,64 +326,25 @@ const base = import.meta.env.BASE_URL
         </section>
       </div>
     </div>
-    
-    <!-- {isLastStep ? <div>LAST STEP!</div> : null} -->
-
 
     {
-      isLastStep ? (<div class="bg-light--alt">
-      {/* <OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits} base={base} locale={locale}/> */}
-      <OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits?.filter((b) => b.sys.id !== benefit.sys.id)} base={base} locale={locale}/>
-    </div>) : null}
-
-  
-    <!-- {isLastStep ? <div class="bg-light--alt">
-    <div class="container">
-      <section class="section">
-        <div class="row justify-content-md-center pt-3">
-          <div class="col-12 cta key">
-            <h2 class="mb-0">{ctaOtherBenefits?.fields?.title}</h2>
-            <p>{ctaOtherBenefits?.fields?.content}</p>
-            <div class="mb-3 pb-3"></div>
-  
-            {
-                  allBenefits
-                    ? allBenefits.map((b) => {
-                        return (
-                          <p
-                            class='medium'
-                            data-province-filter={
-                              getJurisdiction(b.fields.authority)?.code || ''
-                            }
-                            data-province-hide-filter={
-                              b.fields.hideForProvinces || ''
-                            }
-                          >
-                            <a
-                              class='medium'
-                              href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
-                            >
-                               {b.fields.title}
-                            </a>
-  
-                            
-                          </p>
-                        )
-                      })
-                    : null
-                }
-            
-          </div>
+      isLastStep ? (
+        <div class='bg-light--alt'>
+          <OtherBenefits
+            ctaOtherBenefits={ctaOtherBenefits}
+            allBenefits={allBenefits?.filter(
+              (b) => b.sys.id !== benefit.sys.id
+            )}
+            base={base}
+            locale={locale}
+          />
         </div>
-      </section>
-    </div>
-  </div> : null} -->
+      ) : null
+    }
   </main>
 </Layout>
-
 
 <script>
   import accordion from '../lib/accordion'
   accordion('.js-accordion h2', 'H2', 2)
 </script>
-

@@ -34,6 +34,28 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const page = Astro.props.page as Entry<TypeAboutSkeleton>
+
+const reviewersLogos = Astro.props.page.fields.reviewersLogos
+const partnersLogos = Astro.props.page.fields.partners
+
+// Helper function to check if an item is a valid Asset
+function isAsset(item: any): item is Asset<undefined, string> {
+  return item && typeof item === 'object' && 'fields' in item
+}
+
+// Ensure logos is cleaned
+const cleanedReviewersLogos: Asset<undefined, string>[] = (
+  reviewersLogos ?? []
+).filter(
+  (item): item is Asset<undefined, string> =>
+    item !== undefined && isAsset(item)
+)
+const cleanedPartnersLogos: Asset<undefined, string>[] = (
+  partnersLogos ?? []
+).filter(
+  (item): item is Asset<undefined, string> =>
+    item !== undefined && isAsset(item)
+)
 ---
 
 <Layout
@@ -51,7 +73,7 @@ const page = Astro.props.page as Entry<TypeAboutSkeleton>
       <section class='section'>
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
-            <h1><strong>{page?.fields.title as string}</strong></h1>ABOUT
+            <h1><strong>{page?.fields.title as string}</strong></h1>
             <p class='large'>
               {page?.fields.lead as string}
             </p>
@@ -90,8 +112,7 @@ const page = Astro.props.page as Entry<TypeAboutSkeleton>
                 class='row align-items-center justify-content-start partners'
               >
                 {
-                  //@ts-ignore
-                  page?.fields?.partners?.map((p: Asset) => {
+                  cleanedPartnersLogos.map((p: Asset) => {
                     return (
                       <div class='col-6 col-md-4 col-lg-3 text-md-center'>
                         <a href={p.fields.description as string}>
@@ -110,7 +131,7 @@ const page = Astro.props.page as Entry<TypeAboutSkeleton>
         </section>
       </div>
     </div>
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container reviewer'>
         <section class='section'>
           <div class='row justify-content-md-center'>
@@ -120,11 +141,10 @@ const page = Astro.props.page as Entry<TypeAboutSkeleton>
                 class='row align-items-center justify-content-start reviewers'
               >
                 {
-                  //@ts-ignore
-                  page?.fields?.reviewersLogos?.map((p: Asset) => {
+                  cleanedReviewersLogos.map((p: Asset) => {
                     return (
                       <div class='col-6 col-md-4 col-lg-3 text-md-center'>
-                        <a href={p.fields.description as string}>
+                        <a href={p.fields?.description as string}>
                           <img
                             src={p.fields?.file?.url as string}
                             alt={p.fields?.title as string}
@@ -140,7 +160,7 @@ const page = Astro.props.page as Entry<TypeAboutSkeleton>
         </section>
       </div>
     </div>
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
