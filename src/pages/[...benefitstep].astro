@@ -344,7 +344,8 @@ const base = import.meta.env.BASE_URL
 
     {
       isLastStep ? (<div class="bg-light--alt">
-      <OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits} base={base} locale={locale}/>
+      {/* <OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits} base={base} locale={locale}/> */}
+      <OtherBenefits ctaOtherBenefits={ctaOtherBenefits} allBenefits={allBenefits?.filter((b) => b.sys.id !== benefit.sys.id)} base={base} locale={locale}/>
     </div>) : null}
 
   
