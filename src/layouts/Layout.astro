@@ -1,7 +1,4 @@
 ---
-// import prepareThemeToggle from "../lib/themeToggle";
-
-// console.log("prepareThemeToggle ", prepareThemeToggle);
 interface Props {
   title: string
   description: string
@@ -9,7 +6,6 @@ interface Props {
   pageSlug?: string
 }
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
-// import LanguagePicker from "../components/LanguagePicker.astro";
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import '../styles/sass/styles.scss'
@@ -177,15 +173,10 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
       </div>
     </div>
   </body>
-
-  <script></script>
 </html>
 
 <script>
-  import {
-    addPostHandlerListener,
-    runPostHandlerCallbacks
-  } from '../lib/provinceChangeHandler.js'
+  import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
   import updateExternalLinks from '../lib/externalLinks'
   import goToTop from '../lib/gototop'
   import help from '../lib/help'
@@ -201,10 +192,10 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
   goToTop()
   help()
 
-  const provinceCode = JSON.parse(
-    localStorage.getItem('province') || 'null'
-  ) as string | null
-
+  // const provinceCode = JSON.parse(localStorage.getItem('province') || '') as
+  //   | string
+  //   | null
+  const provinceCode = JSON.parse(localStorage.getItem('province') || 'null') // Use 'null' instead of an empty string
   if (!provinceCode) {
     const targetedDialog = document.getElementById('dialog-001')
     if (targetedDialog) {
