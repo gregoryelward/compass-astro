@@ -141,10 +141,10 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
       aria-label={t('topAria')}
       style='display: block;'>{t('top')}</button
     >
-    <div class='dialog-container js--dialog-container is-Xopen' id='dialog-001'>
+    <div class='dialog-container js--dialog-container' id='dialog-001'>
       <div class='dialog'>
         <button
-          class='btn bi bi-x js--close-dialog close-dialog'
+          class='btn bi js--close-dialog close-dialog'
           type='button'
           aria-label='Close'
           dialog-id='dialog-001'></button>
@@ -172,8 +172,18 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
         </div>
       </div>
     </div>
+    <slot />
   </body>
 </html>
+
+<!-- <script>
+  import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
+
+  // Register a handler in the layout
+  provinceSelectionDispatcher.subscribe(() => {
+    console.log('Layout handler executed')
+  }, 10)
+</script> -->
 
 <script>
   import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
@@ -182,11 +192,20 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
   import help from '../lib/help'
   import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
+  import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
 
+  provinceSelectionDispatcher.subscribe(() => {
+    console.log('Layout handler executed')
+  }, 10)
+
+  console.log('layout calling showProvincialDataOnly')
   showProvincialDataOnly()
-
+  provinceSelectionDispatcher.dispatch()
   addPostHandlerListener(() => {
+    console.log('LAYOUT HOOK')
     showProvincialDataOnly()
+    console.log('call the dispatch ')
+    provinceSelectionDispatcher.dispatch()
   })
   updateExternalLinks()
   goToTop()
@@ -225,6 +244,7 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
           }
 
           filterContent(modalSelect.value)
+          provinceSelectionDispatcher.dispatch()
         }
       })
     }

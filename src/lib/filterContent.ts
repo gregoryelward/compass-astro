@@ -1,4 +1,5 @@
 export function filterContent(filter: string) {
+  console.log('filterContent is filtering ', filter)
   const provinceItems = document.querySelectorAll('[data-province-filter]')
 
   provinceItems.forEach(function (item) {

@@ -1195,5 +1195,13 @@ body.light-theme .dropdown-menu.province {
 
 .tab-pane h2,
 .tab-pane .js-accordion > p {
-  color: #000;
+  color: var(--body);
+}
+
+.accordion .accordion .card-body h5 {
+  color: #fff;
+}
+
+body.light-theme .accordion .accordion .card-body h5 {
+  color: var(--body);
 }
