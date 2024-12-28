@@ -198,13 +198,13 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
     console.log('Layout handler executed')
   }, 10)
 
-  console.log('layout calling showProvincialDataOnly')
+  // console.log('layout calling showProvincialDataOnly')
   showProvincialDataOnly()
   provinceSelectionDispatcher.dispatch()
   addPostHandlerListener(() => {
-    console.log('LAYOUT HOOK')
+    // console.log('LAYOUT HOOK')
     showProvincialDataOnly()
-    console.log('call the dispatch ')
+    // console.log('call the dispatch ')
     provinceSelectionDispatcher.dispatch()
   })
   updateExternalLinks()

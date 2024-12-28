@@ -689,7 +689,7 @@ provinceDispatcher.subscribe(() => {
   accordion('.js-accordion h4', 'H4', 4)
 
   function updateBenefitAgenciesVisibility() {
-    console.log('CALLED')
+    // console.log('CALLED')
     document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
       // Check if the parent has at least one child with the desired criteria
       const hasMatchingChild = Array.from(
@@ -728,7 +728,7 @@ provinceDispatcher.subscribe(() => {
   // }, 3000) // Delay of 3 seconds
 
   provinceSelectionDispatcher.subscribe(() => {
-    console.log('Page handler executed')
+    // console.log('Page handler executed')
     updateBenefitAgenciesVisibility()
     // document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
     //   // Check if the parent has at least one child with the desired criteria
