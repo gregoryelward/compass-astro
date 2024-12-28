@@ -38,8 +38,7 @@ export async function getStaticPaths() {
 
     const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
       content_type: 'benefit',
-      //@ts-ignore
-      order: 'fields.order',
+      order: ['fields.order'],
       locale
     })
 
@@ -102,7 +101,6 @@ const options = {
 marked.use(gfmHeadingId(options))
 
 const lang = getLangFromUrl(Astro.url)
-// const langSlug = lang === 'en' ? '' : `${lang}/`
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
 const fields = Astro.props.page
@@ -121,7 +119,6 @@ const exploreSection = Astro.props
   .exploreSection as TypeExploreMoreBenefitsCalloutFields
 const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
-// const base = 'compass-astro' //import.meta.env.BASE_URL
 const base = import.meta.env.BASE_URL
 ---
 
@@ -167,20 +164,20 @@ const base = import.meta.env.BASE_URL
               {
                 mainCallout ? (
                   <div class='callout callout--no-border p-3'>
-                      <h2 class='h4'>{mainCallout.title}</h2>
-                      <div
-                        set:html={marked(
-                          mainCallout?.content as unknown as string
-                        )}
-                      />
-                      {mainCallout?.ctaurl ? (
-                        <a
-                          class='btn btn-outline-primary btn-small'
-                          href={mainCallout?.ctaurl as unknown as string}
-                        >
-                          {mainCallout?.cta}
-                        </a>
-                      ) : null}
+                    <h2 class='h4'>{mainCallout.title}</h2>
+                    <div
+                      set:html={marked(
+                        mainCallout?.content as unknown as string
+                      )}
+                    />
+                    {mainCallout?.ctaurl ? (
+                      <a
+                        class='btn btn-outline-primary btn-small'
+                        href={mainCallout?.ctaurl as unknown as string}
+                      >
+                        {mainCallout?.cta}
+                      </a>
+                    ) : null}
                   </div>
                 ) : null
               }
@@ -260,32 +257,6 @@ const base = import.meta.env.BASE_URL
 </Layout>
 <script>
   import accordion from '../lib/accordion'
-  // import { filterContent } from '../lib/filterContent'
-  // import showProvincialDataOnly from '../lib/filterContent'
-
-  // console.log('hOME CALL showProvincialDataOnly() ')
-  // showProvincialDataOnly()
-
-  // const provinceList = document.querySelector(
-  //   '#navbarDropdown2 + ul.dropdown-menu'
-  // ) as HTMLElement
-
-  // provinceList.addEventListener('click', function (event) {
-  //   event.preventDefault()
-  //   const targetElement = event.target
-  //   //@ts-ignore
-  //   const closest = targetElement?.closest('.js--sub-link')
-  //   if (closest) {
-  //     const provinceCode = closest.getAttribute('data-province') as string
-  //     console.log('FILTER F')
-  //     filterContent(provinceCode)
-  //   }
-  //   // console.log('in resourcepage calling showProvincialDataOnly()')
-  //   // showProvincialDataOnly()
-
-  //   // console.log('in resourcepage calling hideEmptyAgency()')
-  //   // hideEmptyAgency()
-  // })
   accordion('.js-accordion h3', 'H3', 3)
 </script>
 

@@ -115,9 +115,7 @@ if (lang === 'fr') {
       <div class='container'>
         <div class='row'>
           <div class='col-md-6 offset-md-3 card p-4 shadow-lg mb-5'>
-            <p class=' font-italic'>{t(`emdedMandatory`)}</p><form
-              id='share'
-            >
+            <p class='font-italic'>{t(`emdedMandatory`)}</p><form id='share'>
               <div class='form-group'>
                 <label for='inputOrg'>{t(`embedOrg`)}</label>
                 <input
@@ -230,7 +228,7 @@ if (lang === 'fr') {
       </div>
     </div>
 
-    <div class='py-5 xbg-white' id='shareregion' style='display:none'>
+    <div class='py-5' id='shareregion' style='display:none'>
       <div class='container'>
         <div class='col-md-6 offset-md-3'>
           <div class='mb-3'>
@@ -256,7 +254,6 @@ if (lang === 'fr') {
           </div>
           <div set:html={block4} />
           <div class='mb-3 my-5'>
-            
             <button class='btn btn-secondary' id='copy' type='button'>
               {t(`emdedCopy`)}
             </button>
@@ -329,7 +326,6 @@ if (lang === 'fr') {
   }
 
   const sendAnalyticsEvent = (eventPayload: ShareData) => {
-    // console.log('eventPayload ', eventPayload)
     // @ts-expect-error
     window.dataLayer = window.dataLayer || []
     // @ts-expect-error
@@ -373,7 +369,6 @@ if (lang === 'fr') {
   }
 
   function closeHandler() {
-    // console.log('close modal')
     if (myModal) {
       myModal.style.display = 'none'
       myModal.removeAttribute('role')
@@ -385,8 +380,8 @@ if (lang === 'fr') {
   document.querySelectorAll('.modalclose').forEach((item) => {
     item.addEventListener('click', closeHandler)
   })
-  // document.querySelectorAll('.btn-close').forEach((item) => {
-    document.querySelectorAll('.close').forEach((item) => {
+
+  document.querySelectorAll('.close').forEach((item) => {
     item.addEventListener('click', closeHandler)
   })
 
@@ -418,7 +413,6 @@ if (lang === 'fr') {
       const imageOption = document.getElementsByName('imgoption')
 
       if (inputOrg?.value && inputWebsite?.value) {
-        // if (inputOrg.value && inputWebsite.value && inputEmail.value) {
         const source = encodeURI(inputOrg.value + ' ' + inputWebsite.value)
         const medium = `compass-button`
 
@@ -439,7 +433,7 @@ if (lang === 'fr') {
         let embedDomain = 'https://disability.benefitswayfinder.org/'
         let imageUrl = `${embedDomain}img/share/compass-image-${inputLang}-${imageOpt}.png`
 
-        let embedTargetSlug = `` //home page
+        let embedTargetSlug = ``
         let embedTitle = 'Disability Benefits Compass'
 
         const embedCode = `<a href="${embedDomain}${

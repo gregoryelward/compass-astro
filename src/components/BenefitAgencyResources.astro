@@ -3,95 +3,82 @@ import type { Entry } from 'contentful'
 import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
 import { marked } from 'marked'
 import getJurisdiction from '../lib/jurisdictions'
+import type { TypeAgencySkeleton } from '../types/contentful'
 
 interface Props {
   resources: Array<Entry<TypeAgencyResourceSkeleton>>
-  //   title: string
-  //   body: string
-  //   href: string
-  //   img: string
-  //   alt: string
-  //   linkTitle: string
 }
 
-// EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TypeAgencyResourceSkeleton>>
-
-// const { href, title, body, img, alt, linkTitle } = Astro.props
 const { resources } = Astro.props
 
-function myCallback(agencyResource: any) {
-  //@ts-ignore
-  return agencyResource?.agency || 'notitle'
-}
-// console.log('passed in ', resources)
+const resolvedAgencyResource = resources as
+  | Entry<TypeAgencyResourceSkeleton>[]
+  | undefined
 
-// TO DO make it grouped by
+let agencyResource = resolvedAgencyResource?.filter(Boolean).map((a) => {
+  const agencyRecord = a?.fields?.agency as
+    | Entry<TypeAgencySkeleton>
+    | undefined
+  const showLocalyOnly = agencyRecord?.fields?.showLocalyOnly
+  const authority = agencyRecord?.fields?.authority
+  const agency = agencyRecord?.fields?.title
 
-let result2
-
-let agencyResource = resources?.map((a) => {
-  // console.log("a?.agency?.fields? ",a?.fields)
-  //@ts-ignore
   return {
-    //@ts-ignore
     ...a?.fields,
-    //@ts-ignore
-    authority: a?.fields?.agency?.fields?.authority,
-    //@ts-ignore
-    showLocalyOnly: a?.fields?.agency?.fields?.showLocalyOnly, // some benefit related resources provided by agencies are to be consumned only for local people
-    //@ts-ignore
-    agency: a?.fields?.agency?.fields?.title
+    showLocalyOnly,
+    authority,
+    agency
   }
 })
 
-// console.log("agencyResource ", agencyResource)
-if (agencyResource) {
-  result2 = Object.groupBy(agencyResource, myCallback)
-  // console.log("result2 ", result2)
-}
+let groupedAgencyResources
 
-// console.log('result2 ', result2)
+if (agencyResource) {
+  groupedAgencyResources = Object.groupBy(agencyResource, (resource) => {
+    const title = resource.agency
+    return typeof title === 'string' && title.trim() ? title : 'Unknown Agency' // Ensure a valid key
+  })
+}
 ---
 
 {
-  result2 ? (
-    Object.entries(result2).map(([key, value], index) => {
-      return (
-        <div class="benefitagencycomponent childresource"
-          data-foobar='baz'
-          data-province-filter={
-            //@ts-ignore
-            value[0]?.showLocalyOnly
-              ? //@ts-ignore
-                getJurisdiction(value[0]?.authority)?.code || ''
-              : ''
-          }
-        >
-          <h3 id={`agency-resource-${index}`}>{key}</h3>
-          {value
-            ? //@ts-ignore
-              value.map((v) => {
-                return (
-                  <div
-                    data-province-filter={
-                      v.showLocalyOnly
-                        ? getJurisdiction(v.authority)?.code || ''
-                        : ''
-                    }
-                  >
-                    <h4 class='agency resource'>{v.title}</h4>
-                    <div set:html={marked(v.content as string)} />
-                    <hr />
-                  </div>
-                )
-              })
-            : null}
-        </div>
+  groupedAgencyResources
+    ? Object.entries(groupedAgencyResources).map(
+        ([agencyTitle, resources], index) => {
+          if (!resources || resources.length === 0) return null // Handle undefined or empty resources
+
+          return (
+            <div
+              class='benefitagencycomponent childresource'
+              data-province-filter={
+                resources[0]?.showLocalyOnly
+                  ? getJurisdiction(resources[0]?.authority)?.code || ''
+                  : ''
+              }
+            >
+              <h3 id={`agency-resource-${index}`}>{agencyTitle}</h3>
+              {resources
+                ? resources.map((v) => {
+                    return (
+                      <div
+                        data-province-filter={
+                          v.showLocalyOnly
+                            ? getJurisdiction(v.authority)?.code || ''
+                            : ''
+                        }
+                      >
+                        <h4 class='agency resource'>{v.title}</h4>
+                        <div set:html={marked(v.content as string)} />
+                        <hr />
+                      </div>
+                    )
+                  })
+                : null}
+            </div>
+          )
+        }
       )
-    })
-  ) : (
-    <div>{'No resources'}</div>
-  )
+    : null
 }
 
 <style>
@@ -99,9 +86,21 @@ if (agencyResource) {
     margin-top: 1rem;
   }
 </style>
-<!-- <script>
-    import accordion from '../lib/accordion'
+<script>
+  document
+    .querySelectorAll('.js-accordion.benefit-agency.parent')
+    .forEach((parent) => {
+      // Check if any child is visible
 
-    accordion('.js-accordion h2', 'H2', 2)
-    accordion('.js-accordion h3', 'H3', 3)
-  </script> -->
+      // Check if the parent has at least one child with the desired criteria
+      const hasMatchingChild = Array.from(
+        parent.querySelectorAll('.benefitagencycomponent.childresource')
+      ).some((child) => {
+        return (child as HTMLElement).style.display !== 'none'
+      })
+      // // Hide the parent if no visible children
+      if (!hasMatchingChild) {
+        ;(parent as HTMLElement).style.display = 'none' // Hide the parent
+      }
+    })
+</script>

@@ -55,7 +55,6 @@ export default function accordion(
 
     target.innerHTML += foobar
 
-    // heading.remove()
     heading.parentNode.removeChild(heading) // ie 11
   })
 }

@@ -20,8 +20,7 @@ const otherLocale = lang !== 'fr' ? 'fr-CA' : 'en-CA'
 
 const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
   content_type: 'benefit',
-  //@ts-ignore
-  order: 'fields.order',
+  order: ['fields.order'],
   locale
 })
 const { pageSlug } = Astro.props
@@ -393,33 +392,5 @@ const base = import.meta.env.BASE_URL
 
 <script>
   import prepareThemeToggle from '../lib/themeToggle'
-  import { filterContent } from '../lib/filterContent'
-  import showProvincialDataOnly from '../lib/filterContent'
-
-  // console.log('Heading clling showProvincialDataOnly ')
-  // showProvincialDataOnly()
   prepareThemeToggle()
-
-  // const provinceList = document.querySelector(
-  //   '#navbarDropdown2 + ul.dropdown-menu'
-  // ) as HTMLElement
-
-  // // console.log('Header attach listener ')
-  // provinceList.addEventListener('click', function (event) {
-  //   // console.log('Header listener called ')
-  //   event.preventDefault()
-  //   const targetElement = event.target
-  //   //@ts-ignore
-  //   const closest = targetElement?.closest('.js--sub-link')
-  //   if (closest) {
-  //     const provinceCode = closest.getAttribute('data-province') as string
-  //     console.log('FILTER A')
-  //     filterContent(provinceCode)
-  //   }
-  //   // console.log('in resourcepage calling showProvincialDataOnly()')
-  //   // showProvincialDataOnly()
-
-  //   // console.log('in resourcepage calling hideEmptyAgency()')
-  //   // hideEmptyAgency()
-  // })
 </script>

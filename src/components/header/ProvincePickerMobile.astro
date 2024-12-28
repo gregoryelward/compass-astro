@@ -5,7 +5,6 @@ import jurisdictions from '../../lib/jurisdictions.json'
 const lang = getLangFromUrl(Astro.url)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 const t = useTranslations(lang)
-// const base = import.meta.env.BASE_URL
 ---
 
 <a
@@ -17,7 +16,7 @@ const t = useTranslations(lang)
   aria-haspopup='true'
   aria-expanded='false'>{t('select')}</a
 >
-<div class='dropdown-menu  province' aria-labelledby='navbarDropdown-2'>
+<div class='dropdown-menu province' aria-labelledby='navbarDropdown-2'>
   {
     jurisdictions.jurisdictions[locale].map((j) => {
       return (
@@ -29,48 +28,42 @@ const t = useTranslations(lang)
   }
 </div>
 
-<script >
+<script>
+  import { runPostHandlerCallbacks } from '../../lib/provinceChangeHandler.js'
 
-  import { addPostHandlerListener, runPostHandlerCallbacks } from '../../lib/provinceChangeHandler.js';
-  
   try {
-  
-  
     const provinceList = document.querySelector(
       '#navbarDropdown-2 + .dropdown-menu'
     ) as HTMLElement
 
     const provinceSelect = document.getElementById('navbarDropdown-2')
 
-      // Function to set the province from local storage
+    // Function to set the province from local storage
     function initializeProvince() {
-      const storedProvinceCode = JSON.parse(localStorage.getItem('province') || 'null');
+      const storedProvinceCode = JSON.parse(
+        localStorage.getItem('province') || 'null'
+      )
       if (storedProvinceCode && provinceList && provinceSelect) {
         const menuItems = document.querySelectorAll(
-        '.dropdown-item[data-province]'
+          '.dropdown-item[data-province]'
         )
         menuItems.forEach(function (item) {
-        const itemProvince = item.getAttribute('data-province')
-        if (itemProvince === '' || itemProvince === storedProvinceCode) {
-          item.classList.add('is-active')
-        } else {
-          item.classList.remove('is-active')
-        }
-      })
-        
-
-        
-        }
+          const itemProvince = item.getAttribute('data-province')
+          if (itemProvince === '' || itemProvince === storedProvinceCode) {
+            item.classList.add('is-active')
+          } else {
+            item.classList.remove('is-active')
+          }
+        })
+      }
     }
-      
-  
+
     if (provinceList) {
       provinceList.addEventListener('click', function (e) {
-        console.log('mainmenumobile provinceList province picker called')
         e.preventDefault()
-        // const provinceCode = e.target?.getAttribute('data-province')
-        const provinceCode = (e.target as HTMLElement)?.getAttribute('data-province');
-
+        const provinceCode = (e.target as HTMLElement)?.getAttribute(
+          'data-province'
+        )
 
         const menuItems = document.querySelectorAll(
           '.dropdown-item[data-province]'
@@ -85,24 +78,15 @@ const t = useTranslations(lang)
           }
         })
 
-        // TODO use observer pattern?
         localStorage.setItem('province', JSON.stringify(provinceCode))
-        // filterContent(provinceCode)
 
-         // Run post-handler callbacks
-         console.log('MOBILE PICKER CALLING CALLBACK')
-         runPostHandlerCallbacks();
+        // Run post-handler callbacks
+        runPostHandlerCallbacks()
       })
       // Initialize province on page load
-      initializeProvince();
+      initializeProvince()
     }
-  } catch(error) { console.log(error)}
-  
-  </script>
-
-<script>
-  // import showProvincialDataOnly from '../../lib/mainmenumobile'
-
-  // // console.log('mobile call ', 'showProvincialDataOnly')
-  // showProvincialDataOnly()
+  } catch (error) {
+    console.log(error)
+  }
 </script>

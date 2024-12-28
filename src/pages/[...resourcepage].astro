@@ -7,7 +7,6 @@ import type { Entry } from 'contentful'
 import type { TypePageSkeleton } from '../types/contentful/TypePage'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
-// import BenefitResources from '../components/BenefitResources.astro'
 import type { TypeAgencyResourceSkeleton } from '../types/contentful/TypeAgencyResource'
 import Feedback from '../components/Feedback.astro'
 import BenefitAgencyResources from '../components/BenefitAgencyResources.astro'
@@ -23,8 +22,7 @@ export async function getStaticPaths() {
     const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
       content_type: 'benefit',
       include: 3,
-      //@ts-ignore
-      order: 'fields.order',
+      order: ['fields.order'],
       locale
     })
 
@@ -33,11 +31,7 @@ export async function getStaticPaths() {
     const page = res.items
 
     for (const i of page) {
-      // const others = allitems.filter((f) => f.fields.slug !== i.fields.slug)
-      // maybe have an attribute basic page
       if (i.fields.slug === 'resources') {
-        // move this to howTo content type, removed as a page
-        // so far, only disclaimer, all-benefits
         paths.push({
           params: {
             resourcepage: `${locale === 'en-CA' ? i.fields.slug : `fr/${i.fields.slug}`}`
@@ -77,10 +71,8 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
             <h1>
-              <strong>{page?.fields.title as string}</strong>MAINRESOURCE
+              <strong>{page?.fields.title as string}</strong>MAIN RESPURCEPAGE
             </h1>
-            <!-- <h2>{page?.fields.subTitle as string}</h2> -->
-            <!-- TO DO List benefit and agency resource - see groupby -->
             <p class='large'>
               {page?.fields.lead as string}
             </p>
@@ -94,7 +86,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
       </section>
     </div>
 
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
@@ -120,7 +112,6 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
                               </h2>
                               <div class='card-body mb-3'>
                                 <div class='js-accordion child'>
-                                
                                   <BenefitAgencyResources
                                     resources={
                                       b?.fields.agencyResource as Array<
@@ -144,7 +135,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
     {
       page?.fields?.block2 ? (
-        <div class='xbg-white lt-border-t-light block2'>
+        <div class='lt-border-t-light block2'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -174,7 +165,7 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
     }
     {
       page?.fields?.block4 ? (
-        <div class='xbg-white lt-border-t-light block4'>
+        <div class='lt-border-t-light block4'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -193,81 +184,6 @@ const benefits = Astro.props.benefits as Array<Entry<TypeBenefitSkeleton>>
 
 <script>
   import accordion from '../lib/accordion'
-  // import { filterContent } from '../lib/filterContent'
-  // import showProvincialDataOnly from '../lib/filterContent'
-
-  // // TODO ADD A HANDLER FOR PROVINCE CHAGE TO CLEAN UP AGENCY
-  // function hideEmptyAgency() {
-  //   // PREACCORDION
-  //   const agencyList = document.querySelectorAll('.js-accordion.benefit-agency')
-
-  //   // console.log('agencyList ', agencyList)
-
-  //   agencyList.forEach(function (agencyItem) {
-  //     // const name = agencyItem.querySelectorAll('h2')[0].innerText
-  //     // console.log('Nane ', name)
-  //     const agencyResources = agencyItem.querySelectorAll(
-  //       '.js-accordion > [data-province-filter]'
-  //     )
-
-  //     var nodes = Array.prototype.slice.call(agencyResources)
-
-  //     let nodeLength = nodes.filter(function (node) {
-  //       // if (name === 'BENEFIT - Canada Pension Plan–Disability benefit - 1') {
-  //       //   console.log('name ', name, `[${node.style.display}]`)
-  //       //   // console.log('agencyResources ', agencyResources)
-  //       // }
-
-  //       return node.style.display !== 'none'
-  //     }).length
-
-  //     // console.log('nodeLength ', nodeLength)
-  //     if (nodeLength === 0) {
-  //       // console.log('hide', name)
-  //       ;(agencyItem as HTMLElement).style.display = 'none'
-  //       ;(agencyItem as HTMLElement).style.color = 'red'
-  //     } else {
-  //       // console.log('show', name)
-  //       ;(agencyItem as HTMLElement).style.display = 'block'
-  //       ;(agencyItem as HTMLElement).style.color = 'blue'
-  //     }
-  //   })
-  // }
-  // const provinceList = document.querySelector(
-  //   '#navbarDropdown2 + ul.dropdown-menu'
-  // ) as HTMLElement
-
-  // // // console.log('attach listener to ', provinceList)
-  // // provinceList.addEventListener('click', function (event) {
-  // //   // console.log('provinceList.Listener clicked 2 ')
-  // //   event.preventDefault()
-  // //   // console.log('in resourcepage calling showProvincialDataOnly()')
-  // //   showProvincialDataOnly()
-
-  // //   // console.log('in resourcepage calling hideEmptyAgency()')
-  // //   hideEmptyAgency()
-  // // })
-
-  // provinceList.addEventListener('click', function (event) {
-  //   event.preventDefault()
-  //   // const targetElement = event.target
-  //   // //@ts-ignore
-  //   // const closest = targetElement?.closest('.js--sub-link')
-  //   // if (closest) {
-  //   //   const provinceCode = closest.getAttribute('data-province') as string
-  //   //   console.log('FILTER H')
-  //   //   filterContent(provinceCode)
-  //   // }
-  //   hideEmptyAgency()
-  // })
-
-  // // console.log('in resourcepage calling showProvincialDataOnly()')
-
-  // console.log('RESOURCE PAGE showProvincialDataOnly() ')
-  // showProvincialDataOnly()
-
-  // // console.log('in resourcepage calling hideEmptyAgency()')
-  // hideEmptyAgency()
 
   accordion('.js-accordion h2', 'H2', 2)
   accordion('.js-accordion h3', 'H3', 3)

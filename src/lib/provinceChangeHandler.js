@@ -13,7 +13,6 @@ export function addPostHandlerListener(callback) {
 export function runPostHandlerCallbacks() {
   postHandlerCallbacks.forEach((callback) => {
     try {
-      console.log('runPostHandlerCallbacks callback()')
       callback()
     } catch (error) {
       console.error('Error in post-handler callback:', error)

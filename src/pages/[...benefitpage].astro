@@ -91,8 +91,6 @@ export async function getStaticPaths() {
 
       if (agencyResource) {
         groupedAgencyResources = Object.groupBy(agencyResource, (resource) => {
-          // const title = resource.agency
-          // return title || 'Unknown Agency'
           const title = resource.agency
           return typeof title === 'string' && title.trim()
             ? title
@@ -172,14 +170,6 @@ const mainCTA = Astro.props.page.fields
   ?.mainCta as Entry<TypeCtaSkeleton> | null
 const applySlug = Astro.props.applySlug
 
-// let agency
-
-// if (benefit?.fields?.agency) {
-//   //====================@ts-ignore
-//   agency = benefit?.fields?.agency?.filter(Boolean) as Array<
-//     Entry<TypeAgencySkeleton>
-//   >
-// }
 const exploreSection = Astro.props
   .exploreSection as TypeExploreMoreBenefitsCalloutFields
 

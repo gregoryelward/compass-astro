@@ -6,58 +6,53 @@ import type { TypeBenefitSkeleton, TypeCtaSkeleton } from '../types/contentful'
 import { marked } from 'marked'
 
 interface Props {
-
   ctaOtherBenefits: Entry<TypeCtaSkeleton>
   allBenefits: Entry<TypeBenefitSkeleton, undefined, string>[]
   locale: string
   base: string
 }
 
-const { ctaOtherBenefits,allBenefits,base, locale } = Astro.props
+const { ctaOtherBenefits, allBenefits, base, locale } = Astro.props
 ---
 
-<div class="container">
-  <section class="section">
-    <div class="row justify-content-md-center pt-3">
-      <div class="col-12 cta key">
-        <h2 class="mb-0">{ctaOtherBenefits?.fields?.title}</h2>
-        <!-- <p>{ctaOtherBenefits?.fields?.content}</p> -->
-        {ctaOtherBenefits?.fields?.content ? (
-          <div
-            set:html={marked(
-              ctaOtherBenefits.fields.content  as unknown as string
-            )}
-          />
-        ) : null}
-        <div class="mb-3 pb-3"></div>
+<div class='container'>
+  <section class='section'>
+    <div class='row justify-content-md-center pt-3'>
+      <div class='col-12 cta key'>
+        <h2 class='mb-0'>{ctaOtherBenefits?.fields?.title}</h2>
+        {
+          ctaOtherBenefits?.fields?.content ? (
+            <div
+              set:html={marked(
+                ctaOtherBenefits.fields.content as unknown as string
+              )}
+            />
+          ) : null
+        }
+        <div class='mb-3 pb-3'></div>
 
         {
-              allBenefits
-                ? allBenefits.map((b) => {
-                    return (
-                      <p
-                        class='medium'
-                        data-province-filter={
-                          getJurisdiction(b.fields.authority)?.code || ''
-                        }
-                        data-province-hide-filter={
-                          b.fields.hideForProvinces || ''
-                        }
-                      >
-                        <a
-                          class='medium'
-                          href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
-                        >
-                           {b.fields.title}
-                        </a>
-
-                        
-                      </p>
-                    )
-                  })
-                : null
-            }
-        
+          allBenefits
+            ? allBenefits.map((b) => {
+                return (
+                  <p
+                    class='medium'
+                    data-province-filter={
+                      getJurisdiction(b.fields.authority)?.code || ''
+                    }
+                    data-province-hide-filter={b.fields.hideForProvinces || ''}
+                  >
+                    <a
+                      class='medium'
+                      href={`${makeUrl(base, locale, getJurisdiction(b.fields.authority, locale)?.slug, b.fields?.slug as string)}`}
+                    >
+                      {b.fields.title}
+                    </a>
+                  </p>
+                )
+              })
+            : null
+        }
       </div>
     </div>
   </section>

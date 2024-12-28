@@ -13,15 +13,12 @@ const setMode = function (target: HTMLButtonElement, isDarkMode: boolean) {
   const language =
     document.getElementsByTagName('html')[0].getAttribute('lang') || 'en-CA'
 
-  // console.log('setMode isDarkMode', isDarkMode)
   if (!isDarkMode) {
     document.body.classList.add('light-theme')
-    // console.log('add light-theme')
     target.setAttribute('aria-pressed', 'true')
     target.innerHTML = `${translations[language].lightmode}&nbsp<span><span></span></span>`
   } else {
     document.body.classList.remove('light-theme')
-    // console.log('remove light-theme')
     target.setAttribute('aria-pressed', 'false')
     target.innerHTML = `${translations[language].darkmode}&nbsp<span><span></span></span>`
   }
@@ -33,7 +30,6 @@ export default function prepareThemeToggle() {
       'js--theme-toggle'
     ) as HTMLButtonElement
 
-    // console.log('themeToggle ', themeToggle)
     if (themeToggle) {
       themeToggle.addEventListener('click', function (e) {
         const currentState = (
@@ -49,10 +45,8 @@ export default function prepareThemeToggle() {
     const setting = JSON.parse(
       window?.localStorage?.getItem('darkmode') || 'false'
     ) as boolean
-    // console.log('setting ', typeof setting, setting)
 
-    const isDarkMode = setting //=== true' ? true : false
-    // console.log('Calling setMode ', isDarkMode)
+    const isDarkMode = setting
     setMode(themeToggle, isDarkMode)
   } catch (error) {
     console.log('Error', error)

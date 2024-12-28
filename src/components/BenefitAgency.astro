@@ -1,0 +1,51 @@
+---
+import type { Entry } from 'contentful'
+import { marked } from 'marked'
+import getJurisdiction from '../lib/jurisdictions'
+import type { TypeAgencySkeleton } from '../types/contentful'
+
+interface Props {
+  agencies: Array<Entry<TypeAgencySkeleton>>
+    heading: string
+}
+
+const { agencies, heading } = Astro.props
+
+---
+
+ {agencies ? (
+    <div>
+      <p class='bg-light--alt p-3'>
+        {heading}
+      </p>
+
+      {
+        agencies.map((a) => {
+            
+          return (
+              <div
+                class='my-5'
+                data-province-filter={
+                  a?.fields.showLocalyOnly &&
+                  getJurisdiction(a?.fields?.authority)
+                    ?.code
+                }
+              >
+                <h3 class='h4 mb-3'>{a?.fields?.title}</h3>
+                {a?.fields?.content ? (
+                  <div
+                    set:html={marked(
+                      a?.fields
+                        .content as unknown as string
+                    )}
+                  />
+                  <hr class="hr-light"/>
+                ) : null}
+              </div>
+            )
+          }
+        )
+      }
+    </div>
+ ) : null}
+

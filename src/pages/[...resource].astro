@@ -1,7 +1,6 @@
 ---
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
-import { getLangFromUrl } from '../i18n/utils'
 import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
 import type { TypeResourcesSkeleton } from '../types/contentful/TypeResources'
@@ -40,9 +39,6 @@ const options = {
 
 marked.use(gfmHeadingId(options))
 
-const lang = getLangFromUrl(Astro.url)
-// const t = useTranslations(lang)
-
 const page = Astro.props.page as Entry<TypeResourcesSkeleton>
 ---
 
@@ -62,7 +58,7 @@ const page = Astro.props.page as Entry<TypeResourcesSkeleton>
         <div class='row justify-content-md-center'>
           <div class='col-12 col-md-10'>
             <h1>
-              <strong>{page?.fields.title as string}</strong>RESOURCE PAGE
+              <strong>{page?.fields.title as string}</strong>
             </h1>
             <p class='large'>
               {page?.fields.lead as string}
@@ -71,7 +67,7 @@ const page = Astro.props.page as Entry<TypeResourcesSkeleton>
         </div>
       </section>
     </div>
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>

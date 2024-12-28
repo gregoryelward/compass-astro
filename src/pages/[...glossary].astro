@@ -13,42 +13,34 @@ export async function getStaticPaths() {
 
   const LOCALES = ['en-CA', 'fr-CA']
   for (const locale of LOCALES) {
-    // console.log("locale", locale)
     const pageres = await contentfulClient.getEntries<TypePageSkeleton>({
       content_type: 'page',
       locale,
-      'fields.slug': "glossary",
-    });
+      'fields.slug': 'glossary'
+    })
 
     const page = pageres.items[0]
-    // console.log(locale, page)
-    // if (pageres.items.length > 0) {
-    //   return pageres.items[0]; // Return the first matching entry
-    // } else {
-    //   console.log("Can this be ")
-    //   // throw new Error(`No page found for slug: ${slug}`);
-    // }
 
     const res = await contentfulClient.getEntries<TypeGlossarySkeleton>({
       content_type: 'glossary',
       locale,
       skip: 0,
-      limit: 200,
-      //@ts-ignore
-      order: 'fields.term'
+      limit: 300,
+      order: ['fields.term'] // Use array syntax for the order
     })
 
     const glossaryItems = res.items
 
     paths.push({
       params: {
-        // glossary: `${locale === 'en-CA' ? 'glossary' : `fr/glossary`}`
         glossary: `${locale === 'en-CA' ? page.fields.slug : `fr/${page.fields.slug}`}`
       },
-      props: { glossaryItems: [...glossaryItems], page : pageres?.items[0] ? pageres.items[0] : null }
-    })   
+      props: {
+        glossaryItems: [...glossaryItems],
+        page: pageres?.items[0] ? pageres.items[0] : null
+      }
+    })
   }
-  // console.log('paths ', paths)
   return paths
 }
 
@@ -57,7 +49,9 @@ const options = {
 }
 
 marked.use(gfmHeadingId(options))
-const glossaryItems = Astro.props.glossaryItems as Array<Entry<TypeGlossarySkeleton>>
+const glossaryItems = Astro.props.glossaryItems as Array<
+  Entry<TypeGlossarySkeleton>
+>
 const alphabet = [
   'A',
   'B',
@@ -87,18 +81,19 @@ const alphabet = [
   'Z'
 ]
 
-let glossaryGroups = alphabet.reduce(function (target, key) {
-  //@ts-ignore
-  target[key] = {}
+type GlossaryGroups = Record<string, Array<Entry<TypeGlossarySkeleton>>>
+
+const glossaryGroups: GlossaryGroups = alphabet.reduce((target, key) => {
+  target[key] = [] // Initialize each letter key with an empty array
   return target
-}, {}) as Record<string, Array<Entry<TypeGlossarySkeleton>>>
+}, {} as GlossaryGroups)
 
 for (const [key] of Object.entries(glossaryGroups)) {
-  const letterTerms = glossaryItems.filter(
-    //@ts-ignore
-    (t) => t?.fields?.term?.charAt(0).toUpperCase() === key
-  )
-  //@ts-ignore
+  const letterTerms = glossaryItems.filter((t) => {
+    const term = t?.fields?.term
+    if (typeof term !== 'string') return false // Explicit check for `string`
+    return term?.charAt(0).toUpperCase() === key
+  })
   glossaryGroups[key] = [...letterTerms]
 }
 ---
@@ -113,7 +108,9 @@ for (const [key] of Object.entries(glossaryGroups)) {
     <div class='container'>
       <section class='section'>
         <div class='row justify-content-md-center'>
-          <div class='col-12 col-md-10'><h1><strong>Glossary</strong></h1></div>
+          <div class='col-12 col-md-10'>
+            <h1><strong>{Astro.props.page?.fields?.title}</strong></h1>
+          </div>
         </div>
       </section>
     </div>
@@ -140,7 +137,7 @@ for (const [key] of Object.entries(glossaryGroups)) {
         </section>
       </div>
     </div>
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>

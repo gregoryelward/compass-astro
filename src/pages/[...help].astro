@@ -12,12 +12,13 @@ import type { TypeAgencySkeleton } from '../types/contentful/TypeAgency'
 import Feedback from '../components/Feedback.astro'
 import HelpStarter from '../components/HelpStarter.astro'
 import Resources from '../components/Resources.astro'
+import BenefitAgency from '../components/BenefitAgency.astro'
 
 export async function getStaticPaths() {
   let paths = []
 
   const LOCALES = ['en-CA', 'fr-CA']
-  
+
   for (const locale of LOCALES) {
     const res = await contentfulClient.getEntries<TypePageSkeleton>({
       content_type: 'page',
@@ -28,7 +29,8 @@ export async function getStaticPaths() {
 
     const benefitRes = await contentfulClient.getEntries<TypeBenefitSkeleton>({
       content_type: 'benefit',
-      locale
+      locale,
+      order: ['fields.order']
     })
     const benefits = benefitRes.items
 
@@ -99,7 +101,7 @@ const agencyHeading = Astro.props
       </section>
     </div>
 
-    <div class='xbg-white lt-border-t-light'>
+    <div class='lt-border-t-light'>
       <div class='container'>
         <section class='section'>
           <div class='row justify-content-md-center'>
@@ -123,35 +125,51 @@ const agencyHeading = Astro.props
                           <h2 id={`help${b?.sys.id}`}>{b.fields.title}</h2>
                           <div class='card-body'>
                             {b?.fields?.helpAgency ? (
-                              <div class="mb-4"
+                              <div
+                                class='mb-4'
                                 set:html={marked(b.fields.helpAgency as string)}
                               />
                             ) : null}
 
-                            {b?.fields?.agency ? (
+                            {b?.fields?.agency &&
+                            Array.isArray(b.fields.agency) ? (
+                              <BenefitAgency
+                                agencies={b.fields.agency}
+                                agencies={b.fields.agency.filter(
+                                  (item): item is Entry<TypeAgencySkeleton> =>
+                                    item !== undefined && 'fields' in item
+                                )}
+                                heading={
+                                  typeof agencyHeading?.fields?.subTitle ===
+                                  'string'
+                                    ? agencyHeading.fields.subTitle
+                                    : ''
+                                }
+                              />
+                            ) : null}
+                            {/* {b?.fields?.agency && Array.isArray(b.fields.agency) ? (
                               <div>
                                 <p class='bg-light--alt p-3'>
                                   {agencyHeading?.fields.subTitle}
                                 </p>
 
                                 {
-                                  //@ts-ignore
-                                  b.fields.agency.map(
-                                    (a: TypeAgencySkeleton) => {
-                                      return (
+                                  b.fields.agency.map((a) => {
+                                     
+                                   return (
                                         <div
                                           class='my-5'
                                           data-province-filter={
-                                            a.fields.showLocalyOnly &&
-                                            getJurisdiction(a.fields.authority)
+                                            a?.fields.showLocalyOnly &&
+                                            getJurisdiction(a?.fields?.authority)
                                               ?.code
                                           }
                                         >
-                                          <h3 class='h4 mb-3'>{a.fields.title}</h3>
+                                          <h3 class='h4 mb-3'>{a?.fields?.title}</h3>
                                           {a?.fields?.content ? (
                                             <div
                                               set:html={marked(
-                                                a.fields
+                                                a?.fields
                                                   .content as unknown as string
                                               )}
                                             />
@@ -162,9 +180,8 @@ const agencyHeading = Astro.props
                                     }
                                   )
                                 }
-                                {/* <hr /> */}
                               </div>
-                            ) : null}
+                            ) : null} */}
                           </div>
                         </div>
                       )
@@ -176,11 +193,12 @@ const agencyHeading = Astro.props
         </section>
       </div>
     </div>
+
     <HelpStarter />
 
     {
       page?.fields?.block2 ? (
-        <div class='xbg-white lt-border-t-light block2'>
+        <div class='lt-border-t-light block2'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -210,7 +228,7 @@ const agencyHeading = Astro.props
     }
     {
       page?.fields?.block4 ? (
-        <div class='xbg-white lt-border-t-light block4'>
+        <div class='lt-border-t-light block4'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -231,30 +249,6 @@ const agencyHeading = Astro.props
 
 <script>
   import accordion from '../lib/accordion'
-  // import { filterContent } from '../lib/filterContent'
-  // import showProvincialDataOnly from '../lib/filterContent'
-  // console.log('HELP CALL showProvincialDataOnly() ')
-  // showProvincialDataOnly()
 
-  // const provinceList = document.querySelector(
-  //   '#navbarDropdown2 + ul.dropdown-menu'
-  // ) as HTMLElement
-
-  // provinceList.addEventListener('click', function (event) {
-  //   event.preventDefault()
-  //   const targetElement = event.target
-  //   //@ts-ignore
-  //   const closest = targetElement?.closest('.js--sub-link')
-  //   if (closest) {
-  //     const provinceCode = closest.getAttribute('data-province') as string
-  //     console.log('FILTER E')
-  //     filterContent(provinceCode)
-  //   }
-  //   // console.log('in resourcepage calling showProvincialDataOnly()')
-  //   // showProvincialDataOnly()
-
-  //   // console.log('in resourcepage calling hideEmptyAgency()')
-  //   // hideEmptyAgency()
-  // })
   accordion('.js-accordion h2', 'H2', 2)
 </script>
