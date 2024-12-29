@@ -224,6 +224,127 @@ const base = import.meta.env.BASE_URL
             >
               <ul>
                 {
+                  menu.map((i, index) => (
+                    <>
+                      {index === 1 ? (
+                        // BOOTSTRAP 4
+                        // <li class='has-submenu'>
+                        //   <button
+                        //     class='js--sub-menu-trigger sub-menu-trigger'
+                        //     id='dropdownMenuButton'
+                        //     type='button'
+                        //     data-bs-toggle='dropdown'
+                        //     aria-haspopup='true'
+                        //     aria-expanded='false'
+                        //   >
+                        //     {t('menuDisabilityBen')}
+                        //   </button>
+                        //   <ul
+                        //     class='dropdown-menu'
+                        //     aria-labelledby='dropdownMenuButton'
+                        //   >
+                        //     {benefits?.map((b) => (
+                        //       <li
+                        //         data-province-filter={
+                        //           getJurisdiction(b.fields.authority)?.code
+                        //         }
+                        //         data-province-hide-filter={
+                        //           b.fields.hideForProvinces
+                        //         }
+                        //       >
+                        //         <a
+                        //           class='dropdown-item js--sub-link'
+                        //           href={`${makeUrl(
+                        //             base,
+                        //             locale,
+                        //             getJurisdiction(b.fields.authority, locale)
+                        //               ?.slug,
+                        //             b.fields?.slug as string
+                        //           )}`}
+                        //         >
+                        //           {b.fields.title}
+                        //         </a>
+                        //       </li>
+                        //     ))}
+                        //     <li>
+                        //       <a
+                        //         class='dropdown-item js--sub-link'
+                        //         href={`${makeUrl(base, locale, 'all-benefits')}`}
+                        //       >
+                        //         {t('menuOtherBen')}
+                        //       </a>
+                        //     </li>
+                        //   </ul>
+                        // </li>
+                        // BOOTSTRAP 5
+                        <li class='nav-item dropdown'>
+                          <a
+                            class='nav-link dropdown-toggle'
+                            data-bs-toggle='dropdown'
+                            href='#'
+                            role='button'
+                            aria-expanded='false'
+                          >
+                            {t('menuDisabilityBen')}
+                          </a>
+                          <ul class='dropdown-menu'>
+                            {benefits?.map((b) => (
+                              <li
+                                data-province-filter={
+                                  getJurisdiction(b.fields.authority)?.code
+                                }
+                                data-province-hide-filter={
+                                  b.fields.hideForProvinces
+                                }
+                              >
+                                <a
+                                  class='dropdown-item'
+                                  href={`${makeUrl(
+                                    base,
+                                    locale,
+                                    getJurisdiction(b.fields.authority, locale)
+                                      ?.slug,
+                                    b.fields?.slug as string
+                                  )}`}
+                                >
+                                  {b.fields.title}
+                                </a>
+                              </li>
+                            ))}
+                            <li>
+                              <hr class='dropdown-divider' />
+                            </li>
+                            <li>
+                              <a
+                                class='dropdown-item js--sub-link'
+                                href={`${makeUrl(base, locale, 'all-benefits')}`}
+                              >
+                                {t('menuOtherBen')}
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      ) : null}
+                      <li>
+                        <a
+                          href={`${makeUrl(base, locale, i.slug as string)}`}
+                          class={pageSlug === i.slug ? 'is-active' : ''}
+                        >
+                          {i.title}
+                        </a>
+                      </li>
+                    </>
+                  ))
+                }
+              </ul>
+            </nav>
+            <!-- <nav
+              class='dropdown-nav desktop-only'
+              id='main-nav'
+              aria-label='Main'
+            >
+              <ul>
+                {
                   menu.map((i, index) => {
                     return (
                       <>
@@ -286,8 +407,9 @@ const base = import.meta.env.BASE_URL
                   })
                 }
               </ul>
-            </nav>
-            <nav class='navbar navbar-expand-lg mobile-only'>
+            </nav> -->
+            <!-- bootstrap 4 -->
+            <!-- <nav class='navbar navbar-expand-lg mobile-only'>
               <button
                 class='navbar-toggler'
                 type='button'
@@ -376,7 +498,111 @@ const base = import.meta.env.BASE_URL
                   </li>
                 </ul>
               </div>
+            </nav> -->
+            <!-- bootstrap 5 -->
+            <nav class='navbar navbar-expand-lg mobile-only'>
+              <button
+                class='navbar-toggler'
+                type='button'
+                data-bs-toggle='collapse'
+                data-bs-target='#navbarSupportedContent'
+                aria-controls='navbarSupportedContent'
+                aria-expanded='false'
+                aria-label='Toggle navigation'
+              >
+                <span class='bi bi-list'></span>
+              </button>
+              <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+                <ul class='navbar-nav me-auto'>
+                  {
+                    menu.map((i, index) => (
+                      <>
+                        {index === 1 ? (
+                          <li class='nav-item dropdown'>
+                            <a
+                              class='nav-link dropdown-toggle'
+                              id='navbarDropdown'
+                              role='button'
+                              data-bs-toggle='dropdown'
+                              aria-haspopup='true'
+                              aria-expanded='false'
+                            >
+                              {t('menuDisabilityBen')}
+                            </a>
+                            <ul
+                              class='dropdown-menu benefits'
+                              aria-labelledby='navbarDropdown'
+                            >
+                              {benefits?.map((b) => (
+                                <li
+                                  data-province-filter={
+                                    getJurisdiction(b.fields.authority)?.code
+                                  }
+                                  data-province-hide-filter={
+                                    b.fields.hideForProvinces
+                                  }
+                                >
+                                  <a
+                                    class='dropdown-item'
+                                    href={`${makeUrl(
+                                      base,
+                                      locale,
+                                      getJurisdiction(
+                                        b.fields.authority,
+                                        locale
+                                      )?.slug,
+                                      b.fields?.slug as string
+                                    )}`}
+                                  >
+                                    {b.fields.title}
+                                  </a>
+                                </li>
+                              ))}
+                              <li>
+                                <hr class='dropdown-divider' />
+                              </li>
+                              <li>
+                                <a
+                                  class='dropdown-item'
+                                  href={`${makeUrl(base, locale, 'all-benefits')}`}
+                                >
+                                  {t('menuOtherBen')}
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                        ) : null}
+                        <li class='nav-item'>
+                          <a
+                            class='nav-link'
+                            href={`${makeUrl(base, locale, i.slug as string)}`}
+                          >
+                            {i.title}
+                          </a>
+                        </li>
+                      </>
+                    ))
+                  }
+                  <!-- <div class='dropdown-divider'></div> -->
+                  <li>
+                    <hr class='dropdown-divider' />
+                  </li>
+                  <li class='nav-item dropdown'>
+                    <ProvincePickerMobile />
+                  </li>
+                  <li>
+                    <hr class='dropdown-divider' />
+                  </li>
+                  <!-- <div class='dropdown-divider'></div> -->
+                  <li>
+                    <a class='nav-link' href={`${makeUrl(base, otherLocale)}`}>
+                      {t('langTitle')}
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </nav>
+
             <a
               class='desktop-only js--menu-link btn-icon-right bi bi-arrow-up-right'
               href={t('bwURL')}

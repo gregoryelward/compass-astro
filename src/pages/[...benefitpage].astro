@@ -257,7 +257,7 @@ provinceDispatcher.subscribe(() => {
                 </div>
               ) : null
             }
-            {
+            <!-- {
               page?.fields.slug === applySlug && page?.fields?.content2 ? (
                 <>
                   <h2>{page.fields.content2Title}</h2>
@@ -267,9 +267,9 @@ provinceDispatcher.subscribe(() => {
                   />
                 </>
               ) : null
-            }
+            } -->
 
-            {
+            <!-- {
               page?.fields.slug === applySlug && page?.fields?.content3 ? (
                 <>
                   <h2>{page.fields.content3Title}</h2>
@@ -279,7 +279,7 @@ provinceDispatcher.subscribe(() => {
                   />
                 </>
               ) : null
-            }
+            } -->
           </div>
         </div>
       </section>
@@ -305,7 +305,7 @@ provinceDispatcher.subscribe(() => {
 
     {
       page?.fields.slug === 'resources' ? (
-        <div class='agency resources lt-border-t-light  YOU ARE HERE'>
+        <div class='agency resources lt-border-t-light'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -356,7 +356,81 @@ provinceDispatcher.subscribe(() => {
       ) : null
     }
 
+    <!-- bootstrap 5 -->
+
     {
+      page?.fields.slug === 'after-you-apply' ? (
+        <div class=' lt-border-t-light'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center pt-3'>
+                <div class='col-12'>
+                  <ul class='nav nav-tabs' id='myTab' role='tablist'>
+                    <li class='nav-item' role='presentation'>
+                      <button
+                        class='nav-link active'
+                        id='approved-tab'
+                        data-bs-toggle='tab'
+                        data-bs-target='#approved'
+                        type='button'
+                        role='tab'
+                        aria-controls='approved'
+                        aria-selected='true'
+                      >
+                        {page?.fields.content2Title}
+                      </button>
+                    </li>
+                    <li class='nav-item' role='presentation'>
+                      <button
+                        class='nav-link'
+                        id='denied-tab'
+                        data-bs-toggle='tab'
+                        data-bs-target='#denied'
+                        type='button'
+                        role='tab'
+                        aria-controls='denied'
+                        aria-selected='false'
+                      >
+                        {page?.fields.content3Title}
+                      </button>
+                    </li>
+                  </ul>
+                  <div class='tab-content' id='myTabContent'>
+                    <div
+                      class='tab-pane fade show active'
+                      id='approved'
+                      role='tabpanel'
+                      aria-labelledby='approved-tab'
+                    >
+                      <h2>{page?.fields.content2Title}</h2>
+                      <div
+                        class='js-accordion'
+                        set:html={marked(page.fields.content2 as string)}
+                      />
+                    </div>
+                    <div
+                      class='tab-pane fade'
+                      id='denied'
+                      role='tabpanel'
+                      aria-labelledby='denied-tab'
+                    >
+                      <h2>{page?.fields.content3Title}</h2>
+                      <div
+                        class='js-accordion'
+                        set:html={marked(page.fields.content3 as string)}
+                      />
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    <!-- bootstrap 4 -->
+    <!-- {
       page?.fields.slug === 'after-you-apply' ? (
         <div class='bg-secondary lt-border-t-light'>
           <div class='container'>
@@ -426,7 +500,7 @@ provinceDispatcher.subscribe(() => {
           </div>
         </div>
       ) : null
-    }
+    } -->
 
     {
       page?.fields?.bodyTitle ||
@@ -680,8 +754,8 @@ provinceDispatcher.subscribe(() => {
 </script> -->
 
 <script>
-  import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
-  import showProvincialDataOnly from '../lib/filterContent'
+  // import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
+  // import showProvincialDataOnly from '../lib/filterContent'
   import accordion from '../lib/accordion'
   import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
   accordion('.js-accordion h2', 'H2', 2)

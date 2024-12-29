@@ -39,14 +39,14 @@ export default function accordion(
     let foobar = `<div class="card">
                 <div class="card-header" id="title-${name}">
                     <h2 class="mb-0 h6" aria-level="${ariaLevel}">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${name}" aria-expanded="false" aria-controls="collapse-${name}">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse-${name}" aria-expanded="false" aria-controls="collapse${name}">
                         <span>${heading.textContent}</span>
                         <span class="bi bi-dash"></span>
                     </button>
                     </h2>
                 </div>
 
-                <div id="collapse-${name}" class="collapse" aria-labelledby="#${name}" data-bs-parent="#${target.id}">
+                <div id="collapse-${name}" class="collapse" aria-labelledby="#${name}" data-parent="#${target.id}">
                     <div class="card-body">
                     ${wrapper.outerHTML}
                     </div>
@@ -58,18 +58,3 @@ export default function accordion(
     heading.parentNode.removeChild(heading) // ie 11
   })
 }
-
-// Key Changes:
-// Replaced data-toggle with data-bs-toggle:
-
-// Updated data-toggle="collapse" to data-bs-toggle="collapse".
-// Replaced data-target with data-bs-target:
-
-// Updated data-target="#collapse-${name}" to data-bs-target="#collapse-${name}".
-// Replaced data-parent with data-bs-parent:
-
-// Updated data-parent="#${target.id}" to data-bs-parent="#${target.id}".
-// Note: Bootstrap 5 allows you to use data-bs-parent for accordion behavior, but you should ensure the parent container has the appropriate structure.
-// ARIA Attributes:
-
-// Updated aria-controls="collapse${name}" to aria-controls="collapse-${name}" for consistency.

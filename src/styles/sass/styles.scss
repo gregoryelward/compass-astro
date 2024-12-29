@@ -1208,3 +1208,48 @@ body.light-theme .dropdown-menu.province {
 body.light-theme .accordion .accordion .card-body h5 {
   color: var(--body);
 }
+
+// bootstrap 5
+.bg-secondary {
+  background-color: var(--secondary) !important;
+}
+.light-theme .bg-secondary {
+  background-color: var(--lt-secondary) !important;
+}
+
+ul.nav.nav-tabs li.nav-item {
+  margin-bottom: 0;
+}
+
+.nav-tabs .nav-link {
+  background-color: ccc;
+  color: var(--white);
+}
+// body.light-theme .nav-tabs .nav-link {
+//   background-color: #fff;
+//   color: var(--body);
+// }
+body.light-theme .nav-tabs .nav-link {
+  color: var(--body);
+}
+body.light-theme .nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  color: var(--white);
+  background-color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+// .nav-tabs .nav-link {
+//   margin-bottom: 0;
+// }
+
+.tab-pane ul {
+  color: var(--white);
+}
+
+body.light-theme .tab-pane ul {
+  color: var(--body);
+}
+
+.breadcrumb {
+  padding-bottom: 0;
+}

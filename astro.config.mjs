@@ -17,7 +17,20 @@ export default defineConfig({
       }
     }
   },
-  integrations: [sitemap()]
+  integrations: [
+    sitemap({
+      // changefreq: 'weekly',
+      // priority: 0.7,
+      lastmod: new Date('2023-01-01'),
+      i18n: {
+        defaultLocale: 'en', // All urls that don't contain `es` or `fr` after `https://stargazers.club/` will be treated as default locale, i.e. `en`
+        locales: {
+          en: 'en-CA', // The `defaultLocale` value must present in `locales` keys
+          fr: 'fr-CA'
+        }
+      }
+    })
+  ]
 })
 // https://gregoryelward.github.io/trove-astro/
 

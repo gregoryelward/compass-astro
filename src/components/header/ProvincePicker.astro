@@ -12,6 +12,27 @@ const t = useTranslations(lang)
   id='navbarDropdown2'
   aria-haspopup='true'
   aria-expanded='false'
+  data-bs-toggle='dropdown'
+>
+  {t('select')}
+</button>
+<ul class='dropdown-menu benefits' aria-labelledby='navbarDropdown2'>
+  {
+    jurisdictions.jurisdictions[locale].map((j) => (
+      <li>
+        <a class='dropdown-item js--sub-link' href='#' data-province={j.code}>
+          {j.title}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<!-- BS4 <button
+  class='dropdown-toggle js--sub-menu-trigger sub-menu-trigger'
+  id='navbarDropdown2'
+  aria-haspopup='true'
+  aria-expanded='false'
   data-toggle='dropdown'
 >
   {t(`select`)}
@@ -28,7 +49,7 @@ const t = useTranslations(lang)
       )
     })
   }
-</ul>
+</ul> -->
 
 <script>
   import { runPostHandlerCallbacks } from '../../lib/provinceChangeHandler.js'

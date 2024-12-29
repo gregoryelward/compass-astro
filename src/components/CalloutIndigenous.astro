@@ -22,7 +22,59 @@ const t = useTranslations(lang)
 {
   indigenousCallout ? (
     <>
-      <div class='callout callout--no-border p-3  my-4'>
+      {/* bootstrap 5 */}
+
+      <div class='callout callout--no-border p-3 my-4'>
+        <h2 class='h5'>{indigenousCallout.title}</h2>
+        <p class='xsmall'>{indigenousCallout.lead}</p>
+        <button
+          type='button'
+          class='btn btn-outline-primary btn-small'
+          data-bs-toggle='modal'
+          data-bs-target='#indigenousCallout'
+        >
+          {indigenousCallout.cta}
+        </button>
+      </div>
+      <div
+        class='modal fade'
+        id='indigenousCallout'
+        tabindex='-1'
+        aria-labelledby='exampleModalLabel'
+        aria-hidden='true'
+      >
+        <div class='modal-dialog'>
+          <div class='modal-content'>
+            <div class='modal-header'>
+              <h5 class='modal-title' id='exampleModalLabel'>
+                {indigenousCallout.title}
+              </h5>
+              <button
+                type='button'
+                class='btn-close'
+                data-bs-dismiss='modal'
+                aria-label={t('close')}
+              />
+            </div>
+            <div
+              class='modal-body'
+              set:html={marked(indigenousCallout.content as unknown as string)}
+            />
+            <div class='modal-footer'>
+              <button
+                type='button'
+                class='btn btn-secondary'
+                data-bs-dismiss='modal'
+              >
+                {t('close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* bootstrap 4 */}
+      {/* <div class='callout callout--no-border p-3  my-4'>
         <h2 class='h5'>{indigenousCallout.title}</h2>
         <p class='xsmall'>{indigenousCallout.lead}</p>
         <button
@@ -71,7 +123,7 @@ const t = useTranslations(lang)
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   ) : null
 }
