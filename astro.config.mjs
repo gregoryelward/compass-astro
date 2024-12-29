@@ -41,6 +41,21 @@ export default defineConfig({
           // es: 'es-ES',
           fr: 'fr-CA'
         }
+      },
+      serialize: ({ entry }) => {
+        const { defaultLocale, locales } = {
+          defaultLocale: 'en',
+          locales: {
+            en: 'en-CA',
+            // es: 'es-ES',
+            fr: 'fr-CA'
+          }
+        }
+
+        return Object.keys(locales).map((locale) => ({
+          url: locale === defaultLocale ? entry : `/${locale}${entry}`,
+          lastmod: new Date().toISOString()
+        }))
       }
     })
   ]
