@@ -1,8 +1,11 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig } from 'astro/config';
+import sitemap from "@astrojs/sitemap";
 
+// https://astro.build/config
 export default defineConfig({
   // site: 'https://realtorjian.ca',
-  site: 'https://prospercanada.github.io', //
+  site: 'https://prospercanada.github.io',
+  //
   // base: '/compass-astro/',
   base: process.env.NODE_ENV === 'production' ? '/compass-astro/' : '/',
   // trailingSlash: "always",
@@ -12,8 +15,9 @@ export default defineConfig({
         external: [/public\//] // Skip files in the public folder
       }
     }
-  }
-})
+  },
+  integrations: [sitemap()]
+});
 // https://gregoryelward.github.io/trove-astro/
 
 // export default defineConfig({
