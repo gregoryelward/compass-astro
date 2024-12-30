@@ -1118,3 +1118,59 @@ ol a {
 .nav__sponsor span {
   color: #fff;
 }
+
+/**theme toggle */
+.theme-toggle {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--white);
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  font-weight: 400;
+  margin-right: 0.625rem;
+  text-decoration: none;
+
+  @media print {
+    color: var(--tertiary);
+  }
+
+  > span {
+    width: 21px; // Previously: 1.3125rem
+    height: 13px; // Previously: 0.8125rem
+    background: var(--white);
+    border-radius: 1.5rem;
+    display: block;
+    margin-left: 0.25rem;
+    position: relative;
+    transition: 0.35s ease all;
+
+    > span {
+      width: 11px; // Previously: 0.6875rem
+      height: 11px; // Previously: 0.6875rem
+      background: var(--primary);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: calc(100% - 0.09325rem);
+      transform: translateY(-50%) translateX(-100%);
+      transition: 0.35s ease all;
+    }
+  }
+
+  &[aria-pressed='true'] {
+    > span {
+      height: calc(0.8125rem - 0.5px);
+      box-shadow: 0 0 0 1.5px var(--white);
+      background-color: var(--primary);
+
+      > span {
+        box-shadow: 0 0 0 1.25px var(--white);
+        left: 1.25px;
+        transform: translateY(-50%) translateX(0%);
+      }
+    }
+  }
+}

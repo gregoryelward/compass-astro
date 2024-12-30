@@ -1,0 +1,20 @@
+---
+interface Props {
+  title: string
+}
+
+const { title } = Astro.props
+---
+
+<button
+  class='js--menu-link theme-toggle js--theme-toggle'
+  id='xxjs--theme-toggle'
+  aria-pressed='true'
+  >{title}&nbsp;
+  <span> <span></span> </span>
+</button>
+
+<script>
+  import prepareThemeToggle from '../lib/themeToggle'
+  prepareThemeToggle()
+</script>
