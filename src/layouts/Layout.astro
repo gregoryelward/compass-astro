@@ -16,6 +16,7 @@ import type { Entry } from 'contentful'
 
 import data from '../lib/jurisdictions.json'
 import { marked } from 'marked'
+import ProvinceModal from '../components/ProvinceModal.astro'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -154,7 +155,11 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
       aria-label={t('topAria')}
       style='display: block;'>{t('top')}</button
     >
-    <div class='dialog-container js--dialog-container' id='dialog-001'>
+    <ProvinceModal
+      title={ctaProvinceModal?.fields?.title as string}
+      body={ctaProvinceModal?.fields?.content as string}
+    />
+    <!-- <div class='dialog-container js--dialog-container' id='dialog-001'>
       <div class='dialog'>
         <button
           class='btn bi js--close-dialog close-dialog'
@@ -180,11 +185,11 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
             }
           </select>
           <button class='submit btn btn-primary btn-lg' type='button'
-            >{t(`select`)}!</button
+            >{t(`select`)}</button
           >
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <slot /> -->
   </body>
 </html>
@@ -227,39 +232,39 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
   // const provinceCode = JSON.parse(localStorage.getItem('province') || '') as
   //   | string
   //   | null
-  const provinceCode = JSON.parse(localStorage.getItem('province') || 'null') // Use 'null' instead of an empty string
-  if (!provinceCode) {
-    const targetedDialog = document.getElementById('dialog-001')
-    if (targetedDialog) {
-      targetedDialog.classList.add('is-open')
-    }
+  // const provinceCode = JSON.parse(localStorage.getItem('province') || 'null') // Use 'null' instead of an empty string
+  // if (!provinceCode) {
+  //   const targetedDialog = document.getElementById('dialog-001')
+  //   if (targetedDialog) {
+  //     targetedDialog.classList.add('is-open')
+  //   }
 
-    const modalSelect =
-      document.querySelector<HTMLSelectElement>('#dialog-001 select')
-    const modalSubmit = document.querySelector<HTMLButtonElement>(
-      '#dialog-001 button.submit'
-    )
+  //   const modalSelect =
+  //     document.querySelector<HTMLSelectElement>('#dialog-001 select')
+  //   const modalSubmit = document.querySelector<HTMLButtonElement>(
+  //     '#dialog-001 button.submit'
+  //   )
 
-    if (modalSelect && modalSubmit) {
-      modalSubmit.addEventListener('click', function (event) {
-        if (modalSelect.value) {
-          localStorage.setItem('province', JSON.stringify(modalSelect.value))
+  //   if (modalSelect && modalSubmit) {
+  //     modalSubmit.addEventListener('click', function (event) {
+  //       if (modalSelect.value) {
+  //         localStorage.setItem('province', JSON.stringify(modalSelect.value))
 
-          const targetedDialog = document.getElementById('dialog-001')
-          if (targetedDialog) {
-            targetedDialog.classList.remove('is-open')
-          }
+  //         const targetedDialog = document.getElementById('dialog-001')
+  //         if (targetedDialog) {
+  //           targetedDialog.classList.remove('is-open')
+  //         }
 
-          const provinceSelect = document.getElementById('navbarDropdown2')
-          if (provinceSelect) {
-            provinceSelect.textContent =
-              modalSelect.options[modalSelect.selectedIndex].text
-          }
+  //         const provinceSelect = document.getElementById('navbarDropdown2')
+  //         if (provinceSelect) {
+  //           provinceSelect.textContent =
+  //             modalSelect.options[modalSelect.selectedIndex].text
+  //         }
 
-          filterContent(modalSelect.value)
-          provinceSelectionDispatcher.dispatch()
-        }
-      })
-    }
-  }
+  //         filterContent(modalSelect.value)
+  //         provinceSelectionDispatcher.dispatch()
+  //       }
+  //     })
+  //   }
+  // }
 </script>

@@ -1,0 +1,16 @@
+---
+import { marked } from 'marked'
+
+interface Props {
+  title: string
+  body: string
+}
+
+const { title, body } = Astro.props
+---
+
+<section class='overwhelmed mb-3' id='overwhelmed'>
+  <h3 class='h5 mb-0'>{title}</h3>
+  <div set:html={marked(body as string)} />
+  <!-- <button class='close' type='button' aria-label='Close'></button> -->
+</section>

@@ -10,6 +10,8 @@ import type { TypeStepsSkeleton } from '../types/contentful/TypeSteps'
 import makeUrl from '../lib/helpers'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
+import type { TypeCtaSkeleton } from '../types/contentful'
+import Overwhelmed from '../components/Overwhelmed.astro'
 
 export async function getStaticPaths() {
   let paths = []
@@ -19,6 +21,12 @@ export async function getStaticPaths() {
       content_type: 'benefit',
       locale
     })
+
+    const ctaOverwhelmedId = '5VHBxI1ZslFHLtiBLKE0TE'
+    const ctaOverwhelmed: Entry<TypeCtaSkeleton> =
+      await contentfulClient.getEntry(ctaOverwhelmedId, {
+        locale
+      })
 
     const benefits = benefitRes.items
     for (const i of benefits) {
@@ -55,7 +63,8 @@ export async function getStaticPaths() {
             applyPage,
             navigationIndex,
             prevPage: benefitPages[navigationIndex - 1],
-            nextPage: benefitPages[navigationIndex + 1]
+            nextPage: benefitPages[navigationIndex + 1],
+            ctaOverwhelmed
           }
         })
         index = index + 1
@@ -80,6 +89,7 @@ const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
 const steps = benefit?.fields?.steps as Entry<TypeStepsSkeleton>[]
 const stepIndex = Astro.props.index
 const applyPage = Astro.props.applyPage
+const ctaOverwhelmed = Astro.props.ctaOverwhelmed
 
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
@@ -260,6 +270,10 @@ const base = import.meta.env.BASE_URL
                   }
                 </ul>
               </nav>
+              <Overwhelmed
+                title={ctaOverwhelmed?.fields?.title as string}
+                body={ctaOverwhelmed?.fields?.content as string}
+              />
             </div>
           </div>
         </section>

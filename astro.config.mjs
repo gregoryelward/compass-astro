@@ -34,29 +34,7 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      i18n: {
-        defaultLocale: 'en', // All urls that don't contain `es` or `fr` after `https://stargazers.club/` will be treated as default locale, i.e. `en`
-        locales: {
-          en: 'en-CA', // The `defaultLocale` value must present in `locales` keys
-          // es: 'es-ES',
-          fr: 'fr-CA'
-        }
-      },
-      serialize: ({ entry }) => {
-        const { defaultLocale, locales } = {
-          defaultLocale: 'en',
-          locales: {
-            en: 'en-CA',
-            // es: 'es-ES',
-            fr: 'fr-CA'
-          }
-        }
-
-        return Object.keys(locales).map((locale) => ({
-          url: locale === defaultLocale ? entry : `/${locale}${entry}`,
-          lastmod: new Date().toISOString()
-        }))
-      }
+      // configuration options
     })
   ]
 })

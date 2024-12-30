@@ -160,20 +160,33 @@ const cleanedPartnersLogos: Asset<undefined, string>[] = (
         </section>
       </div>
     </div>
-    <div class='lt-border-t-light'>
-      <div class='container'>
-        <section class='section'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12'>
-              {
-                page?.fields?.block3 ? (
-                  <div set:html={marked(page.fields.block3 as string)} />
-                ) : null
-              }
+    {
+      page.fields.block3 ? (
+        <div class='container'>
+          <section class='section'>
+            <div class='row justify-content-md-center'>
+              <div class='col-12'>
+                <div set:html={marked(page.fields.block3 as string)} />
+              </div>
             </div>
+          </section>
+        </div>
+      ) : null
+    }
+    {
+      page.fields.block4 ? (
+        <div class='lt-border-t-light'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div set:html={marked(page.fields.block4 as string)} />
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
+      ) : null
+    }
   </main>
 </Layout>

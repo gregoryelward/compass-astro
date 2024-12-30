@@ -309,14 +309,14 @@ body.light-theme .glossary.links span {
 /* other sytle adjustments  END*/
 
 /* Overwhelmed component BEGIN*/
-.overwhelmed p:first-of-type {
-  @extend .medium;
-}
+// .overwhelmed p:first-of-type {
+//   @extend .medium;
+// }
 
-.overwhelmed p:first-of-type a {
-  @extend .tertiary-blue;
-  text-decoration: none;
-}
+// .overwhelmed p:first-of-type a {
+//   @extend .tertiary-blue;
+//   text-decoration: none;
+// }
 /* Overwhelmed component END*/
 
 /* Step answer BEGIN*/
@@ -437,9 +437,6 @@ body.light-theme .glossary.links span {
 // .page_resourcesall .card-body h4 {
 //     margin-top: 2rem;
 // }
-.page_resourcesall h4.agency.resource {
-  margin-top: 2rem;
-}
 
 // GREG 202405  removed
 // .bg-light .callout {
@@ -805,14 +802,6 @@ body.light-theme .page.glossary dt {
 }
 body.light-theme .feedback h2 {
   color: var(--body) !important;
-}
-
-.page_resourcesall h4.agency.resource {
-  color: #fff;
-}
-
-body.light-theme .page_resourcesall h4.agency.resource {
-  color: var(--body);
 }
 
 // .js-accordion.benefit-agency.parent:not(
@@ -1252,4 +1241,45 @@ body.light-theme .tab-pane ul {
 
 .breadcrumb {
   padding-bottom: 0;
+}
+
+body.light-theme .page-link:focus {
+  background-color: var(--tertiary);
+  color: var(--white);
+}
+
+.overwhelmed {
+  background-color: var(--secondary);
+  color: var(--white);
+}
+
+.overwhelmed a {
+  // background-color: var(--secondary);
+  color: var(--white);
+}
+body.light-theme .overwhelmed a {
+  // background-color: var(--secondary);
+  color: var(--body);
+}
+
+.page_resourcesall h4.agency.resource {
+  //   color: #fff;
+}
+
+body.light-theme .page_resourcesall h4.agency.resource {
+  // color: var(--body);
+}
+
+.page_resourcesall h4.agency.resource {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+body.light-theme .accordion p a:hover {
+  color: var(--body);
+}
+
+ul a,
+ol a {
+  color: var(--light-blue);
 }

@@ -581,7 +581,7 @@ provinceDispatcher.subscribe(() => {
 
     <div class='bg-secondary'>
       <div class='container'>
-        <section class='section'>
+        <section class='xsection py-4'>
           <div class='row justify-content-md-center'>
             <div class='col-12'>
               {
@@ -630,7 +630,110 @@ provinceDispatcher.subscribe(() => {
                 ) : null
               }
 
-              <hr />
+              <!-- <hr />
+              <div class='flex center'>
+                {
+                  navigationIndex === 0 ? (
+                    <a
+                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string
+                      )}`}
+                    >
+                      {t('startBack')} X
+                    </a>
+                  ) : (
+                    <a
+                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string,
+                        prevPage?.fields?.slug as string
+                      )}`}
+                    >
+                      {prevPage?.fields?.title} Y
+                    </a>
+                  )
+                }
+                {
+                  nextPage?.fields?.slug ? (
+                    <a
+                      class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string,
+                        nextPage?.fields?.slug as string
+                      )}`}
+                    >
+                      {nextPage.fields.title} Z
+                    </a>
+                  ) : null
+                }
+              </div> -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='bg-secondary'>
+      <div class='container'>
+        <section class='xxsection pb-4'>
+          <div class='row justify-content-md-center'>
+            <div class='col-12'>
+              <!-- {
+                steps?.length ? (
+                  <>
+                    <h2>{t('steps')}</h2>
+                    <div class='mb-3 pb-3' />
+                    <ol class=''>
+                      {steps?.map((s, index) => {
+                        return (
+                          <li>
+                            <a
+                              href={`${makeUrl(
+                                base,
+                                locale,
+                                getJurisdiction(
+                                  benefit.fields.authority,
+                                  locale
+                                )?.slug,
+                                benefit?.fields?.slug as string,
+                                applySlug,
+                                `step-${index + 1}`
+                              )}`}
+                            >
+                              {s?.fields?.title}
+                            </a>
+                          </li>
+                        )
+                      })}
+                    </ol>
+                    <div class='mb-3 pb-3' />
+                    <a
+                      class='js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none'
+                      href={`${makeUrl(
+                        base,
+                        locale,
+                        getJurisdiction(benefit.fields.authority, locale)?.slug,
+                        benefit?.fields?.slug as string,
+                        applySlug,
+                        `step-1`
+                      )}`}
+                    >
+                      Start&nbsp; <strong>step 1</strong>
+                    </a>
+                  </>
+                ) : null
+              }
+
+              <hr /> -->
               <div class='flex center'>
                 {
                   navigationIndex === 0 ? (
