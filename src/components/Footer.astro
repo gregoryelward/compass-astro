@@ -4,6 +4,7 @@ import { contentfulClient } from '../lib/contentful'
 import { marked } from 'marked'
 import type { TypeFooterProsperAboutSkeleton } from '../types/contentful/TypeFooterProsperAbout'
 import makeUrl from '../lib/helpers'
+import PCLogoFooter from './header/UI/PCLogoFooter.astro'
 
 const lang = getLangFromUrl(Astro.url)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
@@ -26,7 +27,8 @@ const base = import.meta.env.BASE_URL
     <div class='row'>
       <div class='col-12 col-sm-12'>
         <div class='d-flex justify-content-between flex-wrap'>
-          <a
+          <PCLogoFooter />
+          <!-- <a
             href='https://prospercanada.org.org/'
             target='_blank'
             rel='noopener noreferrer'
@@ -188,7 +190,7 @@ const base = import.meta.env.BASE_URL
                 ></defs
               ></svg
             ></a
-          >
+          > -->
         </div>
       </div>
     </div>

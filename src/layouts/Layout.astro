@@ -152,8 +152,7 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
       class='btn btn-tertiary btn-lg d-print-none'
       id='btnTop'
       title={t('topTitle')}
-      aria-label={t('topAria')}
-      style='display: block;'>{t('top')}</button
+      aria-label={t('topAria')}>{t('top')}</button
     >
     <ProvinceModal
       title={ctaProvinceModal?.fields?.title as string}
@@ -208,7 +207,7 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
   import updateExternalLinks from '../lib/externalLinks'
   import goToTop from '../lib/gototop'
   import help from '../lib/help'
-  import { filterContent } from '../lib/filterContent'
+  // import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
   import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
 

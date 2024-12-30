@@ -11,6 +11,8 @@ import ProvincePickerMobile from './header/ProvincePickerMobile.astro'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
 import makeUrl from '../lib/helpers'
+import TDLogo from './header/UI/TDLogo.astro'
+import PCLogo from './header/UI/PCLogo.astro'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -34,7 +36,8 @@ const base = import.meta.env.BASE_URL
       <div class='row'>
         <div class='col-12 col-sm-12'>
           <div class='d-flex justify-content-between'>
-            <a class='nav-top__logo-a' href={`${makeUrl(base, locale)}`}>
+            <PCLogo />
+            <!-- <a class='nav-top__logo-a' href={`${makeUrl(base, locale)}`}>
               <svg
                 class='nav-top__logo'
                 viewBox='0 0 155 30'
@@ -111,11 +114,88 @@ const base = import.meta.env.BASE_URL
                   ></defs
                 ></svg
               ></a
+            > -->
+            <div class='mobile-only nav__sponsor'>
+              <TDLogo />
+              <!-- <span>{t(`sponsored`)}</span>
+              <div class='tdlogo js--menu-link'>
+                <a class='nav-top__logo-a' href={t(`TDURL`)}>
+                  <svg
+                    width='144'
+                    height='35'
+                    viewBox='0 0 144 35'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <title>{t('altTDlogo')}</title>
+                    <path
+                      class='pro-logo__text'
+                      d='M2 2V32.9128H36.5657V2H2ZM24.6931 26.2249H16.6451V11.7213H20.6851V23.6562H24.5753C27.2602 23.6562 28.388 21.7961 28.388 17.007C28.388 12.1893 27.107 10.7887 24.3817 10.7887H15.5105V26.2266H11.5058V10.7887H5.63096V8.21321H25.629C30.4518 8.21321 32.7445 10.7096 32.7445 16.9666C32.7428 25.2149 29.3223 26.2249 24.6931 26.2249Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M51.9632 3.70522H49.3743V2H56.7422V3.70522H54.1516V11.595H51.9632V3.70522Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M70.189 2H73.6247C75.8921 2 77.328 2.92584 77.328 4.91218V4.96604C77.328 6.4154 76.4863 7.17964 75.3686 7.5163L77.8936 11.595H75.5706L73.3031 7.89169H72.3504V11.595H70.1906V2H70.189ZM73.5708 6.4154C74.6582 6.4154 75.2087 5.95921 75.2087 5.03338V4.97951C75.2087 4.01327 74.6178 3.65136 73.5708 3.65136H72.3504V6.4154H73.5708Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M78.9373 2H85.1909V3.69176H81.0987V5.93228H84.3728V7.52977H81.0987V9.90496H85.4063V11.595H78.9373V2Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M89.0694 2H91.8907L95.0049 11.595H92.7324L92.0473 9.44709H88.6133L87.9399 11.595H85.9031L89.0694 2ZM89.056 7.91862H91.6332L90.3454 3.77256L89.056 7.91862Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M95.9119 2H99.0513C102.418 2 104.084 3.82474 104.084 6.69652V6.80425C104.084 9.67603 102.401 11.595 99.0244 11.595H95.9119V2ZM98.9722 9.9117C100.905 9.9117 101.822 8.81752 101.822 6.83118V6.72345C101.822 4.75058 100.98 3.69344 98.9503 3.69344H98.0918V9.9117H98.9772H98.9722Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M57.8232 2H60.9644C64.331 2 65.9959 3.82474 65.9959 6.69652V6.80425C65.9959 9.67603 64.3125 11.595 60.9374 11.595H57.8232V2ZM60.8819 9.9117C62.8143 9.9117 63.7267 8.82426 63.7267 6.83792V6.73018C63.7267 4.75731 62.885 3.70017 60.8549 3.70017H59.9964V9.9117H60.8819Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M106.956 7.46244L103.79 2H106.179L108.123 5.6781L110.03 2H112.136L109.131 7.46244V11.595H106.956V7.46244Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M49.3424 18.9496V18.8418C49.3424 15.9296 51.3624 13.9433 54.1063 13.9433C56.4141 13.9433 58.1328 15.0577 58.3601 17.4329H56.133C55.9647 16.2781 55.3267 15.6603 54.113 15.6603C52.598 15.6603 51.6301 16.8386 51.6301 18.8284V18.9361C51.6301 20.9224 52.5425 22.0907 54.1265 22.0907C55.32 22.0907 56.1465 21.4729 56.3266 20.239H58.4611C58.2187 22.6142 56.5151 23.8346 54.1534 23.8346C51.014 23.8346 49.3357 21.8887 49.3357 18.9529'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M59.1125 18.9495V18.8418C59.1125 15.9801 61.2066 13.9601 64.0515 13.9601C66.9367 13.9517 68.9971 15.9162 68.9971 18.7879V18.8957C68.9971 21.7674 67.0377 23.8346 64.0447 23.8346C61.0518 23.8346 59.1193 21.7674 59.1193 18.9529L59.1125 18.9495ZM66.728 18.926V18.8165C66.728 16.9497 65.7348 15.6754 64.0582 15.6754C62.3816 15.6754 61.38 16.8824 61.38 18.8334V18.9411C61.38 20.9005 62.4944 22.1075 64.0733 22.1075C65.7146 22.1024 66.7212 20.8534 66.7212 18.9226L66.728 18.926Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M70.1553 14.0914H73.0271L75.2827 20.0639L77.4829 14.0914H80.3008V23.6865H78.141V16.9767L75.483 23.6865H74.7727L72.1012 16.9767V23.6865H70.1553V14.0914Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M81.9773 14.0914H84.8491L87.1031 20.0639L89.3049 14.0914H92.1228V23.6865H89.9614V16.9767L87.3051 23.6865H86.5947L83.9232 16.9767V23.6865H81.9773V14.0914Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M96.1747 14.0914H93.9863V23.6865H96.1747V14.0914Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M99.9049 15.7967H97.3142V14.0914H104.682V15.7967H102.093V23.6865H99.9049V15.7967Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M105.768 14.0914H108.642L110.896 20.0639L113.096 14.0914H115.915V23.6865H113.754V16.9767L111.096 23.6865H110.385L107.714 16.9767V23.6865H105.768V14.0914Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M117.725 14.0914H123.978V15.7832H119.886V18.0237H123.16V19.6212H119.886V21.9964H124.194V23.6865H117.725V14.0914Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M125.441 14.0914H127.963L131.601 20.372V14.0914H133.546V23.6865H131.372L127.374 16.8959V23.6865H125.441V14.0914Z'
+                    ></path><path
+                      class='pro-logo__text'
+                      d='M137.223 15.7967H134.632V14.0914H142V15.7967H139.41V23.6865H137.223V15.7967Z'
+                    ></path></svg
+                  ></a
+                >
+              </div> -->
+            </div>
+            <nav
+              class='dropdown-nav desktop-only'
+              id='utility-nav'
+              aria-label='Utility'
             >
-            <nav class='dropdown-nav' id='utility-nav' aria-label='Utility'>
               <ul>
                 <li class='desktop-only utility-nav__sponsor'>
-                  <span>{t(`sponsored`)}</span>
+                  <TDLogo />
+                  <!-- <span>{t(`sponsored`)}</span>
                   <div class='tdlogo js--menu-link'>
                     <a class='nav-top__logo-a' href={t(`TDURL`)}>
                       <svg
@@ -183,7 +263,7 @@ const base = import.meta.env.BASE_URL
                         ></path></svg
                       ></a
                     >
-                  </div>
+                  </div> -->
                 </li>
                 <li>
                   <button
