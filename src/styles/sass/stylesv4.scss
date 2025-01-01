@@ -1,13 +1,6 @@
 @import url('https://use.typekit.net/vcy0msk.css');
-// @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
-@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css');
-
-$primary: #00162c; // Custom primary color
-$secondary: #002244; // Custom secondary color
-$success: #1a8633; // Custom success color
-$tertiary: #0066a1;
-
-@import '_includesv5';
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
+@import '_includesv4';
 
 * {
   box-sizing: border-box;
@@ -19,9 +12,6 @@ html {
   font-size: 100%;
 }
 
-body {
-  font-family: ff-meta-web-pro, sans-serif; // BS5 CHANGE
-}
 body {
   overflow-x: hidden;
   background-color: var(--primary);
@@ -151,45 +141,16 @@ body {
 
 /* Home page*/
 
-// TEMP REMOVE EXTEND
-// .page_home .action a:first-of-type {
-//   @extend .btn;
-//   // @extend .btn-secondary;
-//   // color: var(--tertiary);
-//   background-color: var(--tertiary);
-//   border-color: var(--tertiary);
-//   color: #fff;
-//   text-decoration: none;
-// }
-
 .page_home .action a:first-of-type {
   @extend .btn;
-  // @extend .btn-secondary;
-  background-color: var(--tertiary);
-  border-color: var(--tertiary);
-  color: #fff;
+  @extend .btn-primary;
   text-decoration: none;
-
-  &:hover,
-  &:focus {
-    background-color: var(--secondary);
-    border-color: var(--secondary);
-    // outline: 2px solid var(--tertiary); // Add a focus outline
-    // outline-offset: 2px; // Add space between the outline and the element
-    // background-color: darken(
-    //   var(--tertiary),
-    //   10%
-    // ); // Optional: darken background on focus
-    color: #fff; // Ensure text remains readable
-  }
 }
-
-// .page_home .action a:nth-of-type(2) {
-//   @extend .btn;
-//   @extend .btn-outline-primary;
-//   // @extend .btn-outline-tertiary;
-//   text-decoration: none;
-// }
+.page_home .action a:nth-of-type(2) {
+  @extend .btn;
+  @extend .btn-outline-primary;
+  text-decoration: none;
+}
 
 /* hide bootstrap's default icon. Use custom icon. */
 #navbarDropdown2.dropdown-toggle::after {
@@ -240,10 +201,10 @@ dt.letter {
   // color: var(--orange);
 }
 
-// body.light-theme .glossary.links *,
-// dt.letter {
-//   color: var(--orange);
-// }
+body.light-theme .glossary.links *,
+dt.letter {
+  color: var(--orange);
+}
 
 .letter a {
   font-size: 1.4em;
@@ -267,13 +228,19 @@ body.light-theme .glossary.links span {
 /* Glossary page END */
 
 /* About page BEGIN */
-// TEMP REMOVE EXTEND
 .page_about .block p:first-of-type {
   @extend .large;
 }
 .page_about .block4 p:first-of-type {
   @extend .small;
 }
+
+// .page_about .block.block2 img, .page_about .block.block3 img {
+//     @extend .tiled-logos;
+// }
+/* About page END */
+
+/* How page BEGIN */
 .page_howto .video h2 + p {
   @extend .large;
 }
@@ -292,7 +259,6 @@ body.light-theme .glossary.links span {
   @extend .btn-primary;
   text-decoration: none;
 }
-
 /* How page END */
 
 /*Feedback START*/
@@ -307,21 +273,27 @@ body.light-theme .glossary.links span {
 /*Feedback END*/
 
 /* Benefit FAQ page BEGIN */
-// TEMP REMOVE EXTEND
 .page_faq h1 + p,
 .page_afterapplying h1 + p,
 .page_home h1 + p {
   @extend .large;
 }
+/* Benefit FAQ page END */
+
+/* Explore more benefits CTA BEGIN */
 .cta p:first-of-type {
   @extend .large;
 }
+
 .cta.explore p a {
   @extend .tertiary-blue;
 }
+/* Explore more benefits CTA BEGIN */
+
+/* Benefit Introduction Other ways callout */
 .page_introduction .info h3 {
-  // @extend h5;
-  // color: var(--body);
+  @extend h5;
+  color: var(--body);
 }
 
 /* other style adjustments  BEGIN*/
@@ -334,8 +306,20 @@ body.light-theme .glossary.links span {
   color: var(--body);
 }
 
+/* other sytle adjustments  END*/
+
+/* Overwhelmed component BEGIN*/
+// .overwhelmed p:first-of-type {
+//   @extend .medium;
+// }
+
+// .overwhelmed p:first-of-type a {
+//   @extend .tertiary-blue;
+//   text-decoration: none;
+// }
+/* Overwhelmed component END*/
+
 /* Step answer BEGIN*/
-// TEMP REMOVE EXTEND
 .step.answer p:first-of-type {
   @extend .h5;
 }
@@ -404,10 +388,10 @@ body.light-theme .glossary.links span {
 .accordion .card-body table {
   @extend .table;
 }
-// TEMP REMOVE EXTEND
-// .accordion .card-body table thead {
-//   @extend .thead-dark;
-// }
+
+.accordion .card-body table thead {
+  @extend .thead-dark;
+}
 
 .accordion .card-body ul + p,
 .accordion .card-body ol + p {
@@ -442,7 +426,7 @@ body.light-theme .glossary.links span {
   z-index: 99; /* Make sure it does not overlap */
 }
 #btnTop {
-  bottom: 7rem;
+  bottom: 1rem;
   right: 1rem;
   font-size: small;
 }
@@ -490,10 +474,14 @@ p + ol {
   margin-top: 2rem;
 }
 
-// TEMP REMOVE EXTEND
 .cta p:first-of-type {
   @extend .large;
 }
+
+// .page_apply .callout {
+//   margin-top: 2rem;
+//   margin-bottom: 2rem;
+// }
 
 .page_apply h2.h4 {
   margin-top: 2rem;
@@ -504,11 +492,27 @@ p + ol {
   padding-top: 1rem;
 }
 
-// TEMP REMOVE EXTEND
+// .page_step  .customstep h2 {
+//     @extend .h4;
+//     padding-top: 2rem;
+// }
+
 .page_step .customstep h3 {
   @extend .h5;
   padding-top: 2rem;
 }
+
+// .resource.page h2 {
+//     margin-top: 5rem;
+// }
+
+// .resource.page h3 {
+//     margin-top: 3rem;
+// }
+
+// .resource.page h4 {
+//     margin-top: 2rem;
+// }
 
 .accordion .accordion .card-body h5 {
   margin-top: 4rem;
@@ -534,19 +538,20 @@ p + ol {
 }
 
 /* How page BEGIN */
-
-// TEMP REMOVE EXTEND
 .how-to-use-this-website .block4 .video h2 + p {
   @extend .large;
 }
+
 .how-to-use-this-website .block4 h2 + p,
 .how-to-use-this-website .block2 h2 + p {
   @extend .large;
 }
+
 .how-to-use-this-website .block4 h2 + p:first-of-type {
   @extend .pb-4;
   @extend .mb-4;
 }
+
 .how-to-use-this-website .block3 p:last-child a {
   @extend .btn;
   @extend .btn-primary;
@@ -803,28 +808,7 @@ body.light-theme .feedback h2 {
 
 .bg-light--alt {
   background-color: var(--tertiary);
-  color: #fff; /* Default for all text, including headings and paragraphs */
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p {
-    color: #fff; /* Explicitly set color for headings and paragraphs */
-  }
 }
-
-// .bg-light--alt h2,
-// .bg-light--alt h3 {
-//   color: #fff;
-// }
-
-// body.light-theme .bg-light--alt h2,
-// body.light-theme .bg-light--alt h3 {
-//   // color: var(--body);
-// }
 
 .accordion p a:hover {
   color: #fff;
@@ -838,18 +822,19 @@ body.light-theme a svg {
   fill: var(--body);
 }
 
-body.light-theme a.btn.btn-primary svg {
-  fill: #fff;
-}
-
-body.light-theme .bg-light--alt a svg {
-  fill: #fff;
-}
 .card-body h4 {
   color: #fff;
 }
 
 body.light-theme .card-body h4 {
+  color: var(--body);
+}
+
+.bg-light--alt h2 {
+  color: #fff;
+}
+
+body.light-theme .bg-light--alt h2 {
   color: var(--body);
 }
 
@@ -872,13 +857,13 @@ h1 + p:first-of-type {
   font-weight: 400;
 }
 
-// .bg-light--alt p {
-//   color: #fff;
-// }
+.bg-light--alt p {
+  color: #fff;
+}
 
-// body.light-theme .bg-light--alt p {
-//   color: var(--body);
-// }
+body.light-theme .bg-light--alt p {
+  color: var(--body);
+}
 
 /* Default Styles for Input and Textarea */
 textarea,
@@ -977,30 +962,30 @@ body.light-theme .content p a:hover {
   color: inherit;
 }
 
-// .bg-light--alt p a {
-//   color: #fff;
-// }
-// body.light-theme .bg-light--alt p a {
-//   color: var(--body);
-// }
+.bg-light--alt p a {
+  color: #fff;
+}
+body.light-theme .bg-light--alt p a {
+  color: var(--body);
+}
 
-// .bg-light--alt h3,
-// .bg-light--alt .h5 {
-//   color: #fff;
-// }
+.bg-light--alt h3,
+.bg-light--alt .h5 {
+  color: #fff;
+}
 
-// body.light-theme .bg-light--alt h3,
-// body.light-theme .bg-light--alt .h5 {
-//   color: var(--body);
-// }
+body.light-theme .bg-light--alt h3,
+body.light-theme .bg-light--alt .h5 {
+  color: var(--body);
+}
 
-// .page_introduction .info h3 {
-//   color: #fff;
-// }
+.page_introduction .info h3 {
+  color: #fff;
+}
 
-// body.light-theme .page_introduction .info h3 {
-//   color: var(--body);
-// }
+body.light-theme .page_introduction .info h3 {
+  color: var(--body);
+}
 
 .step.answer.dontknow {
   color: #fff;
@@ -1045,6 +1030,14 @@ body.light-theme .dropdown-menu.province {
   color: var(--body);
 }
 
+.tab-pane h2,
+.tab-pane .js-accordion > p {
+  color: var(--body);
+}
+
+.tab-pane ul {
+  color: var(--body);
+}
 .accordion .accordion .card-body h5 {
   color: #fff;
 }
@@ -1077,6 +1070,23 @@ body.light-theme .nav-tabs .nav-link.active,
   color: var(--white);
   background-color: var(--tertiary);
   border-color: var(--tertiary);
+}
+
+.tab-pane ul {
+  color: var(--white);
+}
+
+body.light-theme .tab-pane ul {
+  color: var(--body);
+}
+
+.breadcrumb {
+  padding-bottom: 0;
+}
+
+body.light-theme .page-link:focus {
+  background-color: var(--tertiary);
+  color: var(--white);
 }
 
 .overwhelmed {
@@ -1163,482 +1173,4 @@ ol a {
       }
     }
   }
-}
-
-// .visually-hidden.focusable:focus,
-// .visually-hidden.focusable:active {
-//   position: absolute;
-//   width: 1px;
-//   height: 1px;
-//   padding: 0;
-//   margin: -1px;
-//   overflow: hidden;
-//   clip: rect(0, 0, 0, 0);
-//   white-space: nowrap;
-//   border: 0;
-// }
-
-.btn.btn-outline-primary {
-  color: #fff;
-  border-color: var(--white);
-}
-
-body.light-theme .btn.btn-outline-primary {
-  color: var(--body);
-  border-color: var(--body);
-}
-
-body.light-theme .btn.btn-outline-primary:focus {
-  color: var(--body);
-  border-color: var(--body);
-}
-
-body.light-theme .btn.btn-outline-primary:hover {
-  color: var(--white);
-}
-
-.page_home .action a:nth-of-type(2) {
-  @extend .btn;
-  @extend .btn-outline-primary;
-  color: var(--white);
-  border-color: var(--white);
-  // @extend .btn-secondary;
-  // background-color: var(--tertiary);
-  // border-color: var(--tertiary);
-  // color: #fff;
-  text-decoration: none;
-
-  &:hover,
-  &:focus {
-    // background-color: var(--secondary);
-    // border-color: var(--secondary);
-    // outline: 2px solid var(--tertiary); // Add a focus outline
-    // outline-offset: 2px; // Add space between the outline and the element
-    // background-color: darken(
-    //   var(--tertiary),
-    //   10%
-    // ); // Optional: darken background on focus
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-    color: #fff; // Ensure text remains readable
-  }
-}
-
-body.light-theme .page_home .action a:nth-of-type(2) {
-  @extend .btn;
-  @extend .btn-outline-primary;
-  // @extend .btn-secondary;
-  // background-color: var(--tertiary);
-  // border-color: var(--tertiary);
-  // color: #fff;
-  text-decoration: none;
-
-  &:hover,
-  &:focus {
-    // background-color: var(--secondary);
-    // border-color: var(--secondary);
-    // outline: 2px solid var(--tertiary); // Add a focus outline
-    // outline-offset: 2px; // Add space between the outline and the element
-    // background-color: darken(
-    //   var(--tertiary),
-    //   10%
-    // ); // Optional: darken background on focus
-    color: #fff; // Ensure text remains readable
-  }
-}
-
-.accordion-header {
-  border: inherit;
-  box-shadow: 0 2px 4px #0000001a;
-  background-color: var(--primary);
-  color: var(--white);
-}
-
-.accordion-header .accordion-button.collapsed {
-  background-color: var(--primary);
-  color: var(--white);
-}
-
-.accordion-button:not(.collapsed),
-.accordion-body {
-  background-color: var(--primary);
-  color: var(--white);
-  // box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 var(--white);
-}
-
-body.light-theme .accordion-header {
-  border: inherit;
-  box-shadow: 0 2px 4px #0000001a;
-  background-color: var(--white);
-  color: var(--body);
-}
-
-.accordion-body p {
-  color: var(--white);
-}
-
-body.light-theme .accordion-header .accordion-button.collapsed {
-  color: var(--body);
-  background-color: var(--white);
-}
-
-body.light-theme .accordion-button:not(.collapsed),
-body.light-theme .accordion-body {
-  color: var(--body);
-  background-color: var(--white);
-  box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 var(--white);
-}
-
-body.light-theme .accordion-body p {
-  color: var(--body);
-}
-
-.accordion-button.collapsed::after {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-}
-
-.accordion-button:not(.collapsed)::after {
-  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-}
-
-body.light-theme .accordion-button.collapsed::after {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-}
-
-body.light-theme .accordion-button:not(.collapsed)::after {
-  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-}
-
-.skip-link {
-  position: absolute; /* Remove it from layout flow */
-  top: 0;
-  left: 0;
-  transform: translateY(-100%); /* Move off-screen */
-  background-color: var(--bs-primary);
-  color: #fff;
-  padding: 0.2rem 0.5rem;
-  text-decoration: none;
-  z-index: 1000;
-  border-radius: 0.25rem;
-}
-
-.skip-link:focus {
-  transform: translateY(0); /* Bring into view */
-  background-color: #0056b3;
-  color: #fff;
-  outline: 1px solid #fff;
-  outline-offset: 0px;
-}
-
-.accordion-button {
-  font-size: 1.4rem;
-  font-weight: 600;
-}
-
-a {
-  text-decoration: none;
-  background-color: rgba(0, 0, 0, 0);
-}
-
-footer a:hover {
-  text-decoration: underline;
-  // color: var(--tertiary);
-}
-
-p a {
-  color: var(--light-blue);
-}
-
-body.light-theme p a {
-  color: var(--light-blue);
-}
-
-ul a,
-ol a {
-  color: var(--light-blue);
-}
-
-footer p,
-footer a {
-  color: var(--white);
-}
-
-// .accordion-body p.bg-light--alt {
-//   color: #fff;
-// }
-
-.accordion h4,
-.accordion h5 {
-  color: #fff;
-  margin-top: 2rem;
-}
-body.light-theme .accordion h4,
-body.light-theme .accordion h5 {
-  color: var(--body);
-}
-
-.accordion p + h4 {
-  margin-top: 2rem;
-}
-
-.btn-tertiary {
-  color: var(--white);
-  background-color: var(--orange);
-  border-color: var(--orange);
-}
-
-.btn-tertiary:focus,
-.btn-tertiary:hover,
-.btn-tertiary:active {
-  color: var(--white);
-  background-color: var(--orange);
-  border-color: var(--orange);
-}
-
-.btn-outline-secondary {
-  border-color: #ffffff;
-  color: #ffffff;
-}
-
-body.light-theme .btn-outline-secondary {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-body.light-theme .btn-outline-secondary:hover,
-body.light-theme .btn-outline-secondary:focus {
-  color: #ffffff;
-}
-
-body.light-theme .bg-secondary ul a,
-body.light-theme .bg-secondary ol a {
-  color: var(--secondary);
-}
-
-// .breadcrumb ul a,
-// ol a {
-//   color: #ffffff;
-// }
-.breadcrumb-item + .breadcrumb-item::before {
-  color: var(--light-blue);
-}
-
-.breadcrumb-item.active {
-  color: var(--light-blue);
-}
-
-.breadcrumb {
-  padding-top: 1rem;
-}
-
-body.light-theme .breadcrumb-item.active {
-  color: var(--bs-breadcrumb-item-active-color);
-}
-body.light-theme .breadcrumb-item + .breadcrumb-item {
-  padding-left: var(--bs-breadcrumb-item-padding-x);
-}
-
-body.light-theme .breadcrumb-item + .breadcrumb-item::before {
-  color: var(--bs-breadcrumb-divider-color);
-}
-
-.page-item {
-  margin-right: 1rem;
-}
-
-.tab-content {
-  padding: 2rem;
-  background-color: #e8f3fa;
-}
-
-.tab-pane h2,
-.tab-pane .js-accordion > p {
-  color: var(--body);
-}
-
-.tab-pane ul {
-  color: var(--body);
-}
-
-.tab-pane ul {
-  color: var(--white);
-}
-
-body.light-theme .tab-pane ul {
-  color: var(--body);
-}
-
-.need-help .close {
-  background-color: inherit;
-  opacity: 1;
-  text-shadow: none;
-  position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  border: 0;
-  color: #fff;
-}
-
-.bg-light--alt .otherbenefits a {
-  color: #fff;
-}
-
-.table .thead-dark th,
-.accordion .card-body table .thead-dark th,
-.accordion .card-body table thead th {
-  color: var(--white);
-  background-color: #343a40;
-  border-color: #454d55;
-}
-
-// .table,
-// .accordion .card-body table {
-//   width: 100%;
-//   margin-bottom: 1rem;
-//   color: #212529;
-// }
-
-// .accordion .card-body table {
-//   margin-top: 1.5rem;
-// }
-
-// .card-body table thead th {
-//   color: var(--white);
-//   background-color: #343a40;
-//   border-color: #454d55;
-// }
-
-// .table thead th,
-// .accordion .card-body table thead th {
-//   vertical-align: bottom;
-//   border-bottom: 2px solid #dee2e6;
-// }
-
-// .table th,
-// .accordion .card-body table th,
-// .table td,
-// .accordion .card-body table td {
-//   padding: 0.75rem;
-//   vertical-align: top;
-//   border-top: 1px solid #dee2e6;
-// }
-
-table thead th {
-  color: var(--white);
-  background-color: #343a40;
-  border-color: #454d55;
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #dee2e6;
-}
-
-thead th {
-  vertical-align: bottom;
-  border-bottom: 2px solid #dee2e6;
-}
-
-// table {
-//   color: #212529;
-// }
-
-table td {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #dee2e6;
-}
-
-td a {
-  color: var(--light-blue);
-}
-
-// .tab-content .tab-pane ul {
-//   color: var(--body);
-// }
-
-.tab-pane > div > ul {
-  color: var(--body);
-}
-hr.hr-light {
-  border-top: 1px solid rgba(215, 223, 231, 0.2);
-}
-
-// .btn-step {
-//   color: var(--white);
-//   background-color: var(--tertiary);
-//   border-color: var(--tertiary);
-// }
-
-// .btn-step:hover {
-//   color: var(--white);
-//   background-color: var(--secondary);
-//   border-color: var(--white);
-// }
-
-.btn-step {
-  color: var(--white);
-  background-color: var(--tertiary);
-  border-color: var(--tertiary);
-
-  &:is(:hover, :focus, :active, :focus-visible) {
-    color: var(--white);
-    background-color: var(--secondary);
-    border-color: var(--white);
-  }
-}
-
-// body.light-theme .page-link:focus {
-//   background-color: var(--tertiary);
-//   color: var(--white);
-// }
-
-// .page-link {
-//   position: relative;
-//   margin-left: -1px;
-//   line-height: 1.25;
-//   color: var(--white);
-//   background-color: var(--primary);
-//   border: 1px solid var(--white);
-//   border-radius: 50%;
-//   width: 2.25rem;
-//   height: 2.25rem;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   transition: 0.35s ease all;
-//   text-decoration: none;
-// }
-
-.page-link {
-  position: relative;
-  margin-left: -1px;
-  line-height: 1.25;
-  color: var(--white);
-  background-color: var(--primary);
-  border: 1px solid var(--white);
-  border-radius: 50%;
-  width: 2.25rem;
-  height: 2.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.35s ease all;
-  text-decoration: none;
-}
-
-body.light-theme .page-link {
-  color: var(--body);
-  background-color: var(--white);
-  border: 1px solid var(--body);
-}
-
-body.light-theme .page-item.active .page-link {
-  z-index: 3;
-  color: var(--white);
-  background-color: var(--tertiary);
-  border-color: var(--tertiary);
-}
-
-body.light-theme .page-link:hover {
-  color: var(--body);
-  background-color: var(--light-brown-tint);
-  border: 1px solid var(--body);
 }

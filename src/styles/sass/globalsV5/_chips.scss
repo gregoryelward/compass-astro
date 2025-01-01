@@ -1,0 +1,82 @@
+.chip {
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    margin-right: 0.5rem;
+    background-color: var(--light-brown-tint);
+    display: inline-block;
+    font-size: 0.875rem;
+    @media(min-width: 768px) {
+        font-size: 1rem;
+    }
+    
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &.bi {
+        display: inline-flex;
+        align-items: center;
+
+        &::before {
+            font-size: 0.875rem;
+            @media(min-width: 768px) {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    &--new {
+        background-color: transparent;
+        color: var(--secondary);
+        font-weight: 600;
+        font-style: italic;
+        padding: 0.25rem 0;
+    }
+
+    &--icon-left {
+
+        &::before {
+            display: inline-block;
+            padding-right: 0.5rem;
+        }
+    }
+
+    &--icon-right {
+
+        &::before {
+            display: inline-block;
+            order: 2;
+            padding-left: 0.5rem;
+        }
+    }
+
+    &--icon-orange {
+        &::before {
+            color: var(--orange);
+        }
+    }
+
+    &--icon-green {
+        &::before {
+            color: var(--success);
+        }
+    }
+
+    &.bi-plus, &.bi-arrow-left-short, &.bi-arrow-right-short, &.bi-arrow-down-short, &.bi-x {
+        &::before {
+            transform: scale(1.25);
+        }
+    }
+
+    &.bi-flag, &.bi-flag-fill {
+        &::before {
+            transform: scale(0.75);
+        }
+    }
+
+    &.bi-bar-chart-fill {
+        &::before {
+            transform: scale(0.9);
+        }
+    }
+}

@@ -67,27 +67,50 @@ const page = Astro.props.page as Entry<TypeResourcesSkeleton>
         </div>
       </section>
     </div>
-    <div class='lt-border-t-light'>
-      <div class='container'>
-        <section class='section'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12'>
-              <div class='js-accordion'>
-                <div set:html={marked(page?.fields.content1 as string)} />
+    {
+      page?.fields?.sample ? (
+        <div class='bg-secondary'>
+          <div class='container'>
+            <section class='section'>
+              <div class='row justify-content-md-center'>
+                <div class='col-9'>
+                  <div set:html={marked(page.fields.sample as string)} />
+                </div>
               </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
+    <div class='container'>
+      {
+        page?.fields?.content1 ? (
+          <div class='lt-border-t-light'>
+            <div class='container'>
+              <section class='section'>
+                <div class='row justify-content-md-center'>
+                  <div class='col-12'>
+                    <div class='js-accordion'>
+                      <div set:html={marked(page.fields.content1 as string)} />
+                    </div>
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
-        </section>
-      </div>
+        ) : null
+      }
+      <!-- <Resources />
+      <Feedback /> -->
     </div>
     <Resources />
     <Feedback />
   </main>
+
+  <script>
+    import accordion from '../lib/accordion'
+
+    accordion('.js-accordion h2', 'H2', 2)
+    accordion('.js-accordion h3', 'H3', 3)
+  </script>
 </Layout>
-
-<script>
-  import accordion from '../lib/accordion'
-
-  accordion('.js-accordion h2', 'H2', 2)
-  accordion('.js-accordion h3', 'H3', 3)
-</script>

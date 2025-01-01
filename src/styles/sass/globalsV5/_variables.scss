@@ -1,0 +1,73 @@
+/*  ================= Colour Note =================
+ * root colours are based for the dark theme to be the default option on page load */
+
+:root {
+  /* ================= text colours ================= */
+  --body: #212529;
+  --muted: #727272;
+  --reverse: #d7dfe7;
+
+  /* ================= style colours ================= */
+  --primary: #00162c;
+  --secondary: #002244;
+  --tertiary: #0066a1;
+  --success: #1a8633;
+  --info: #0066a1;
+  --light: #f8f9fa;
+  --white: #ffffff;
+  --black: #000000;
+  --light-blue: #6aade4;
+
+  --white-transparent: rgba(255, 255, 255, 0.1);
+  --primary-transparent: rgba(0, 22, 44, 0.5);
+  --secondary-transparent: rgba(0, 34, 68, 0.5);
+
+  --lt-secondary: #ebf2f5;
+
+  /* ================= brand colours ================= */
+  --orange: #d25f2a;
+  --light-brown-tint: #f4f2ef;
+  --light-brown: #a59d95;
+  --c-i-border: #dee2e6;
+  --blue-gradient: linear-gradient(
+      34.44deg,
+      rgba(255, 255, 255, 0.2) 12.9%,
+      rgba(255, 255, 255, 0) 60.59%
+    ),
+    #002244;
+  --orange-gradient: linear-gradient(
+      34.44deg,
+      rgba(255, 255, 255, 0.2) 12.9%,
+      rgba(255, 255, 255, 0) 60.59%
+    ),
+    #d25f2a;
+
+  /* ================= components ================= */
+  --card-border: #a59d95;
+  --img-border: #dee2e6;
+  --input-border: #a59d95;
+}
+
+.blue-gradient {
+  background: var(--blue-gradient);
+}
+
+.orange-gradient {
+  background: var(--orange-gradient);
+}
+
+.bg-light-brown-tint {
+  background-color: var(--light-brown-tint);
+}
+
+/* ================= Light Theme Colour Adjustments ================= */
+.light-theme {
+  footer,
+  .need-help {
+    --body: #fff;
+
+    @media print {
+      --body: #212529;
+    }
+  }
+}

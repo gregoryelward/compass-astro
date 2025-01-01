@@ -1,0 +1,42 @@
+.dashboard-filters-selected-col {
+    @media(max-width: 767px) {
+        padding-right: 0;
+    }
+}
+.dashboard-filters-selected {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    white-space: nowrap;
+    overflow-x: scroll;
+    //Hide horizontal scrollbar. Affordance of cut-off buttons should be sufficient.
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    @media(min-width: 768px) {
+        white-space: unset;
+        overflow-x: unset;
+        flex-wrap: wrap;
+    }
+
+    >li {
+        display: inline-block;
+    }
+
+    .btn {
+        border-radius: 6px;
+        padding: 0.5rem;
+        
+        &:not(.btn-secondary) {
+            color: var(--secondary);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+    }
+}
+
+.dashboard-filters-trigger {
+    width: 100%;
+}

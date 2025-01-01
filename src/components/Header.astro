@@ -256,11 +256,28 @@ const base = import.meta.env.BASE_URL
               <ThemeToggle title={t(`lightMode`)} />
             </div>
             <a
-              class='xdesktop-only d-none d-md-block js--menu-link btn-icon-right bi bi-arrow-up-right'
+              class='d-none d-md-inline-block btn btn-link js--menu-link'
+              href="{t('bwURL')}"
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              {t('bwName')}
+              <i class='bi bi-arrow-up-right'></i>
+            </a>
+            <!-- <a
+              class='d-none d-md-block js--menu-link btn-icon-right bi bi-arrow-up-right'
               href={t('bwURL')}
               target='_blank'
               rel='noopener'>{t('bwName')}</a
+            > -->
+            <!-- <a
+              class='d-none d-md-inline-block btn btn-link btn-icon-right bi bi-arrow-up-right'
+              href="{t('bwURL')}"
+              target='_blank'
+              rel='noopener noreferrer'
             >
+              {t('bwName')}
+            </a> -->
           </div>
         </div>
       </div>

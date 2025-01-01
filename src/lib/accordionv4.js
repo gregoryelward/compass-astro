@@ -36,30 +36,22 @@ export default function accordion(
       wrapper.appendChild(node)
     })
 
-    let foobar = `<div class="accordion-item">
-                <h2 class="accordion-header" id="title-${name}">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapse-${name}"
-                    aria-expanded="false"
-                    aria-controls="collapse-${name}"
-                  >
-                    <span>${heading.textContent}</span>
-                  </button>
-                </h2>
-                <div
-                  id="collapse-${name}"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="title-${name}"
-                  data-bs-parent="#${target.id}"
-                >
-                  <div class="accordion-body">
-                    ${wrapper.outerHTML}
-                  </div>
+    let foobar = `<div class="card">
+                <div class="card-header" id="title-${name}">
+                    <h2 class="mb-0 h6" aria-level="${ariaLevel}">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${name}" aria-expanded="false" aria-controls="collapse-${name}">
+                        <span>${heading.textContent}</span>
+                        <span class="bi bi-dash"></span>
+                    </button>
+                    </h2>
                 </div>
-              </div>`
+
+                <div id="collapse-${name}" class="collapse" aria-labelledby="#${name}" data-bs-parent="#${target.id}">
+                    <div class="card-body">
+                    ${wrapper.outerHTML}
+                    </div>
+                </div>
+            </div>`
 
     target.innerHTML += foobar
 
