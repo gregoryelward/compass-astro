@@ -1642,3 +1642,49 @@ body.light-theme .page-link:hover {
   background-color: var(--light-brown-tint);
   border: 1px solid var(--body);
 }
+
+.bg-light--alt .pro-card--starting-points,
+.bg-light--alt .pro-card--starting-points:hover {
+  background: var(--primary);
+  // color: var(--white);
+  // padding: 1.875rem;
+  // box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+  // border-radius: 0.375rem;
+  // margin-bottom: 1.5rem;
+  // transition: all 0.5s;
+}
+
+.pro-card--starting-points a,
+.bg-light--alt .pro-card--starting-points .small-text,
+.bg-light--alt .pro-card--starting-points .small-text,
+.bg-light--alt .pro-card--starting-points .small-text {
+  color: var(--white);
+}
+
+.pro-card--starting-points .content > *,
+.bg-light--alt .pro-card--starting-points .btn-link,
+.bg-light--alt .pro-card--top-border .btn-link,
+.bg-light--alt .pro-card--top-border .btn-link span {
+  color: var(--white);
+}
+.light-theme .bg-light--alt .pro-card--starting-points {
+  background: var(--white);
+  // color: var(--body);
+  // padding: 1.875rem;
+  // box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+  // border-radius: 0.375rem;
+  // margin-bottom: 1.5rem;
+  // transition: all 0.5s;
+}
+
+.light-theme .pro-card--starting-points a {
+  color: var(--body);
+}
+
+.light-theme .pro-card--starting-points a,
+.light-theme .bg-light--alt .pro-card--starting-points .small-text,
+.light-theme .bg-light--alt .pro-card--starting-points .small-text,
+.light-theme .bg-light--alt .pro-card--starting-points .small-text,
+.light-theme .bg-light--alt .pro-card--top-border .btn-link span {
+  color: var(--body);
+}
