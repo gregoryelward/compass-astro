@@ -4,7 +4,7 @@ import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { getLangFromUrl, useTranslations } from '../i18n/utils'
 import Layout from '../layouts/Layout.astro'
 import { contentfulClient } from '../lib/contentful'
-import type { Entry } from 'contentful'
+import type { Asset, Entry } from 'contentful'
 import type { TypeBenefitSkeleton } from '../types/contentful/TypeBenefit'
 import getJurisdiction from '../lib/jurisdictions'
 import type { TypeBenefitPageSkeleton } from '../types/contentful/TypeBenefitPage'
@@ -23,6 +23,10 @@ import type {
 import OtherBenefits from '../components/OtherBenefits.astro'
 import BenefitResources from '../components/BenefitResources.astro'
 import { PriorityEventDispatcher } from '../lib/PriorityEventDispatcher'
+
+function isAsset(asset: any): asset is Asset {
+  return asset?.fields !== undefined
+}
 
 export async function getStaticPaths() {
   let paths = []
@@ -50,6 +54,13 @@ export async function getStaticPaths() {
       await contentfulClient.getEntry(ctaOtherBenefitsyId, {
         locale
       })
+    const ctaFeaturedResourceId = '5D7jmrAw16OWl2xBC8HAJ1'
+    const ctaFeaturedResource: Entry<TypeCtaSkeleton> =
+      await contentfulClient.getEntry(ctaFeaturedResourceId, {
+        locale
+      })
+
+    // console.log('ctaFeaturedResource ', ctaFeaturedResource)
 
     const exploreRes =
       await contentfulClient.getEntries<TypeExploreMoreBenefitsCalloutSkeleton>(
@@ -115,6 +126,13 @@ export async function getStaticPaths() {
       let applySlug = benefitPages[2]?.fields.slug || 'how-to-apply'
 
       for (const b of benefitPages) {
+        const resources = i?.fields?.resources as unknown as Array<
+          Entry<TypeResourcesSkeleton>
+        >
+        // console.log('resources ', resources)
+        const featuredResource =
+          resources?.filter((r) => r?.fields?.featured)?.[0] ?? null
+        // console.log('featuredResource ', featuredResource)
         paths.push({
           params: {
             benefitpage: path + '/' + b.fields.slug
@@ -127,7 +145,10 @@ export async function getStaticPaths() {
                 ? benefitSteps
                 : null,
             navigationIndex,
+            resources,
+            featuredResource,
             ctaOtherBenefits,
+            ctaFeaturedResource,
             prevPage: benefitPages[navigationIndex - 1],
             nextPage: benefitPages[navigationIndex + 1],
             warning,
@@ -158,14 +179,21 @@ const page = Astro.props.page as Entry<TypeBenefitPageSkeleton>
 const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
 const steps = Astro.props.steps as Array<Entry<TypeStepsSkeleton>> | null
 const warning = Astro.props.warning
-const resources = benefit.fields.resources as Array<
-  Entry<TypeResourcesSkeleton>
->
+const resources = Astro.props.resources as Array<Entry<TypeResourcesSkeleton>>
+// const resources = benefit.fields.resources as Array<
+//   Entry<TypeResourcesSkeleton>
+// >
+const featuredResource = Astro.props.featuredResource
+// const resources = benefit.fields.resources as Array<
+//   Entry<TypeResourcesSkeleton>
+// >
+
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
 const nextPage = Astro.props.nextPage
 const groupedAgencyResources = Astro.props.groupedAgencyResources
 const ctaOtherBenefits = Astro.props.ctaOtherBenefits
+const ctaFeaturedResource = Astro.props.ctaFeaturedResource
 const allBenefits = Astro.props.allBenefits
 const mainCTA = Astro.props.page.fields
   ?.mainCta as Entry<TypeCtaSkeleton> | null
@@ -179,9 +207,9 @@ const base = import.meta.env.BASE_URL
 const provinceDispatcher = new PriorityEventDispatcher()
 
 // Subscribe handlers
-provinceDispatcher.subscribe(() => {
-  console.log('Page-specific handler executed')
-}, 7)
+// provinceDispatcher.subscribe(() => {
+//   console.log('Page-specific handler executed')
+// }, 7)
 ---
 
 <Layout
@@ -785,6 +813,77 @@ provinceDispatcher.subscribe(() => {
         </section>
       </div>
     </div>
+
+    {
+      (page?.fields.slug === 'eligibility' ||
+        page?.fields.slug === 'introduction' ||
+        page?.fields.slug === 'faq' ||
+        page?.fields.slug === 'resources') &&
+      featuredResource ? (
+        <div class='bg-light--alt'>
+          <div class='container'>
+            <section class='section cta'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <h2>{ctaFeaturedResource?.fields?.title}</h2>
+                  <div class='mb-3 pb-2' />
+                  <div
+                    set:html={marked(
+                      ctaFeaturedResource?.fields?.content as unknown as string
+                    )}
+                  />
+                  <div class='pro-card--top-border pro-card--starting-points'>
+                    <div class='content'>
+                      <div class='icon blue-gradient'>
+                        {/* <img
+                          alt=''
+                          src={
+                            featuredResource.fields?.ctaImage.url?.fields?.file
+                              ?.url as string
+                          }
+                        /> */}
+
+                        {/* <img
+                          src={
+                            isAsset(featuredResource.fields?.ctaImage) &&
+                            featuredResource.fields?.ctaImage.fields?.file?.url
+                              ? `https:${featuredResource.fields?.ctaImage.fields.file.url}`
+                              : ''
+                          }
+                        /> */}
+                        {featuredResource.fields?.ctaImage ? (
+                          <img
+                            alt={
+                              ((featuredResource.fields.ctaImage as Asset)
+                                .fields?.title as string) || 'Image'
+                            }
+                            src={
+                              isAsset(featuredResource.fields?.ctaImage) &&
+                              featuredResource.fields?.ctaImage.fields?.file
+                                ?.url
+                                ? `https:${featuredResource.fields?.ctaImage.fields.file.url}`
+                                : ''
+                            }
+                          />
+                        ) : null}
+                      </div>
+                      <a href={featuredResource?.fields?.ctaUrl as string}>
+                        <span class='small-text h6'>
+                          {featuredResource?.fields?.ctaHeader}
+                        </span>
+                        <span class='large-text btn-link h4'>
+                          <span> {featuredResource?.fields?.ctaLinkText}</span>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : null
+    }
 
     {
       page?.fields.slug === 'after-you-apply' ||
