@@ -16,13 +16,6 @@ interface Props {
 const { title, body } = Astro.props
 ---
 
-<!-- <button
-  class='btn btn-tertiary btn-lg d-print-none'
-  id='btnTop'
-  title={t('topTitle')}
-  aria-label={t('topAria')}
-  style='display: block;'>{t('top')}</button
-> -->
 <div class='dialog-container js--dialog-container' id='dialog-001'>
   <div class='dialog'>
     <button
@@ -44,34 +37,9 @@ const { title, body } = Astro.props
 </div>
 
 <script>
-  // import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
-  // import updateExternalLinks from '../lib/externalLinks'
-  // import goToTop from '../lib/gototop'
-  // import help from '../lib/help'
   import { filterContent } from '../lib/filterContent'
-  // import showProvincialDataOnly from '../lib/filterContent'
   import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
 
-  // provinceSelectionDispatcher.subscribe(() => {
-  //   console.log('Layout handler executed')
-  // }, 10)
-
-  // // console.log('layout calling showProvincialDataOnly')
-  // showProvincialDataOnly()
-  // provinceSelectionDispatcher.dispatch()
-  // addPostHandlerListener(() => {
-  //   // console.log('LAYOUT HOOK')
-  //   showProvincialDataOnly()
-  //   // console.log('call the dispatch ')
-  //   provinceSelectionDispatcher.dispatch()
-  // })
-  // updateExternalLinks()
-  // goToTop()
-  // help()
-
-  // const provinceCode = JSON.parse(localStorage.getItem('province') || '') as
-  //   | string
-  //   | null
   const provinceCode = JSON.parse(localStorage.getItem('province') || 'null') // Use 'null' instead of an empty string
   if (!provinceCode) {
     const targetedDialog = document.getElementById('dialog-001')

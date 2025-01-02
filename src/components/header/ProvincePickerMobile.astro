@@ -7,26 +7,6 @@ const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 const t = useTranslations(lang)
 ---
 
-<!-- bootstrap 4 --><!-- <a
-  class='nav-link dropdown-toggle'
-  id='navbarDropdown-2'
-  href='#'
-  role='button'
-  data-toggle='dropdown'
-  aria-haspopup='true'
-  aria-expanded='false'>{t('select')}</a
->
-<div class='dropdown-menu province' aria-labelledby='navbarDropdown-2'>
-  {
-    jurisdictions.jurisdictions[locale].map((j) => {
-      return (
-        <a class='dropdown-item' href='#' data-province={j.code}>
-          {j.title}
-        </a>
-      )
-    })
-  }
-</div> --><!-- bootstrap 5 -->
 <a
   class='nav-link dropdown-toggle'
   id='navbarDropdown-2'

@@ -28,29 +28,6 @@ const t = useTranslations(lang)
   }
 </ul>
 
-<!-- BS4 <button
-  class='dropdown-toggle js--sub-menu-trigger sub-menu-trigger'
-  id='navbarDropdown2'
-  aria-haspopup='true'
-  aria-expanded='false'
-  data-toggle='dropdown'
->
-  {t(`select`)}
-</button>
-<ul class='dropdown-menu benefits' aria-labelledby='navbarDropdown2'>
-  {
-    jurisdictions.jurisdictions[locale].map((j) => {
-      return (
-        <li>
-          <a class='js--sub-link' href='#' data-province={j.code}>
-            {j.title}
-          </a>
-        </li>
-      )
-    })
-  }
-</ul> -->
-
 <script>
   import { runPostHandlerCallbacks } from '../../lib/provinceChangeHandler.js'
 
@@ -113,7 +90,6 @@ const t = useTranslations(lang)
             console.error('Failed to update button label')
           }
 
-          // console.log('clicked so call ')
           runPostHandlerCallbacks()
         }
       })

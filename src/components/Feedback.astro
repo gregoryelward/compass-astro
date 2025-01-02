@@ -5,7 +5,6 @@ import type { TypeHelpfulSkeleton } from '../types/contentful/TypeHelpful'
 
 const lang = getLangFromUrl(Astro.url)
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
-// const t = useTranslations(lang)
 
 const res = await contentfulClient.getEntries<TypeHelpfulSkeleton>({
   skip: 0,

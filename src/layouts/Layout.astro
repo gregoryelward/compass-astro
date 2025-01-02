@@ -14,8 +14,6 @@ import type { TypeNeedHelpSkeleton } from '../types/contentful/TypeNeedHelp'
 import type { TypeCtaSkeleton } from '../types/contentful'
 import type { Entry } from 'contentful'
 
-import data from '../lib/jurisdictions.json'
-import { marked } from 'marked'
 import ProvinceModal from '../components/ProvinceModal.astro'
 
 const lang = getLangFromUrl(Astro.url)
@@ -25,7 +23,6 @@ const tagLine = `- ${t('siteName')}`
 const base = import.meta.env.BASE_URL
 const locale = lang === 'fr' ? 'fr-CA' : 'en-CA'
 
-const jurisdictions = data.jurisdictions[locale]
 const needhelpRes = await contentfulClient.getEntries<TypeNeedHelpSkeleton>({
   skip: 0,
   limit: 1,
@@ -78,26 +75,6 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
     />
     <link rel='shortcut icon' href=`${base}favicons/favicon.ico` />
     <meta name='msapplication-TileColor' content='#da532c' />
-    <!-- <script
-      src='https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js'
-      integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj'
-      crossorigin='anonymous'></script>
-    <script
-      src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'
-      integrity='sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN'
-      crossorigin='anonymous'></script>
-    <script
-      src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js'
-      integrity='sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+'
-      crossorigin='anonymous'></script> -->
-
-    <!-- BOOTSTRAP 5 -->
-    <!-- <link
-      href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
-      rel='stylesheet'
-      integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
-      crossorigin='anonymous'
-    /> -->
     <script
       src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
       integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
@@ -158,56 +135,14 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
       title={ctaProvinceModal?.fields?.title as string}
       body={ctaProvinceModal?.fields?.content as string}
     />
-    <!-- <div class='dialog-container js--dialog-container' id='dialog-001'>
-      <div class='dialog'>
-        <button
-          class='btn bi js--close-dialog close-dialog'
-          type='button'
-          aria-label='Close'
-          dialog-id='dialog-001'></button>
-        <p class='h4'>{ctaProvinceModal?.fields?.title}</p>
-        {
-          ctaProvinceModal?.fields?.content ? (
-            <div
-              set:html={marked(
-                ctaProvinceModal.fields?.content as unknown as string
-              )}
-            />
-          ) : null
-        }
-        <div>
-          <select class='custom-select custom-select-lg'>
-            {
-              jurisdictions.map((j) => (
-                <option value={j.code}>{j.title}</option>
-              ))
-            }
-          </select>
-          <button class='submit btn btn-primary btn-lg' type='button'
-            >{t(`select`)}</button
-          >
-        </div>
-      </div>
-    </div> -->
-    <!-- <slot /> -->
   </body>
 </html>
-
-<!-- <script>
-  import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
-
-  // Register a handler in the layout
-  provinceSelectionDispatcher.subscribe(() => {
-    console.log('Layout handler executed')
-  }, 10)
-</script> -->
 
 <script>
   import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
   import updateExternalLinks from '../lib/externalLinks'
   import goToTop from '../lib/gototop'
   import help from '../lib/help'
-  // import { filterContent } from '../lib/filterContent'
   import showProvincialDataOnly from '../lib/filterContent'
   import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
 
@@ -215,55 +150,13 @@ const ctaProvinceModal: Entry<TypeCtaSkeleton> =
     console.log('Layout handler executed')
   }, 10)
 
-  // console.log('layout calling showProvincialDataOnly')
   showProvincialDataOnly()
   provinceSelectionDispatcher.dispatch()
   addPostHandlerListener(() => {
-    // console.log('LAYOUT HOOK')
     showProvincialDataOnly()
-    // console.log('call the dispatch ')
     provinceSelectionDispatcher.dispatch()
   })
   updateExternalLinks()
   goToTop()
   help()
-
-  // const provinceCode = JSON.parse(localStorage.getItem('province') || '') as
-  //   | string
-  //   | null
-  // const provinceCode = JSON.parse(localStorage.getItem('province') || 'null') // Use 'null' instead of an empty string
-  // if (!provinceCode) {
-  //   const targetedDialog = document.getElementById('dialog-001')
-  //   if (targetedDialog) {
-  //     targetedDialog.classList.add('is-open')
-  //   }
-
-  //   const modalSelect =
-  //     document.querySelector<HTMLSelectElement>('#dialog-001 select')
-  //   const modalSubmit = document.querySelector<HTMLButtonElement>(
-  //     '#dialog-001 button.submit'
-  //   )
-
-  //   if (modalSelect && modalSubmit) {
-  //     modalSubmit.addEventListener('click', function (event) {
-  //       if (modalSelect.value) {
-  //         localStorage.setItem('province', JSON.stringify(modalSelect.value))
-
-  //         const targetedDialog = document.getElementById('dialog-001')
-  //         if (targetedDialog) {
-  //           targetedDialog.classList.remove('is-open')
-  //         }
-
-  //         const provinceSelect = document.getElementById('navbarDropdown2')
-  //         if (provinceSelect) {
-  //           provinceSelect.textContent =
-  //             modalSelect.options[modalSelect.selectedIndex].text
-  //         }
-
-  //         filterContent(modalSelect.value)
-  //         provinceSelectionDispatcher.dispatch()
-  //       }
-  //     })
-  //   }
-  // }
 </script>

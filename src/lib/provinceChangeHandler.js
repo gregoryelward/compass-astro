@@ -1,5 +1,3 @@
-// src/provinceChangeHandler.js
-
 export const postHandlerCallbacks = []
 
 export function addPostHandlerListener(callback) {

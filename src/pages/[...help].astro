@@ -147,41 +147,6 @@ const agencyHeading = Astro.props
                                 }
                               />
                             ) : null}
-                            {/* {b?.fields?.agency && Array.isArray(b.fields.agency) ? (
-                              <div>
-                                <p class='bg-light--alt p-3'>
-                                  {agencyHeading?.fields.subTitle}
-                                </p>
-
-                                {
-                                  b.fields.agency.map((a) => {
-                                     
-                                   return (
-                                        <div
-                                          class='my-5'
-                                          data-province-filter={
-                                            a?.fields.showLocalyOnly &&
-                                            getJurisdiction(a?.fields?.authority)
-                                              ?.code
-                                          }
-                                        >
-                                          <h3 class='h4 mb-3'>{a?.fields?.title}</h3>
-                                          {a?.fields?.content ? (
-                                            <div
-                                              set:html={marked(
-                                                a?.fields
-                                                  .content as unknown as string
-                                              )}
-                                            />
-                                            <hr class="hr-light"/>
-                                          ) : null}
-                                        </div>
-                                      )
-                                    }
-                                  )
-                                }
-                              </div>
-                            ) : null} */}
                           </div>
                         </div>
                       )

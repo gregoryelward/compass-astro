@@ -89,7 +89,6 @@ if (agencyResource) {
 <script>
   import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
   function updateBenefitAgenciesVisibility() {
-    // console.log('CALLED')
     document
       .querySelectorAll('.js-accordion.benefit-agency.parent')
       .forEach((parent) => {
@@ -103,69 +102,15 @@ if (agencyResource) {
         })
         // // Hide the parent if no visible children
         if (!hasMatchingChild) {
-          // console.log(
-          //   'hide',
-          //   (parent as HTMLElement).getAttribute('data-province-filter')
-          // )
           ;(parent as HTMLElement).style.display = 'none' // Hide the parent
         } else {
-          // console.log(
-          //   'show',
-          //   (parent as HTMLElement).getAttribute('data-province-filter')
-          // )
           ;(parent as HTMLElement).style.display = 'block' // show the parent
         }
       })
   }
 
   provinceSelectionDispatcher.subscribe(() => {
-    // console.log('Page handler executed')
     updateBenefitAgenciesVisibility()
-    // document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
-    //   // Check if the parent has at least one child with the desired criteria
-    //   const hasMatchingChild = Array.from(
-    //     parent.querySelectorAll('.benefitagencycomponent.childresource')
-    //   ).some((child) => {
-    //     return (child as HTMLElement).style.display !== 'none'
-    //   })
-
-    //   // console.log('parent has at least one visible child: ', hasMatchingChild)
-
-    //   // Hide the parent if no visible children
-    //   if (!hasMatchingChild) {
-    //     // console.log('HIDE ', (parent as HTMLElement).innerText)
-    //     ;(parent as HTMLElement).style.display = 'none' // Hide the parent
-    //   } else {
-    //     // console.log('SHOW ', (parent as HTMLElement).innerText)
-    //     ;(parent as HTMLElement).style.display = 'block' // Hide the parent
-    //   }
-    // })
   }, 5)
   updateBenefitAgenciesVisibility()
-  // document
-  //   .querySelectorAll('.js-accordion.benefit-agency.parent')
-  //   .forEach((parent) => {
-  //     // Check if any child is visible
-
-  //     // Check if the parent has at least one child with the desired criteria
-  //     const hasMatchingChild = Array.from(
-  //       parent.querySelectorAll('.benefitagencycomponent.childresource')
-  //     ).some((child) => {
-  //       return (child as HTMLElement).style.display !== 'none'
-  //     })
-  //     // // Hide the parent if no visible children
-  //     if (!hasMatchingChild) {
-  //       console.log(
-  //         'hide',
-  //         (parent as HTMLElement).getAttribute('data-province-filter')
-  //       )
-  //       ;(parent as HTMLElement).style.display = 'none' // Hide the parent
-  //     } else {
-  //       console.log(
-  //         'show',
-  //         (parent as HTMLElement).getAttribute('data-province-filter')
-  //       )
-  //       ;(parent as HTMLElement).style.display = 'block' // show the parent
-  //     }
-  //   })
 </script>

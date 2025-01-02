@@ -1,5 +1,4 @@
 export function filterContent(filter: string) {
-  // console.log('filterContent is filtering ', filter)
   const provinceItems = document.querySelectorAll('[data-province-filter]')
 
   provinceItems.forEach(function (item) {
@@ -21,7 +20,6 @@ export function filterContent(filter: string) {
 
 export default function showProvincialDataOnly() {
   // check for existing province, filter accordingly
-  // const userProvince = JSON.parse(localStorage.getItem('province') || '')
   const userProvince = JSON.parse(localStorage.getItem('province') || 'null')
   if (userProvince) {
     filterContent(userProvince)
