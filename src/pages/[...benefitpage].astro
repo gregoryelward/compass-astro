@@ -22,7 +22,6 @@ import type {
 } from '../types/contentful'
 import OtherBenefits from '../components/OtherBenefits.astro'
 import BenefitResources from '../components/BenefitResources.astro'
-import { PriorityEventDispatcher } from '../lib/PriorityEventDispatcher'
 
 function isAsset(asset: any): asset is Asset {
   return asset?.fields !== undefined
@@ -60,8 +59,6 @@ export async function getStaticPaths() {
         locale
       })
 
-    // console.log('ctaFeaturedResource ', ctaFeaturedResource)
-
     const exploreRes =
       await contentfulClient.getEntries<TypeExploreMoreBenefitsCalloutSkeleton>(
         {
@@ -82,24 +79,21 @@ export async function getStaticPaths() {
         | Entry<TypeAgencyResourceSkeleton>[]
         | undefined
 
-      let agencyResource = resolvedAgencyResource
-        // let agencyResource = i.fields?.agencyResource
-        ?.filter(Boolean)
-        .map((a) => {
-          const agencyRecord = a?.fields?.agency as
-            | Entry<TypeAgencySkeleton>
-            | undefined
-          const showLocalyOnly = agencyRecord?.fields?.showLocalyOnly
-          const authority = agencyRecord?.fields?.authority
-          const agency = agencyRecord?.fields?.title
+      let agencyResource = resolvedAgencyResource?.filter(Boolean).map((a) => {
+        const agencyRecord = a?.fields?.agency as
+          | Entry<TypeAgencySkeleton>
+          | undefined
+        const showLocalyOnly = agencyRecord?.fields?.showLocalyOnly
+        const authority = agencyRecord?.fields?.authority
+        const agency = agencyRecord?.fields?.title
 
-          return {
-            ...a?.fields,
-            showLocalyOnly,
-            authority,
-            agency
-          }
-        })
+        return {
+          ...a?.fields,
+          showLocalyOnly,
+          authority,
+          agency
+        }
+      })
 
       if (agencyResource) {
         groupedAgencyResources = Object.groupBy(agencyResource, (resource) => {
@@ -129,10 +123,8 @@ export async function getStaticPaths() {
         const resources = i?.fields?.resources as unknown as Array<
           Entry<TypeResourcesSkeleton>
         >
-        // console.log('resources ', resources)
         const featuredResource =
           resources?.filter((r) => r?.fields?.featured)?.[0] ?? null
-        // console.log('featuredResource ', featuredResource)
         paths.push({
           params: {
             benefitpage: path + '/' + b.fields.slug
@@ -180,13 +172,7 @@ const benefit = Astro.props.benefit as Entry<TypeBenefitSkeleton>
 const steps = Astro.props.steps as Array<Entry<TypeStepsSkeleton>> | null
 const warning = Astro.props.warning
 const resources = Astro.props.resources as Array<Entry<TypeResourcesSkeleton>>
-// const resources = benefit.fields.resources as Array<
-//   Entry<TypeResourcesSkeleton>
-// >
 const featuredResource = Astro.props.featuredResource
-// const resources = benefit.fields.resources as Array<
-//   Entry<TypeResourcesSkeleton>
-// >
 
 const navigationIndex = Astro.props.navigationIndex
 const prevPage = Astro.props.prevPage
@@ -203,13 +189,6 @@ const exploreSection = Astro.props
   .exploreSection as TypeExploreMoreBenefitsCalloutFields
 
 const base = import.meta.env.BASE_URL
-
-const provinceDispatcher = new PriorityEventDispatcher()
-
-// Subscribe handlers
-// provinceDispatcher.subscribe(() => {
-//   console.log('Page-specific handler executed')
-// }, 7)
 ---
 
 <Layout
@@ -285,29 +264,6 @@ const provinceDispatcher = new PriorityEventDispatcher()
                 </div>
               ) : null
             }
-            <!-- {
-              page?.fields.slug === applySlug && page?.fields?.content2 ? (
-                <>
-                  <h2>{page.fields.content2Title}</h2>
-                  <div
-                    class=''
-                    set:html={marked(page.fields.content2 as string)}
-                  />
-                </>
-              ) : null
-            } -->
-
-            <!-- {
-              page?.fields.slug === applySlug && page?.fields?.content3 ? (
-                <>
-                  <h2>{page.fields.content3Title}</h2>
-                  <div
-                    class=''
-                    set:html={marked(page.fields.content3 as string)}
-                  />
-                </>
-              ) : null
-            } -->
           </div>
         </div>
       </section>
@@ -384,8 +340,6 @@ const provinceDispatcher = new PriorityEventDispatcher()
       ) : null
     }
 
-    <!-- bootstrap 5 -->
-
     {
       page?.fields.slug === 'after-you-apply' ? (
         <div class=' lt-border-t-light'>
@@ -457,78 +411,6 @@ const provinceDispatcher = new PriorityEventDispatcher()
         </div>
       ) : null
     }
-    <!-- bootstrap 4 -->
-    <!-- {
-      page?.fields.slug === 'after-you-apply' ? (
-        <div class='bg-secondary lt-border-t-light'>
-          <div class='container'>
-            <section class='section'>
-              <div class='row justify-content-md-center pt-3'>
-                <div class='col-12'>
-                  <ul class='nav nav-tabs' id='myTab' role='tablist'>
-                    <li class='nav-item' role='presentation'>
-                      <button
-                        class='nav-link active'
-                        id='approved-tab'
-                        data-toggle='tab'
-                        data-target='#approved'
-                        type='button'
-                        role='tab'
-                        aria-controls='approved'
-                        aria-selected='true'
-                      >
-                        {page?.fields.content2Title}
-                      </button>
-                    </li>
-                    <li class='nav-item' role='presentation'>
-                      <button
-                        class='nav-link'
-                        id='denied-tab'
-                        data-toggle='tab'
-                        data-target='#denied'
-                        type='button'
-                        role='tab'
-                        aria-controls='denied'
-                        aria-selected='false'
-                      >
-                        {page?.fields.content3Title}
-                      </button>
-                    </li>
-                  </ul>
-                  <div class='tab-content' id='myTabContent'>
-                    <div
-                      class='tab-pane fade show active'
-                      id='approved'
-                      role='tabpanel'
-                      aria-labelledby='approved-tab'
-                    >
-                      <h2>{page?.fields.content2Title}</h2>
-                      <div
-                        class='js-accordion'
-                        set:html={marked(page.fields.content2 as string)}
-                      />
-                    </div>
-                    <div
-                      class='tab-pane fade'
-                      id='denied'
-                      role='tabpanel'
-                      aria-labelledby='denied-tab'
-                    >
-                      <h2>{page?.fields.content3Title}</h2>
-                      <div
-                        class='js-accordion'
-                        set:html={marked(page.fields.content3 as string)}
-                      />
-                    </div>
-                  </div>
-                  <hr />
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      ) : null
-    } -->
 
     {
       page?.fields?.bodyTitle ||
@@ -607,14 +489,14 @@ const provinceDispatcher = new PriorityEventDispatcher()
       ) : null
     }
 
-    <div class='bg-secondary'>
-      <div class='container'>
-        <section class='xsection py-4'>
-          <div class='row justify-content-md-center'>
-            <div class='col-12'>
-              {
-                steps?.length ? (
-                  <>
+    {
+      steps?.length ? (
+        <div class='bg-secondary steps'>
+          <div class='container'>
+            <section class='py-4'>
+              <div class='row justify-content-md-center'>
+                <div class='col-12'>
+                  <div>
                     <h2>{t('steps')}</h2>
                     <div class='mb-3 pb-3' />
                     <ol class=''>
@@ -652,116 +534,23 @@ const provinceDispatcher = new PriorityEventDispatcher()
                         `step-1`
                       )}`}
                     >
-                      Start&nbsp; <strong>step 1</strong>
+                      {t(`startsteppart1`)}&nbsp;{' '}
+                      <strong>{t(`startsteppart2`)}</strong>
                     </a>
-                  </>
-                ) : null
-              }
-
-              <!-- <hr />
-              <div class='flex center'>
-                {
-                  navigationIndex === 0 ? (
-                    <a
-                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string
-                      )}`}
-                    >
-                      {t('startBack')} X
-                    </a>
-                  ) : (
-                    <a
-                      class='btn btn-outline-secondary btn-lg btn-icon-left bi bi-arrow-left'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        prevPage?.fields?.slug as string
-                      )}`}
-                    >
-                      {prevPage?.fields?.title} Y
-                    </a>
-                  )
-                }
-                {
-                  nextPage?.fields?.slug ? (
-                    <a
-                      class='btn btn-lg btn-icon-right bi bi-arrow-right btn-primary'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        nextPage?.fields?.slug as string
-                      )}`}
-                    >
-                      {nextPage.fields.title} Z
-                    </a>
-                  ) : null
-                }
-              </div> -->
-            </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
-    </div>
-    <div class='bg-secondary'>
+        </div>
+      ) : null
+    }
+
+    <div class='bg-secondary d-print-none'>
       <div class='container'>
-        <section class='xxsection pb-4'>
+        <section class='py-4'>
           <div class='row justify-content-md-center'>
             <div class='col-12'>
-              <!-- {
-                steps?.length ? (
-                  <>
-                    <h2>{t('steps')}</h2>
-                    <div class='mb-3 pb-3' />
-                    <ol class=''>
-                      {steps?.map((s, index) => {
-                        return (
-                          <li>
-                            <a
-                              href={`${makeUrl(
-                                base,
-                                locale,
-                                getJurisdiction(
-                                  benefit.fields.authority,
-                                  locale
-                                )?.slug,
-                                benefit?.fields?.slug as string,
-                                applySlug,
-                                `step-${index + 1}`
-                              )}`}
-                            >
-                              {s?.fields?.title}
-                            </a>
-                          </li>
-                        )
-                      })}
-                    </ol>
-                    <div class='mb-3 pb-3' />
-                    <a
-                      class='js-step-start-button btn btn-tertiary btn-lg btn-icon-left bi bi-play-fill d-print-none'
-                      href={`${makeUrl(
-                        base,
-                        locale,
-                        getJurisdiction(benefit.fields.authority, locale)?.slug,
-                        benefit?.fields?.slug as string,
-                        applySlug,
-                        `step-1`
-                      )}`}
-                    >
-                      Start&nbsp; <strong>step 1</strong>
-                    </a>
-                  </>
-                ) : null
-              }
-
-              <hr /> -->
               <div class='flex center'>
                 {
                   navigationIndex === 0 ? (
@@ -820,7 +609,7 @@ const provinceDispatcher = new PriorityEventDispatcher()
         page?.fields.slug === 'faq' ||
         page?.fields.slug === 'resources') &&
       featuredResource ? (
-        <div class='bg-light--alt'>
+        <div class='bg-light--alt  d-print-none'>
           <div class='container'>
             <section class='section cta'>
               <div class='row justify-content-md-center'>
@@ -835,22 +624,6 @@ const provinceDispatcher = new PriorityEventDispatcher()
                   <div class='pro-card--top-border pro-card--starting-points'>
                     <div class='content'>
                       <div class='icon blue-gradient'>
-                        {/* <img
-                          alt=''
-                          src={
-                            featuredResource.fields?.ctaImage.url?.fields?.file
-                              ?.url as string
-                          }
-                        /> */}
-
-                        {/* <img
-                          src={
-                            isAsset(featuredResource.fields?.ctaImage) &&
-                            featuredResource.fields?.ctaImage.fields?.file?.url
-                              ? `https:${featuredResource.fields?.ctaImage.fields.file.url}`
-                              : ''
-                          }
-                        /> */}
                         {featuredResource.fields?.ctaImage ? (
                           <img
                             alt={
@@ -888,7 +661,7 @@ const provinceDispatcher = new PriorityEventDispatcher()
     {
       page?.fields.slug === 'after-you-apply' ||
       page?.fields.slug === 'resources' ? (
-        <div class='bg-light--alt'>
+        <div class='bg-light--alt d-print-none'>
           <OtherBenefits
             ctaOtherBenefits={ctaOtherBenefits}
             allBenefits={allBenefits?.filter(
@@ -911,7 +684,7 @@ const provinceDispatcher = new PriorityEventDispatcher()
 
     {
       page?.fields.slug === 'after-you-apply' && exploreSection?.title ? (
-        <div class='bg-secondary'>
+        <div class='bg-secondary d-print-none'>
           <div class='container'>
             <section class='section'>
               <div class='row justify-content-md-center'>
@@ -941,23 +714,7 @@ const provinceDispatcher = new PriorityEventDispatcher()
   </main>
 </Layout>
 
-<!-- <script>
-  import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
-
-  // Register a handler in the page
-  provinceSelectionDispatcher.subscribe(() => {
-    console.log('Page handler executed')
-  }, 5)
-
-  // Simulate an event dispatch
-  // setTimeout(() => {
-  //   provinceSelectionDispatcher.dispatch('Ontario')
-  // }, 3000)
-</script> -->
-
 <script>
-  // import { addPostHandlerListener } from '../lib/provinceChangeHandler.js'
-  // import showProvincialDataOnly from '../lib/filterContent'
   import accordion from '../lib/accordion'
   import { provinceSelectionDispatcher } from '../lib/PriorityEventDispatcher'
   accordion('.js-accordion h2', 'H2', 2)
@@ -965,7 +722,6 @@ const provinceDispatcher = new PriorityEventDispatcher()
   accordion('.js-accordion h4', 'H4', 4)
 
   function updateBenefitAgenciesVisibility() {
-    // console.log('CALLED')
     document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
       // Check if the parent has at least one child with the desired criteria
       const hasMatchingChild = Array.from(
@@ -982,86 +738,9 @@ const provinceDispatcher = new PriorityEventDispatcher()
       }
     })
   }
-  // updateBenefitAgenciesVisibility()
-  //TODO add to hook to react to province selection change
-  //need to be called after non-relevant elements are hidden
-  // setTimeout(() => {
-  //   document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
-  //     // Check if the parent has at least one child with the desired criteria
-  //     const hasMatchingChild = Array.from(
-  //       parent.querySelectorAll('.benefitagencycomponent.childresource')
-  //     ).some((child) => {
-  //       return (child as HTMLElement).style.display !== 'none'
-  //     })
-
-  //     console.log('parent has at least one visible child: ', hasMatchingChild)
-
-  //     // Hide the parent if no visible children
-  //     if (!hasMatchingChild) {
-  //       ;(parent as HTMLElement).style.display = 'none' // Hide the parent
-  //     }
-  //   })
-  // }, 3000) // Delay of 3 seconds
 
   provinceSelectionDispatcher.subscribe(() => {
     // console.log('Page handler executed')
     updateBenefitAgenciesVisibility()
-    // document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
-    //   // Check if the parent has at least one child with the desired criteria
-    //   const hasMatchingChild = Array.from(
-    //     parent.querySelectorAll('.benefitagencycomponent.childresource')
-    //   ).some((child) => {
-    //     return (child as HTMLElement).style.display !== 'none'
-    //   })
-
-    //   // console.log('parent has at least one visible child: ', hasMatchingChild)
-
-    //   // Hide the parent if no visible children
-    //   if (!hasMatchingChild) {
-    //     // console.log('HIDE ', (parent as HTMLElement).innerText)
-    //     ;(parent as HTMLElement).style.display = 'none' // Hide the parent
-    //   } else {
-    //     // console.log('SHOW ', (parent as HTMLElement).innerText)
-    //     ;(parent as HTMLElement).style.display = 'block' // Hide the parent
-    //   }
-    // })
   }, 5)
-  // addPostHandlerListener(() => {
-  //   console.log('I want the pages non standatrd content to be filtered now too')
-
-  //   // setTimeout(() => {
-  //   document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
-  //     // Check if the parent has at least one child with the desired criteria
-  //     const hasMatchingChild = Array.from(
-  //       parent.querySelectorAll('.benefitagencycomponent.childresource')
-  //     ).some((child) => {
-  //       return (child as HTMLElement).style.display !== 'none'
-  //     })
-
-  //     // console.log('parent has at least one visible child: ', hasMatchingChild)
-
-  //     // Hide the parent if no visible children
-  //     if (!hasMatchingChild) {
-  //       ;(parent as HTMLElement).style.display = 'none' // Hide the parent
-  //     }
-  //   })
-  //   // }, 3000) // Delay of 3 seconds
-  // })
-
-  // document.querySelectorAll('.benefit-agency.parent').forEach((parent) => {
-  //   // Check if any child is visible
-
-  //   // Check if the parent has at least one child with the desired criteria
-  //   const hasMatchingChild = Array.from(
-  //     parent.querySelectorAll('.benefitagencycomponent.childresource')
-  //   ).some((child) => {
-  //     return (child as HTMLElement).style.display !== 'none'
-  //   })
-
-  //   console.log('parent has at leat one visibile child: ', hasMatchingChild)
-  //   // // Hide the parent if no visible children
-  //   if (!hasMatchingChild) {
-  //     ;(parent as HTMLElement).style.display = 'none' // Hide the parent
-  //   }
-  // })
 </script>

@@ -1688,3 +1688,66 @@ body.light-theme .page-link:hover {
 .light-theme .bg-light--alt .pro-card--top-border .btn-link span {
   color: var(--body);
 }
+
+.accordion p + h5 {
+  margin-top: 2rem;
+}
+
+// .nav-top {
+//   @media print {
+//     background: var(--white);
+//   }
+// }
+
+// .nav-top nav > ul .utility-nav__sponsor span {
+//   @media print {
+//     color: var(--body);
+//   }
+// }
+
+// .nav-top .has-submenu button {
+//   @media print {
+//     color: var(--body);
+//   }
+// }
+
+// .nav-top nav > ul li.language a {
+//   @media print {
+//     color: var(--body);
+//   }
+// }
+
+// body.light-theme .accordion-body p.bg-light--alt {
+//   color: var(--white);
+// }
+
+// body {
+//   @media print {
+//     color: var(--body);
+//     background: var(--white);
+//   }
+// }
+
+@media print {
+  body {
+    filter: grayscale(100%);
+  }
+}
+
+@media print {
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  img {
+    filter: grayscale(100%);
+  }
+}
+
+@media print {
+  .accordion-collapse {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+  }
+}
